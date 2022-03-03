@@ -14,7 +14,7 @@ exports.signup = async (req, res) => {
 
 		await userManager.createUser(user);
 
-		res.status(201).json({ message: "User created" });
+		res.status(201).json({ message: "User signed up" });
 	} catch (err) {
 		console.error(`Failed to signup ✖\n${err}`);
 		res.sendStatus(500);
