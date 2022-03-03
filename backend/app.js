@@ -14,4 +14,8 @@ app.get("/", (req, res) =>
 	res.status(200).json({ message: "Welcome to Groupomania 🔥" })
 );
 
+const userRouter = require("./routers/user");
+
+app.use("/", userRouter);
+
 module.exports = app;

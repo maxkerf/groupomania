@@ -1,3 +1,14 @@
 @root = http://localhost:3000
 
+### Root
 GET {{root}}
+
+### Signup
+POST {{root}}/signup
+Content-Type: application/json
+
+{
+  "email": "a@a",
+  "password": "a",
+  "username": "a"
+}
