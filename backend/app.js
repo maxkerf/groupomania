@@ -10,7 +10,8 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 
-app.get("/", (req, res) =>
+const authenticateUser = require("./middlewares/authenticateUser");
+app.get("/", authenticateUser, (req, res) =>
 	res.status(200).json({ message: "Welcome to Groupomania 🔥" })
 );
 

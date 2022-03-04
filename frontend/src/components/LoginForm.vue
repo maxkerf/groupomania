@@ -31,6 +31,10 @@ export default {
 			const data = await this.login(user);
 
 			console.log(data);
+			if (data.token) {
+				localStorage.setItem("token", data.token);
+				window.location = "/";
+			}
 		},
 
 		async login(user) {

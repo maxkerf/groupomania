@@ -1,26 +1,25 @@
 <template>
-	<div>
-		{{ message }}
-	</div>
+	<h1>Home</h1>
 </template>
 
 <script>
 import { mapState } from "vuex";
 
 export default {
-	data() {
-		return {
-			message: "",
-		};
-	},
 	computed: {
 		...mapState(["apiRoot"]),
 	},
 	async created() {
-		const res = await fetch(this.apiRoot);
+		const res = await fetch(this.apiRoot, {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
+		});
 		const data = await res.json();
 
-		this.message = data.message;
+		console.log(data);
+
+		if (!res.ok) window.location = "/login";
 	},
 };
 </script>
