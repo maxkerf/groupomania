@@ -4,9 +4,7 @@
 		<input id="email" type="email" v-model="email" />
 		<label for="password">Password</label>
 		<input id="password" type="password" v-model="password" />
-		<label for="username">Username</label>
-		<input id="username" type="text" v-model="username" />
-		<button type="submit">Signup</button>
+		<button type="submit">Login</button>
 	</form>
 </template>
 
@@ -18,7 +16,6 @@ export default {
 		return {
 			email: "",
 			password: "",
-			username: "",
 		};
 	},
 	computed: {
@@ -29,16 +26,15 @@ export default {
 			const user = {
 				email: this.email,
 				password: this.password,
-				username: this.username,
 			};
 
-			const data = await this.signup(user);
+			const data = await this.login(user);
 
 			console.log(data);
 		},
 
-		async signup(user) {
-			const res = await fetch(`${this.apiRoot}/signup`, {
+		async login(user) {
+			const res = await fetch(`${this.apiRoot}/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

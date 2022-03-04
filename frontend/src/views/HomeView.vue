@@ -5,21 +5,22 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
 	data() {
 		return {
 			message: "",
 		};
 	},
+	computed: {
+		...mapState(["apiRoot"]),
+	},
 	async created() {
-		try {
-			const res = await fetch("http://localhost:3000");
-			const data = await res.json();
+		const res = await fetch(this.apiRoot);
+		const data = await res.json();
 
-			this.message = data.message;
-		} catch (err) {
-			console.error(err);
-		}
+		this.message = data.message;
 	},
 };
 </script>
