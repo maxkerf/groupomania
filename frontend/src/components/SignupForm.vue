@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
 	data() {
@@ -22,9 +22,14 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(["apiRoot"]),
+		...mapState(["token"]),
+	},
+	created() {
+		if (this.token) this.$router.push("/");
 	},
 	methods: {
+		...mapActions(["signup", "login"]),
+
 		async submit() {
 			const user = {
 				email: this.email,
@@ -32,22 +37,15 @@ export default {
 				username: this.username,
 			};
 
-			const data = await this.signup(user);
+			try {
+				const signupData = await this.signup(user);
+				console.log(signupData);
 
-			console.log(data);
-		},
-
-		async signup(user) {
-			const res = await fetch(`${this.apiRoot}/signup`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(user),
-			});
-			const data = await res.json();
-
-			return data;
+				await this.login(user);
+				this.$router.push("/");
+			} catch (err) {
+				console.error(err);
+			}
 		},
 	},
 };

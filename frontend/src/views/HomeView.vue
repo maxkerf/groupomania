@@ -1,25 +1,30 @@
 <template>
-	<h1>Home</h1>
+	<div>
+		<h1>Home</h1>
+		<button @click="logout">Logout</button>
+	</div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
-	computed: {
-		...mapState(["apiRoot"]),
+	methods: {
+		...mapActions(["apiRoot"]),
+
+		logout() {
+			this.$store.dispatch("logout");
+			this.$router.push("/login");
+		},
 	},
 	async created() {
-		const res = await fetch(this.apiRoot, {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
-			},
-		});
-		const data = await res.json();
-
-		console.log(data);
-
-		if (!res.ok) window.location = "/login";
+		try {
+			const data = await this.apiRoot();
+			console.log(data);
+		} catch (err) {
+			console.error(err);
+			this.logout();
+		}
 	},
 };
 </script>
