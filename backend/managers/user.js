@@ -15,3 +15,19 @@ exports.getUserByEmail = email => {
 		db.query(sql, email, (err, data) => (err ? reject(err) : resolve(data[0])));
 	});
 };
+
+exports.getUserById = id => {
+	const sql = "SELECT * FROM `user` WHERE `id` = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
+	});
+};
+
+exports.deleteUser = id => {
+	const sql = "DELETE FROM `user` WHERE `id` = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, id, err => (err ? reject(err) : resolve()));
+	});
+};

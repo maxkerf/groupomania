@@ -1,4 +1,5 @@
 @root = http://localhost:3000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2NDY3MzY3MzAsImV4cCI6MTY0NjczNjc2MH0.4MaSoUjbnB64OMzysHqLhn-poSYa-1oB0KHe4jROXzA
 
 ### Root
 GET {{root}}
@@ -18,6 +19,10 @@ POST {{root}}/login
 Content-Type: application/json
 
 {
-  "email": "a@a",
-  "password": "a"
+  "email": "",
+  "password": ""
 }
+
+### Delete User
+DELETE {{root}}/users
+Authorization: Bearer {{token}}

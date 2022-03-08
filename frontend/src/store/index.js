@@ -60,6 +60,20 @@ export default createStore({
 			commit("REMOVE_TOKEN");
 		},
 
+		async deleteAccount({ state }) {
+			const res = await fetch(`${state.apiRoot}/users`, {
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${state.token}`,
+				},
+			});
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok ? resolve(data) : reject(Error(data.message));
+			});
+		},
+
 		async apiRoot({ state }) {
 			const res = await fetch(state.apiRoot, {
 				headers: {

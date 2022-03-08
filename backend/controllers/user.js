@@ -37,12 +37,22 @@ exports.login = async (req, res) => {
 
 		const userId = user.id;
 		const token = jwt.sign({ userId }, process.env.TOKEN_SECRET_KEY, {
-			expiresIn: "10s",
+			expiresIn: "1h",
 		});
 
 		res.status(200).json({ token });
 	} catch (err) {
 		console.error(`Failed to login ✖\n${err}`);
+		res.sendStatus(500);
+	}
+};
+
+exports.deleteUser = async (req, res) => {
+	try {
+		await userManager.deleteUser(res.locals.userId);
+		res.status(200).json({ message: "User deleted" });
+	} catch (err) {
+		console.error(`Failed to delete user ✖\n${err}`);
 		res.sendStatus(500);
 	}
 };

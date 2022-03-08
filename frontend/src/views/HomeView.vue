@@ -2,6 +2,7 @@
 	<div>
 		<h1>Home</h1>
 		<button @click="logout">Logout</button>
+		<button @click="deleteAccount">Delete account</button>
 	</div>
 </template>
 
@@ -16,6 +17,17 @@ export default {
 			this.$store.dispatch("logout");
 			this.$router.push("/login");
 		},
+
+		async deleteAccount() {
+			try {
+				const data = await this.$store.dispatch("deleteAccount");
+				console.log(data);
+			} catch (err) {
+				console.error(err);
+			}
+
+			this.logout();
+		},
 	},
 	async created() {
 		try {
@@ -28,3 +40,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+button + button {
+	margin-left: 0.5rem;
+}
+</style>
