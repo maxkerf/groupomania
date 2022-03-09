@@ -1,5 +1,5 @@
 @root = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2NDY3MzY3MzAsImV4cCI6MTY0NjczNjc2MH0.4MaSoUjbnB64OMzysHqLhn-poSYa-1oB0KHe4jROXzA
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyLCJpYXQiOjE2NDY4MTAwNTAsImV4cCI6MTY0NjgxMzY1MH0.g-2Qej9mTNEgGlrUHE68HwNlOFPKFizd09eJfiRWZOc
 
 ### Root
 GET {{root}}
@@ -26,3 +26,12 @@ Content-Type: application/json
 ### Delete User
 DELETE {{root}}/users
 Authorization: Bearer {{token}}
+
+### Create Post
+POST {{root}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "text": "Rick & Morty are cooool!"
+}

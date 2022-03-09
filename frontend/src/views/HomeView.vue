@@ -1,13 +1,14 @@
 <template>
 	<div>
 		<h1>Home</h1>
+		<router-link to="/add-post">Add a post</router-link>
 		<button @click="logout">Logout</button>
 		<button @click="deleteAccount">Delete account</button>
 	</div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
 	methods: {
@@ -29,7 +30,12 @@ export default {
 			this.logout();
 		},
 	},
+	computed: {
+		...mapState(["token"]),
+	},
 	async created() {
+		if (!this.token) this.$router.push("/login");
+
 		try {
 			const data = await this.apiRoot();
 			console.log(data);
@@ -42,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button + button {
+button {
 	margin-left: 0.5rem;
 }
 </style>

@@ -74,6 +74,22 @@ export default createStore({
 			});
 		},
 
+		async addPost({ state }, post) {
+			const res = await fetch(`${state.apiRoot}/posts`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${state.token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(post),
+			});
+			const data = res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok ? resolve(data) : reject(Error(data.message));
+			});
+		},
+
 		async apiRoot({ state }) {
 			const res = await fetch(state.apiRoot, {
 				headers: {
