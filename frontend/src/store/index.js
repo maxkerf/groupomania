@@ -90,6 +90,32 @@ export default createStore({
 			});
 		},
 
+		async getPosts({ state }) {
+			const res = await fetch(`${state.apiRoot}/posts`, {
+				headers: {
+					Authorization: `Bearer ${state.token}`,
+				},
+			});
+			const data = res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok ? resolve(data) : reject(Error(data.message));
+			});
+		},
+
+		async getOneUser({ state }, userId) {
+			const res = await fetch(`${state.apiRoot}/users/${userId}`, {
+				headers: {
+					Authorization: `Bearer ${state.token}`,
+				},
+			});
+			const data = res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok ? resolve(data) : reject(Error(data.message));
+			});
+		},
+
 		async apiRoot({ state }) {
 			const res = await fetch(state.apiRoot, {
 				headers: {

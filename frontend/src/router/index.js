@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import SignupView from "../views/SignupView.vue";
 import LoginView from "../views/LoginView.vue";
 import AddPostView from "../views/AddPostView.vue";
+import PostsView from "../views/PostsView.vue";
 import NotFound from "../views/NotFound.vue";
 
 const routes = [
@@ -36,6 +37,14 @@ const routes = [
 		component: AddPostView,
 		meta: {
 			title: "Add Post | Groupomania",
+		},
+	},
+	{
+		path: "/posts",
+		name: "postsView",
+		component: PostsView,
+		meta: {
+			title: "Posts | Groupomania",
 		},
 	},
 	{

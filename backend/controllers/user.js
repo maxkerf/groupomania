@@ -56,3 +56,13 @@ exports.deleteUser = async (req, res) => {
 		res.sendStatus(500);
 	}
 };
+
+exports.getOneUser = async (req, res) => {
+	try {
+		const user = await userManager.getUserById(req.params.id);
+		res.status(200).json(user);
+	} catch (err) {
+		console.error(`Failed to get one user ✖\n${err}`);
+		res.sendStatus(500);
+	}
+};

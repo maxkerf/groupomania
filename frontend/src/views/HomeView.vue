@@ -2,6 +2,7 @@
 	<div>
 		<h1>Home</h1>
 		<router-link to="/add-post">Add a post</router-link>
+		<router-link to="/posts">Show posts</router-link>
 		<button @click="logout">Logout</button>
 		<button @click="deleteAccount">Delete account</button>
 	</div>
@@ -48,7 +49,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button {
-	margin-left: 0.5rem;
+div > * {
+	display: block;
+
+	& + * {
+		margin-top: 1rem;
+	}
 }
 </style>

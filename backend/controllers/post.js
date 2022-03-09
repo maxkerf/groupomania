@@ -14,3 +14,13 @@ exports.createPost = async (req, res) => {
 		res.sendStatus(500);
 	}
 };
+
+exports.getAllPosts = async (req, res) => {
+	try {
+		const posts = await postManager.getAllPosts();
+		res.status(200).json(posts);
+	} catch (err) {
+		console.error(`Failed to get all posts ✖\n${err}`);
+		res.sendStatus(500);
+	}
+};

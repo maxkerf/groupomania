@@ -36,7 +36,7 @@ export default {
 			try {
 				const data = await this.addPost(post);
 				console.log(data);
-				this.$router.push("/");
+				this.$router.push("/posts");
 			} catch (err) {
 				console.error(err);
 			}

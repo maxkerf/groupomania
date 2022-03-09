@@ -9,7 +9,7 @@ exports.createUser = user => {
 };
 
 exports.getUserByEmail = email => {
-	const sql = "SELECT * FROM `user` WHERE `email` = ?";
+	const sql = "SELECT id, password FROM `user` WHERE `email` = ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, email, (err, data) => (err ? reject(err) : resolve(data[0])));
@@ -17,7 +17,8 @@ exports.getUserByEmail = email => {
 };
 
 exports.getUserById = id => {
-	const sql = "SELECT * FROM `user` WHERE `id` = ?";
+	const sql =
+		"SELECT id, email, username, creationDate, picture FROM `user` WHERE `id` = ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
