@@ -3,7 +3,9 @@
 		<h1>Posts</h1>
 		<article v-for="post in posts" :key="post.id">
 			<img :src="post.user_picture" alt="profile picture" />
-			<span>{{ post.username }}</span>
+			<router-link :to="{ name: 'profile', params: { id: post.user_id } }">{{
+				post.username
+			}}</router-link>
 			<span>{{ new Date(post.creationDate).toLocaleString() }}</span>
 			<p>{{ post.text }}</p>
 		</article>

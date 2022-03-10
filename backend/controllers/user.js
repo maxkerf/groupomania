@@ -40,7 +40,7 @@ exports.login = async (req, res) => {
 			expiresIn: "1h",
 		});
 
-		res.status(200).json({ token });
+		res.status(200).json({ userId, token });
 	} catch (err) {
 		console.error(`Failed to login ✖\n${err}`);
 		res.sendStatus(500);
@@ -60,6 +60,9 @@ exports.deleteUser = async (req, res) => {
 exports.getOneUser = async (req, res) => {
 	try {
 		const user = await userManager.getUserById(req.params.id);
+
+		if (!user) return res.status(404).json({ message: "User not found" });
+
 		res.status(200).json(user);
 	} catch (err) {
 		console.error(`Failed to get one user ✖\n${err}`);

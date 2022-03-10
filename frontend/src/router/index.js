@@ -4,6 +4,7 @@ import SignupView from "../views/SignupView.vue";
 import LoginView from "../views/LoginView.vue";
 import AddPostView from "../views/AddPostView.vue";
 import PostsView from "../views/PostsView.vue";
+import ProfileView from "../views/ProfileView.vue";
 import NotFound from "../views/NotFound.vue";
 
 const routes = [
@@ -29,6 +30,14 @@ const routes = [
 		component: LoginView,
 		meta: {
 			title: "Login | Groupomania",
+		},
+	},
+	{
+		path: "/profile/:id",
+		name: "profile",
+		component: ProfileView,
+		meta: {
+			title: "Profile | Groupomania",
 		},
 	},
 	{

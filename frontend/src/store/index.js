@@ -1,23 +1,26 @@
 import { createStore } from "vuex";
 
-let token = localStorage.getItem("token");
-if (!token) token = "";
+let user = localStorage.getItem("user");
+user = user ? JSON.parse(user) : { id: -1, token: "" };
 
 export default createStore({
 	state: {
 		apiRoot: "http://localhost:3000",
-		token,
+		token: user.token,
+		userId: user.id,
 	},
 	getters: {},
 	mutations: {
-		SET_TOKEN(state, token) {
-			state.token = token;
-			localStorage.setItem("token", token);
+		SET_USER(state, user) {
+			state.token = user.token;
+			state.userId = user.id;
+			localStorage.setItem("user", JSON.stringify(user));
 		},
 
-		REMOVE_TOKEN(state) {
+		REMOVE_USER(state) {
 			state.token = "";
-			localStorage.removeItem("token");
+			state.userId = -1;
+			localStorage.removeItem("user");
 		},
 	},
 	actions: {
@@ -48,8 +51,9 @@ export default createStore({
 
 			return new Promise((resolve, reject) => {
 				if (res.ok) {
-					commit("SET_TOKEN", data.token);
-					resolve(data);
+					const user = { id: data.userId, token: data.token };
+					commit("SET_USER", user);
+					resolve();
 				} else {
 					reject(Error(data.errorMessage));
 				}
@@ -57,7 +61,7 @@ export default createStore({
 		},
 
 		logout({ commit }) {
-			commit("REMOVE_TOKEN");
+			commit("REMOVE_USER");
 		},
 
 		async deleteAccount({ state }) {
@@ -83,7 +87,7 @@ export default createStore({
 				},
 				body: JSON.stringify(post),
 			});
-			const data = res.json();
+			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
 				res.ok ? resolve(data) : reject(Error(data.message));
@@ -96,7 +100,7 @@ export default createStore({
 					Authorization: `Bearer ${state.token}`,
 				},
 			});
-			const data = res.json();
+			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
 				res.ok ? resolve(data) : reject(Error(data.message));
@@ -109,10 +113,12 @@ export default createStore({
 					Authorization: `Bearer ${state.token}`,
 				},
 			});
-			const data = res.json();
+			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
-				res.ok ? resolve(data) : reject(Error(data.message));
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
 			});
 		},
 

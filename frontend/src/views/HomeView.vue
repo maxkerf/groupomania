@@ -3,8 +3,9 @@
 		<h1>Home</h1>
 		<router-link to="/add-post">Add a post</router-link>
 		<router-link to="/posts">Show posts</router-link>
-		<button @click="logout">Logout</button>
-		<button @click="deleteAccount">Delete account</button>
+		<router-link :to="{ name: 'profile', params: { id: userId } }">
+			Profile
+		</router-link>
 	</div>
 </template>
 
@@ -14,25 +15,9 @@ import { mapActions, mapState } from "vuex";
 export default {
 	methods: {
 		...mapActions(["apiRoot"]),
-
-		logout() {
-			this.$store.dispatch("logout");
-			this.$router.push("/login");
-		},
-
-		async deleteAccount() {
-			try {
-				const data = await this.$store.dispatch("deleteAccount");
-				console.log(data);
-			} catch (err) {
-				console.error(err);
-			}
-
-			this.logout();
-		},
 	},
 	computed: {
-		...mapState(["token"]),
+		...mapState(["token", "userId"]),
 	},
 	async created() {
 		if (!this.token) this.$router.push("/login");

@@ -18,7 +18,7 @@ exports.getUserByEmail = email => {
 
 exports.getUserById = id => {
 	const sql =
-		"SELECT id, email, username, creationDate, picture FROM `user` WHERE `id` = ?";
+		"SELECT id, username, creationDate, picture FROM `user` WHERE `id` = ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
