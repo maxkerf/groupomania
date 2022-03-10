@@ -22,13 +22,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(["token"]),
+		...mapState(["login"]),
 	},
 	methods: {
 		...mapActions(["getPosts"]),
 	},
 	async created() {
-		if (!this.token) this.$router.push("/login");
+		if (this.login.userId === -1) return this.$router.push("/login");
 
 		try {
 			this.posts = await this.getPosts();

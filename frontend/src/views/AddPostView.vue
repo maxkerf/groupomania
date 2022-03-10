@@ -20,10 +20,10 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(["token"]),
+		...mapState(["login"]),
 	},
 	created() {
-		if (!this.token) this.$router.push("/login");
+		if (this.login.userId === -1) return this.$router.push("/login");
 	},
 	methods: {
 		...mapActions(["addPost"]),

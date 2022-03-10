@@ -1,26 +1,24 @@
 import { createStore } from "vuex";
 
-let user = localStorage.getItem("user");
-user = user ? JSON.parse(user) : { id: -1, token: "" };
+const DEFAULT_LOGIN = { userId: -1, token: "" };
+let login = localStorage.getItem("login");
+login = login ? JSON.parse(login) : DEFAULT_LOGIN;
 
 export default createStore({
 	state: {
 		apiRoot: "http://localhost:3000",
-		token: user.token,
-		userId: user.id,
+		login,
 	},
 	getters: {},
 	mutations: {
-		SET_USER(state, user) {
-			state.token = user.token;
-			state.userId = user.id;
-			localStorage.setItem("user", JSON.stringify(user));
+		SET_LOGIN(state, login) {
+			state.login = login;
+			localStorage.setItem("login", JSON.stringify(login));
 		},
 
-		REMOVE_USER(state) {
-			state.token = "";
-			state.userId = -1;
-			localStorage.removeItem("user");
+		REMOVE_LOGIN(state) {
+			state.login = DEFAULT_LOGIN;
+			localStorage.removeItem("login");
 		},
 	},
 	actions: {
@@ -51,8 +49,7 @@ export default createStore({
 
 			return new Promise((resolve, reject) => {
 				if (res.ok) {
-					const user = { id: data.userId, token: data.token };
-					commit("SET_USER", user);
+					commit("SET_LOGIN", data);
 					resolve();
 				} else {
 					reject(Error(data.errorMessage));
@@ -61,14 +58,14 @@ export default createStore({
 		},
 
 		logout({ commit }) {
-			commit("REMOVE_USER");
+			commit("REMOVE_LOGIN");
 		},
 
 		async deleteAccount({ state }) {
 			const res = await fetch(`${state.apiRoot}/users`, {
 				method: "DELETE",
 				headers: {
-					Authorization: `Bearer ${state.token}`,
+					Authorization: `Bearer ${state.login.token}`,
 				},
 			});
 			const data = await res.json();
@@ -82,7 +79,7 @@ export default createStore({
 			const res = await fetch(`${state.apiRoot}/posts`, {
 				method: "POST",
 				headers: {
-					Authorization: `Bearer ${state.token}`,
+					Authorization: `Bearer ${state.login.token}`,
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(post),
@@ -97,7 +94,7 @@ export default createStore({
 		async getPosts({ state }) {
 			const res = await fetch(`${state.apiRoot}/posts`, {
 				headers: {
-					Authorization: `Bearer ${state.token}`,
+					Authorization: `Bearer ${state.login.token}`,
 				},
 			});
 			const data = await res.json();
@@ -110,7 +107,7 @@ export default createStore({
 		async getOneUser({ state }, userId) {
 			const res = await fetch(`${state.apiRoot}/users/${userId}`, {
 				headers: {
-					Authorization: `Bearer ${state.token}`,
+					Authorization: `Bearer ${state.login.token}`,
 				},
 			});
 			const data = await res.json();
@@ -125,7 +122,7 @@ export default createStore({
 		async apiRoot({ state }) {
 			const res = await fetch(state.apiRoot, {
 				headers: {
-					Authorization: `Bearer ${state.token}`,
+					Authorization: `Bearer ${state.login.token}`,
 				},
 			});
 			const data = await res.json();

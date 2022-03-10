@@ -3,7 +3,7 @@
 		<h1>Home</h1>
 		<router-link to="/add-post">Add a post</router-link>
 		<router-link to="/posts">Show posts</router-link>
-		<router-link :to="{ name: 'profile', params: { id: userId } }">
+		<router-link :to="{ name: 'profile', params: { id: login.userId } }">
 			Profile
 		</router-link>
 	</div>
@@ -17,17 +17,18 @@ export default {
 		...mapActions(["apiRoot"]),
 	},
 	computed: {
-		...mapState(["token", "userId"]),
+		...mapState(["login"]),
 	},
 	async created() {
-		if (!this.token) this.$router.push("/login");
+		if (this.login.userId === -1) return this.$router.push("/login");
 
 		try {
 			const data = await this.apiRoot();
 			console.log(data);
 		} catch (err) {
 			console.error(err);
-			this.logout();
+			this.$store.dispatch("logout");
+			this.$router.push("/login");
 		}
 	},
 };

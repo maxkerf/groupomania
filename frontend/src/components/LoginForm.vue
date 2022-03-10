@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 
 export default {
 	data() {
@@ -21,14 +21,12 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(["token"]),
+		...mapState(["login"]),
 	},
 	created() {
-		if (this.token) this.$router.push("/");
+		if (this.login.userId !== -1) return this.$router.push("/");
 	},
 	methods: {
-		...mapActions(["login"]),
-
 		async submit() {
 			const user = {
 				email: this.email,
@@ -36,7 +34,7 @@ export default {
 			};
 
 			try {
-				await this.login(user);
+				await this.$store.dispatch("login", user);
 				this.$router.push("/");
 			} catch (err) {
 				this.errorMessage = err.message;

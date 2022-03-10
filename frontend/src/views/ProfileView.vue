@@ -7,10 +7,13 @@
 			<span>
 				Creation date: {{ new Date(user.creationDate).toLocaleString() }}
 			</span>
-			<button v-if="userId == this.$route.params.id" @click="logout">
+			<button v-if="login.userId == this.$route.params.id" @click="logout">
 				Logout
 			</button>
-			<button v-if="userId == this.$route.params.id" @click="deleteAccount">
+			<button
+				v-if="login.userId == this.$route.params.id"
+				@click="deleteAccount"
+			>
 				Delete account
 			</button>
 		</div>
@@ -47,10 +50,10 @@ export default {
 		},
 	},
 	computed: {
-		...mapState(["token", "userId"]),
+		...mapState(["login"]),
 	},
 	async created() {
-		if (!this.token) this.$router.push("/login");
+		if (this.login.userId === -1) return this.$router.push("/login");
 
 		try {
 			this.user = await this.getOneUser(this.$route.params.id);

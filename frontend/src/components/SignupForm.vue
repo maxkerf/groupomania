@@ -22,13 +22,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(["token"]),
+		...mapState(["login"]),
 	},
 	created() {
-		if (this.token) this.$router.push("/");
+		if (this.login.userId !== -1) return this.$router.push("/");
 	},
 	methods: {
-		...mapActions(["signup", "login"]),
+		...mapActions(["signup"]),
 
 		async submit() {
 			const user = {
@@ -41,7 +41,7 @@ export default {
 				const signupData = await this.signup(user);
 				console.log(signupData);
 
-				await this.login(user);
+				await this.$store.dispatch("login", user);
 				this.$router.push("/");
 			} catch (err) {
 				console.error(err);
