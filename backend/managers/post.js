@@ -16,3 +16,19 @@ exports.getAllPosts = () => {
 		db.query(sql, (err, data) => (err ? reject(err) : resolve(data)));
 	});
 };
+
+exports.getPostById = id => {
+	const sql = "SELECT * FROM `post` WHERE `id` = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
+	});
+};
+
+exports.deletePost = id => {
+	const sql = "DELETE FROM `post` WHERE `id` = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, id, err => (err ? reject(err) : resolve()));
+	});
+};

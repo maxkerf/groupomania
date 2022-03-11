@@ -24,3 +24,13 @@ exports.getAllPosts = async (req, res) => {
 		res.sendStatus(500);
 	}
 };
+
+exports.deletePost = async (req, res) => {
+	try {
+		await postManager.deletePost(req.params.id);
+		res.status(200).json({ message: "Post deleted" });
+	} catch (err) {
+		console.error(`Failed to delete post ✖\n${err}`);
+		res.sendStatus(500);
+	}
+};

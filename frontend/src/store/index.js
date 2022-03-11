@@ -61,6 +61,21 @@ export default createStore({
 			commit("REMOVE_LOGIN");
 		},
 
+		async getOneUser({ state }, userId) {
+			const res = await fetch(`${state.apiRoot}/users/${userId}`, {
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+				},
+			});
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
 		async deleteAccount({ state }) {
 			const res = await fetch(`${state.apiRoot}/users`, {
 				method: "DELETE",
@@ -100,12 +115,15 @@ export default createStore({
 			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
-				res.ok ? resolve(data) : reject(Error(data.message));
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
 			});
 		},
 
-		async getOneUser({ state }, userId) {
-			const res = await fetch(`${state.apiRoot}/users/${userId}`, {
+		async deletePost({ state }, postId) {
+			const res = await fetch(`${state.apiRoot}/posts/${postId}`, {
+				method: "DELETE",
 				headers: {
 					Authorization: `Bearer ${state.login.token}`,
 				},
