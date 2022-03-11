@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<h1>Posts</h1>
+		<AddPostForm @add-post="addPost" />
 		<article v-for="post in posts" :key="post.id" :ref="`post-${post.id}`">
 			<img :src="post.user_picture" alt="profile picture" />
 			<router-link :to="{ name: 'profile', params: { id: post.user_id } }">{{
@@ -19,13 +20,18 @@
 </template>
 
 <script>
+import AddPostForm from "../components/AddPostForm.vue";
 import { mapState } from "vuex";
+
 export default {
 	data() {
 		return {
 			posts: [],
 			nbPosts: 0,
 		};
+	},
+	components: {
+		AddPostForm,
 	},
 	computed: {
 		...mapState(["login"]),
@@ -58,14 +64,25 @@ export default {
 		async getPosts() {
 			try {
 				const posts = await this.$store.dispatch("getPosts", this.posts.length);
-				posts.forEach(post => {
-					this.posts.push(post);
-				});
+				this.posts = [...this.posts, ...posts];
 			} catch (err) {
 				if (err.status === 401) {
 					this.$store.dispatch("logout");
 					this.$router.push("/login");
 				}
+				console.error(err);
+			}
+		},
+
+		async addPost(post) {
+			try {
+				const data = await this.$store.dispatch("addPost", post);
+				console.log(data);
+				const postCreated = await this.$store.dispatch("getPost", data.postId);
+
+				this.posts = [postCreated, ...this.posts];
+				this.nbPosts++;
+			} catch (err) {
 				console.error(err);
 			}
 		},
@@ -104,5 +121,9 @@ p {
 
 button {
 	margin-top: 1rem;
+}
+
+form {
+	margin-bottom: 2rem;
 }
 </style>

@@ -4,13 +4,13 @@ exports.createPost = post => {
 	const sql = "INSERT INTO `post` SET ?, `creationDate` = NOW()";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, post, err => (err ? reject(err) : resolve()));
+		db.query(sql, post, (err, data) => (err ? reject(err) : resolve(data)));
 	});
 };
 
 exports.getPosts = (offset = 0) => {
 	const sql =
-		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, username, picture AS user_picture FROM `post`INNER JOIN `user` ON post.user_id = user.id ORDER BY post.creationDate DESC LIMIT 2 OFFSET ?";
+		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, username, picture AS user_picture FROM `post`INNER JOIN `user` ON post.user_id = user.id ORDER BY post.creationDate DESC LIMIT 5 OFFSET ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, offset, (err, data) => (err ? reject(err) : resolve(data)));
@@ -27,8 +27,9 @@ exports.countPosts = () => {
 	});
 };
 
-exports.getPostById = postId => {
-	const sql = "SELECT * FROM `post` WHERE `id` = ?";
+exports.getPost = postId => {
+	const sql =
+		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, username, picture AS user_picture FROM `post` INNER JOIN `user` ON post.user_id = user.id WHERE post.id = ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, postId, (err, data) =>

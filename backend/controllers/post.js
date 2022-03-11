@@ -1,14 +1,14 @@
 const postManager = require("../managers/post");
 
 exports.createPost = async (req, res) => {
-	const post = {
+	const newPost = {
 		user_id: res.locals.userId,
 		text: req.body.text,
 	};
 
 	try {
-		await postManager.createPost(post);
-		res.status(201).json({ message: "Post created" });
+		const data = await postManager.createPost(newPost);
+		res.status(201).json({ message: "Post created", postId: data.insertId });
 	} catch (err) {
 		console.error(`Failed to create post ✖\n${err}`);
 		res.sendStatus(500);
@@ -25,6 +25,10 @@ exports.getPosts = async (req, res) => {
 		console.error(`Failed to get all posts ✖\n${err}`);
 		res.sendStatus(500);
 	}
+};
+
+exports.getPost = async (req, res) => {
+	res.status(200).json(res.locals.post);
 };
 
 exports.countPosts = async (req, res) => {
