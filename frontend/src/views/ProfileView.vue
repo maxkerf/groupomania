@@ -39,6 +39,8 @@ export default {
 		},
 
 		async deleteAccount() {
+			if (!confirm("Do you really want to delete your account?")) return;
+
 			try {
 				const data = await this.$store.dispatch("deleteAccount");
 				console.log(data);

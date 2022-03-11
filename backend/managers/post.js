@@ -8,7 +8,7 @@ exports.createPost = post => {
 	});
 };
 
-exports.getAllPosts = () => {
+exports.getPosts = () => {
 	const sql =
 		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, username, picture AS user_picture FROM `post`INNER JOIN `user` ON post.user_id = user.id";
 
@@ -17,18 +17,28 @@ exports.getAllPosts = () => {
 	});
 };
 
-exports.getPostById = id => {
+exports.getPostById = postId => {
 	const sql = "SELECT * FROM `post` WHERE `id` = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
+		db.query(sql, postId, (err, data) =>
+			err ? reject(err) : resolve(data[0])
+		);
 	});
 };
 
-exports.deletePost = id => {
+exports.deletePost = postId => {
 	const sql = "DELETE FROM `post` WHERE `id` = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, id, err => (err ? reject(err) : resolve()));
+		db.query(sql, postId, err => (err ? reject(err) : resolve()));
+	});
+};
+
+exports.deleteUserPosts = userId => {
+	const sql = "DELETE FROM `post` WHERE `user_id` = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, userId, err => (err ? reject(err) : resolve()));
 	});
 };

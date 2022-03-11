@@ -7,12 +7,12 @@ const authenticateUser = require("../middlewares/authenticateUser");
 const authorizeUser = require("../middlewares/authorizeUser");
 
 router.use(authenticateUser);
-router.route("/").post(postCtrl.createPost).get(postCtrl.getAllPosts);
+router.route("/").post(postCtrl.createPost).get(postCtrl.getPosts);
 router.route("/:id").delete(authorizeUser, postCtrl.deletePost);
 
-router.param("id", async (req, res, next, id) => {
+router.param("id", async (req, res, next, postId) => {
 	try {
-		const post = await postManager.getPostById(id);
+		const post = await postManager.getPostById(postId);
 		if (!post) return res.status(404).json({ message: "Post not found" });
 		res.locals.post = post;
 		next();

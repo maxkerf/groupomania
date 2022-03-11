@@ -15,9 +15,9 @@ exports.createPost = async (req, res) => {
 	}
 };
 
-exports.getAllPosts = async (req, res) => {
+exports.getPosts = async (req, res) => {
 	try {
-		const posts = await postManager.getAllPosts();
+		const posts = await postManager.getPosts();
 		res.status(200).json(posts);
 	} catch (err) {
 		console.error(`Failed to get all posts ✖\n${err}`);

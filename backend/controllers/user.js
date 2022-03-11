@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userManager = require("../managers/user");
+const postManager = require("../managers/post");
 
 exports.signup = async (req, res) => {
 	try {
@@ -48,8 +49,11 @@ exports.login = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
+	const userId = res.locals.userId;
+
 	try {
-		await userManager.deleteUser(res.locals.userId);
+		await postManager.deleteUserPosts(userId);
+		await userManager.deleteUser(userId);
 		res.status(200).json({ message: "User deleted" });
 	} catch (err) {
 		console.error(`Failed to delete user ✖\n${err}`);

@@ -8,27 +8,31 @@ exports.createUser = user => {
 	});
 };
 
-exports.getUserByEmail = email => {
+exports.getUserByEmail = userEmail => {
 	const sql = "SELECT id, password FROM `user` WHERE `email` = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, email, (err, data) => (err ? reject(err) : resolve(data[0])));
+		db.query(sql, userEmail, (err, data) =>
+			err ? reject(err) : resolve(data[0])
+		);
 	});
 };
 
-exports.getUserById = id => {
+exports.getUserById = userId => {
 	const sql =
 		"SELECT id, username, creationDate, picture FROM `user` WHERE `id` = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
+		db.query(sql, userId, (err, data) =>
+			err ? reject(err) : resolve(data[0])
+		);
 	});
 };
 
-exports.deleteUser = id => {
+exports.deleteUser = userId => {
 	const sql = "DELETE FROM `user` WHERE `id` = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, id, err => (err ? reject(err) : resolve()));
+		db.query(sql, userId, err => (err ? reject(err) : resolve()));
 	});
 };
