@@ -1,12 +1,5 @@
 <template>
-	<div>
-		<h1>Home</h1>
-		<router-link to="/add-post">Add a post</router-link>
-		<router-link to="/posts">Show posts</router-link>
-		<router-link :to="{ name: 'profile', params: { id: login.userId } }">
-			Profile
-		</router-link>
-	</div>
+	<h1>Home</h1>
 </template>
 
 <script>

@@ -6,7 +6,6 @@
 			<input id="text" type="text" v-model="text" />
 			<button type="submit">Add Post</button>
 		</form>
-		<router-link to="/">Home</router-link>
 	</div>
 </template>
 
@@ -48,10 +47,6 @@ export default {
 <style lang="scss" scoped>
 form > * {
 	display: block;
-}
-
-form {
-	margin-bottom: 1rem;
 }
 
 button {

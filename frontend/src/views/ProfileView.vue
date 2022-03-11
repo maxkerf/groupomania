@@ -5,7 +5,7 @@
 			<img :src="user.picture" alt="profile picture" />
 			<span>Username: {{ user.username }}</span>
 			<span>
-				Creation date: {{ new Date(user.creationDate).toLocaleString() }}
+				Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
 			</span>
 			<button v-if="login.userId == this.$route.params.id" @click="logout">
 				Logout
@@ -17,7 +17,6 @@
 				Delete account
 			</button>
 		</div>
-		<router-link to="/">Home</router-link>
 	</div>
 </template>
 
