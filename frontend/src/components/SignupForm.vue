@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="submit">
+	<form @submit.prevent="onSubmit">
 		<label for="email">Email</label>
 		<input id="email" type="email" v-model="email" />
 		<label for="password">Password</label>
@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-
 export default {
 	data() {
 		return {
@@ -21,31 +19,15 @@ export default {
 			username: "",
 		};
 	},
-	computed: {
-		...mapState(["login"]),
-	},
-	created() {
-		if (this.login.userId !== -1) return this.$router.push("/");
-	},
 	methods: {
-		...mapActions(["signup"]),
-
-		async submit() {
+		onSubmit() {
 			const user = {
 				email: this.email,
 				password: this.password,
 				username: this.username,
 			};
 
-			try {
-				const signupData = await this.signup(user);
-				console.log(signupData);
-
-				await this.$store.dispatch("login", user);
-				this.$router.push("/");
-			} catch (err) {
-				console.error(err);
-			}
+			this.$emit("signup", user);
 		},
 	},
 };

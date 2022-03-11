@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="submit">
+	<form @submit.prevent="onSubmit">
 		<label for="email">Email</label>
 		<input v-model="email" id="email" type="email" />
 		<label for="password">Password</label>
@@ -10,35 +10,22 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
 	data() {
 		return {
 			email: "",
 			password: "",
-			errorMessage: "",
 		};
 	},
-	computed: {
-		...mapState(["login"]),
-	},
-	created() {
-		if (this.login.userId !== -1) return this.$router.push("/");
-	},
+	props: ["errorMessage"],
 	methods: {
-		async submit() {
+		onSubmit() {
 			const user = {
 				email: this.email,
 				password: this.password,
 			};
 
-			try {
-				await this.$store.dispatch("login", user);
-				this.$router.push("/");
-			} catch (err) {
-				this.errorMessage = err.message;
-			}
+			this.$emit("login", user);
 		},
 	},
 };

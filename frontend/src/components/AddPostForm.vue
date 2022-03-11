@@ -14,7 +14,7 @@ export default {
 		};
 	},
 	methods: {
-		async onSubmit() {
+		onSubmit() {
 			const post = {
 				text: this.text,
 			};
