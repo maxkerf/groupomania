@@ -16,11 +16,23 @@ exports.createPost = async (req, res) => {
 };
 
 exports.getPosts = async (req, res) => {
+	const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+
 	try {
-		const posts = await postManager.getPosts();
+		const posts = await postManager.getPosts(offset);
 		res.status(200).json(posts);
 	} catch (err) {
 		console.error(`Failed to get all posts ✖\n${err}`);
+		res.sendStatus(500);
+	}
+};
+
+exports.countPosts = async (req, res) => {
+	try {
+		const nbPosts = await postManager.countPosts();
+		res.status(200).json(nbPosts);
+	} catch (err) {
+		console.error(`Failed to count posts ✖\n${err}`);
 		res.sendStatus(500);
 	}
 };

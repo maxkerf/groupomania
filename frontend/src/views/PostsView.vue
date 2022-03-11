@@ -12,24 +12,34 @@
 				Delete
 			</button>
 		</article>
+		<button @click="getPosts" v-show="posts.length !== nbPosts">
+			Show more
+		</button>
 	</div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 export default {
 	data() {
 		return {
 			posts: [],
+			nbPosts: 0,
 		};
 	},
 	computed: {
 		...mapState(["login"]),
 	},
-	methods: {
-		...mapActions(["getPosts"]),
+	async created() {
+		if (this.login.userId === -1) return this.$router.push("/login");
 
+		this.getPosts();
+		this.nbPosts = await this.$store.dispatch("countPosts");
+	},
+	methods: {
 		async deletePost(id) {
+			if (!confirm("Do you really want to delete this post?")) return;
+
 			const DOMPost = this.$refs[`post-${id}`][0];
 
 			try {
@@ -44,19 +54,21 @@ export default {
 				console.error(err);
 			}
 		},
-	},
-	async created() {
-		if (this.login.userId === -1) return this.$router.push("/login");
 
-		try {
-			this.posts = await this.getPosts();
-		} catch (err) {
-			if (err.status === 401) {
-				this.$store.dispatch("logout");
-				this.$router.push("/login");
+		async getPosts() {
+			try {
+				const posts = await this.$store.dispatch("getPosts", this.posts.length);
+				posts.forEach(post => {
+					this.posts.push(post);
+				});
+			} catch (err) {
+				if (err.status === 401) {
+					this.$store.dispatch("logout");
+					this.$router.push("/login");
+				}
+				console.error(err);
 			}
-			console.error(err);
-		}
+		},
 	},
 };
 </script>

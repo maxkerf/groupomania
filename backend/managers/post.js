@@ -8,12 +8,22 @@ exports.createPost = post => {
 	});
 };
 
-exports.getPosts = () => {
+exports.getPosts = (offset = 0) => {
 	const sql =
-		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, username, picture AS user_picture FROM `post`INNER JOIN `user` ON post.user_id = user.id";
+		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, username, picture AS user_picture FROM `post`INNER JOIN `user` ON post.user_id = user.id ORDER BY post.creationDate DESC LIMIT 2 OFFSET ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, (err, data) => (err ? reject(err) : resolve(data)));
+		db.query(sql, offset, (err, data) => (err ? reject(err) : resolve(data)));
+	});
+};
+
+exports.countPosts = () => {
+	const sql = "SELECT COUNT(*) FROM `post`";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, (err, data) =>
+			err ? reject(err) : resolve(data[0]["COUNT(*)"])
+		);
 	});
 };
 

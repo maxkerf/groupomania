@@ -9,6 +9,7 @@ const authorizeUser = require("../middlewares/authorizeUser");
 router.use(authenticateUser);
 router.route("/").post(postCtrl.createPost).get(postCtrl.getPosts);
 router.route("/:id").delete(authorizeUser, postCtrl.deletePost);
+router.get("/count", postCtrl.countPosts);
 
 router.param("id", async (req, res, next, postId) => {
 	try {
