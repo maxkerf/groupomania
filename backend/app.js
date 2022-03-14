@@ -13,9 +13,8 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 
-const authenticateUser = require("./middlewares/authenticateUser");
-app.get("/", authenticateUser, (req, res) =>
-	res.status(200).json({ message: "Welcome to Groupomania 🌐" })
+app.get("/", (req, res) =>
+	res.status(200).json({ message: "Welcome to Groupomania API 🌐" })
 );
 
 const userRouter = require("./routers/user");

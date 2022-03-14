@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import SignupView from "../views/SignupView.vue";
 import LoginView from "../views/LoginView.vue";
-import PostsView from "../views/PostsView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import NotFound from "../views/NotFound.vue";
 
@@ -37,14 +36,6 @@ const routes = [
 		component: ProfileView,
 		meta: {
 			title: "Profile | Groupomania",
-		},
-	},
-	{
-		path: "/posts",
-		name: "postsView",
-		component: PostsView,
-		meta: {
-			title: "Posts | Groupomania",
 		},
 	},
 	{
