@@ -2,7 +2,14 @@
 	<div>
 		<h1>Profile<span v-if="notFound"> not found</span></h1>
 		<div v-if="!notFound">
-			<img :src="user.picture" alt="profile picture" />
+			<img :src="`${apiRoot}/images/${user.picture}`" alt="profile picture" />
+			<form
+				v-if="login.userId == this.$route.params.id"
+				@submit.prevent="onSubmit"
+			>
+				<input type="file" required />
+				<button type="submit">Update pic</button>
+			</form>
 			<span>Username: {{ user.username }}</span>
 			<span>
 				Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
@@ -21,16 +28,53 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
+
 export default {
 	data() {
 		return {
 			notFound: false,
-			user: {},
+			user: {
+				picture: "user.svg",
+			},
 		};
 	},
+	computed: {
+		...mapState(["login", "apiRoot"]),
+	},
+	async created() {
+		if (this.login.userId === -1) return this.$router.push("/login");
+
+		this.$watch(
+			() => {
+				return this.$route.params.id;
+			},
+			() => {
+				if (this.$route.name === "profile") this.getOneUser();
+			},
+			{ immediate: true }
+		);
+	},
 	methods: {
-		...mapActions(["getOneUser"]),
+		async getOneUser() {
+			try {
+				this.user = await this.$store.dispatch(
+					"getOneUser",
+					this.$route.params.id
+				);
+			} catch (err) {
+				switch (err.status) {
+					case 401:
+						this.logout();
+						break;
+					case 404:
+						this.notFound = true;
+						break;
+					default:
+				}
+				console.error(err);
+			}
+		},
 
 		logout() {
 			this.$store.dispatch("logout");
@@ -49,29 +93,18 @@ export default {
 
 			this.logout();
 		},
-	},
-	computed: {
-		...mapState(["login"]),
-	},
-	async created() {
-		if (this.login.userId === -1) return this.$router.push("/login");
 
-		try {
-			this.user = await this.getOneUser(this.$route.params.id);
-			this.user.picture = `/${this.user.picture}`;
-		} catch (err) {
-			switch (err.status) {
-				case 401:
-					this.$store.dispatch("logout");
-					this.$router.push("/login");
-					break;
-				case 404:
-					this.notFound = true;
-					break;
-				default:
+		async onSubmit() {
+			const newPicture = document.querySelector("input").files[0];
+
+			try {
+				const data = await this.$store.dispatch("updatePicture", newPicture);
+				console.log(data);
+				this.user.picture = data.newPicture;
+			} catch (err) {
+				console.error(err);
 			}
-			console.error(err);
-		}
+		},
 	},
 };
 </script>
@@ -86,6 +119,6 @@ div > * {
 }
 
 img {
-	height: 50px;
+	height: 100px;
 }
 </style>

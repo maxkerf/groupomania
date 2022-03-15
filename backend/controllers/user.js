@@ -64,12 +64,24 @@ exports.deleteUser = async (req, res) => {
 exports.getOneUser = async (req, res) => {
 	try {
 		const user = await userManager.getUserById(req.params.id);
-
 		if (!user) return res.status(404).json({ message: "User not found" });
 
 		res.status(200).json(user);
 	} catch (err) {
 		console.error(`Failed to get one user ✖\n${err}`);
+		res.sendStatus(500);
+	}
+};
+
+exports.updateUserPicture = async (req, res) => {
+	const userId = res.locals.userId;
+	const newPicture = req.file.filename;
+
+	try {
+		await userManager.updateUserPicture(userId, newPicture);
+		res.status(200).json({ message: "User picture updated", newPicture });
+	} catch (err) {
+		console.error(`Failed to update user picture ✖\n${err}`);
 		res.sendStatus(500);
 	}
 };

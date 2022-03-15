@@ -6,7 +6,6 @@
 			v-for="post in posts"
 			:key="post.id"
 			:post="post"
-			:login="login"
 			@delete-post="deletePost"
 		/>
 		<button @click="getPosts" v-show="posts.length !== nbPosts">

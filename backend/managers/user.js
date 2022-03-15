@@ -36,3 +36,11 @@ exports.deleteUser = userId => {
 		db.query(sql, userId, err => (err ? reject(err) : resolve()));
 	});
 };
+
+exports.updateUserPicture = (userId, newPicture) => {
+	const sql = "UPDATE user SET picture = ? WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, [newPicture, userId], err => (err ? reject(err) : resolve()));
+	});
+};

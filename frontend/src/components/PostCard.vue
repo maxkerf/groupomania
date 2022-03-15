@@ -1,6 +1,9 @@
 <template>
 	<article>
-		<img :src="post.user_picture" alt="profile picture" />
+		<img
+			:src="`${apiRoot}/images/${post.user_picture}`"
+			alt="profile picture"
+		/>
 		<router-link :to="{ name: 'profile', params: { id: post.user_id } }">{{
 			post.username
 		}}</router-link>
@@ -16,8 +19,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-	props: ["post", "login"],
+	props: ["post"],
+	computed: {
+		...mapState(["login", "apiRoot"]),
+	},
 };
 </script>
 
@@ -33,12 +41,10 @@ article {
 }
 
 img {
-	height: 40px;
+	height: 50px;
 	aspect-ratio: 1;
 	object-fit: cover;
 	object-position: top;
-	background-color: grey;
-	padding: 0.25rem;
 	border-radius: 50%;
 	grid-row: 1 / 3;
 	margin-right: 0.5rem;

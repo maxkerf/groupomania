@@ -90,6 +90,26 @@ export default createStore({
 			});
 		},
 
+		async updatePicture({ state }, newPicture) {
+			const formData = new FormData();
+			formData.append("picture", newPicture);
+
+			const res = await fetch(`${state.apiRoot}/users`, {
+				method: "PUT",
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+				},
+				body: formData,
+			});
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
 		async addPost({ state }, post) {
 			const res = await fetch(`${state.apiRoot}/posts`, {
 				method: "POST",
@@ -164,19 +184,6 @@ export default createStore({
 				res.ok
 					? resolve(data)
 					: reject(Object.assign({ status: res.status }, data));
-			});
-		},
-
-		async apiRoot({ state }) {
-			const res = await fetch(state.apiRoot, {
-				headers: {
-					Authorization: `Bearer ${state.login.token}`,
-				},
-			});
-			const data = await res.json();
-
-			return new Promise((resolve, reject) => {
-				res.ok ? resolve(data) : reject(Error(data.message));
 			});
 		},
 	},

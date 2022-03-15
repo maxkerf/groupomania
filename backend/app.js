@@ -12,6 +12,7 @@ app.use((req, res, next) => {
 	next();
 });
 app.use(express.json());
+app.use("/images", express.static("images"));
 
 app.get("/", (req, res) =>
 	res.status(200).json({ message: "Welcome to Groupomania API 🌐" })
