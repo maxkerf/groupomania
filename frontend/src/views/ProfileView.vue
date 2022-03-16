@@ -3,17 +3,46 @@
 		<h1>Profile<span v-if="notFound"> not found</span></h1>
 		<div v-if="!notFound">
 			<img :src="`${apiRoot}/images/${user.picture}`" alt="profile picture" />
+			<button
+				v-if="login.userId == this.$route.params.id"
+				@click="updatingPicture = !updatingPicture"
+			>
+				<i v-show="updatingPicture" class="fa-solid fa-caret-up"></i>
+				<i v-show="!updatingPicture" class="fa-solid fa-caret-down"></i>
+				<span> Update picture</span>
+			</button>
 			<form
+				v-show="updatingPicture"
 				v-if="login.userId == this.$route.params.id"
 				@submit.prevent="onSubmit"
 			>
-				<input type="file" required />
-				<button type="submit">Update pic</button>
+				<label for="picture">Picture</label>
+				<input id="picture" type="file" required />
+				<button type="submit">Save</button>
 			</form>
+			<hr />
 			<span>Username: {{ user.username }}</span>
 			<span>
 				Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
 			</span>
+			<button
+				v-if="login.userId == this.$route.params.id"
+				@click="updating = !updating"
+			>
+				<i v-show="updating" class="fa-solid fa-caret-up"></i>
+				<i v-show="!updating" class="fa-solid fa-caret-down"></i>
+				<span> Update</span>
+			</button>
+			<form
+				v-show="updating"
+				v-if="login.userId == this.$route.params.id"
+				@submit.prevent="updateUser"
+			>
+				<label for="username">Username</label>
+				<input id="username" type="text" :value="user.username" />
+				<button type="submit">Save</button>
+			</form>
+			<hr />
 			<button v-if="login.userId == this.$route.params.id" @click="logout">
 				Logout
 			</button>
@@ -37,6 +66,8 @@ export default {
 			user: {
 				picture: "user.svg",
 			},
+			updating: false,
+			updatingPicture: false,
 		};
 	},
 	computed: {
@@ -95,12 +126,27 @@ export default {
 		},
 
 		async onSubmit() {
-			const newPicture = document.querySelector("input").files[0];
+			const newPicture = document.querySelector("#picture").files[0];
 
 			try {
 				const data = await this.$store.dispatch("updatePicture", newPicture);
 				console.log(data);
 				this.user.picture = data.newPicture;
+				this.updatingPicture = false;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+
+		async updateUser() {
+			const username = document.querySelector("#username").value;
+			const newUser = { username };
+
+			try {
+				const data = await this.$store.dispatch("updateUser", newUser);
+				console.log(data);
+				this.updating = false;
+				this.user.username = username;
 			} catch (err) {
 				console.error(err);
 			}
@@ -120,5 +166,18 @@ div > * {
 
 img {
 	height: 100px;
+}
+
+form {
+	border-left: 2px solid;
+	padding-left: 0.25rem;
+
+	& > * {
+		display: block;
+	}
+
+	button {
+		margin-top: 0.25rem;
+	}
 }
 </style>

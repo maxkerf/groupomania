@@ -1,8 +1,19 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 const userManager = require("../managers/user");
 const postManager = require("../managers/post");
+
+async function deleteUserPicture(userId) {
+	const user = await userManager.getUserById(userId);
+	const path = `images/${user.picture}`;
+
+	return new Promise((resolve, reject) => {
+		if (user.picture === "user.svg") return resolve();
+		fs.unlink(path, err => (err ? reject(err) : resolve()));
+	});
+}
 
 exports.signup = async (req, res) => {
 	try {
@@ -52,6 +63,7 @@ exports.deleteUser = async (req, res) => {
 	const userId = res.locals.userId;
 
 	try {
+		await deleteUserPicture(userId);
 		await postManager.deleteUserPosts(userId);
 		await userManager.deleteUser(userId);
 		res.status(200).json({ message: "User deleted" });
@@ -65,7 +77,6 @@ exports.getOneUser = async (req, res) => {
 	try {
 		const user = await userManager.getUserById(req.params.id);
 		if (!user) return res.status(404).json({ message: "User not found" });
-
 		res.status(200).json(user);
 	} catch (err) {
 		console.error(`Failed to get one user ✖\n${err}`);
@@ -78,10 +89,26 @@ exports.updateUserPicture = async (req, res) => {
 	const newPicture = req.file.filename;
 
 	try {
+		await deleteUserPicture(userId);
 		await userManager.updateUserPicture(userId, newPicture);
 		res.status(200).json({ message: "User picture updated", newPicture });
 	} catch (err) {
 		console.error(`Failed to update user picture ✖\n${err}`);
+		res.sendStatus(500);
+	}
+};
+
+exports.updateUser = async (req, res) => {
+	const userId = res.locals.userId;
+	const newUser = {
+		username: req.body.username,
+	};
+
+	try {
+		await userManager.updateUser(userId, newUser);
+		res.status(200).json({ message: "User updated" });
+	} catch (err) {
+		console.error(`Failed to update user ✖\n${err}`);
 		res.sendStatus(500);
 	}
 };

@@ -94,12 +94,30 @@ export default createStore({
 			const formData = new FormData();
 			formData.append("picture", newPicture);
 
-			const res = await fetch(`${state.apiRoot}/users`, {
+			const res = await fetch(`${state.apiRoot}/users/picture`, {
 				method: "PUT",
 				headers: {
 					Authorization: `Bearer ${state.login.token}`,
 				},
 				body: formData,
+			});
+			const data = res.status !== 500 ? await res.json() : {};
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
+		async updateUser({ state }, newUser) {
+			const res = await fetch(`${state.apiRoot}/users`, {
+				method: "PUT",
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(newUser),
 			});
 			const data = await res.json();
 

@@ -44,3 +44,11 @@ exports.updateUserPicture = (userId, newPicture) => {
 		db.query(sql, [newPicture, userId], err => (err ? reject(err) : resolve()));
 	});
 };
+
+exports.updateUser = (userId, userInfos) => {
+	const sql = "UPDATE user SET ? WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, [userInfos, userId], err => (err ? reject(err) : resolve()));
+	});
+};
