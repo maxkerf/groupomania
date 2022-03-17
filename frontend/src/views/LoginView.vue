@@ -31,6 +31,7 @@ export default {
 				await this.$store.dispatch("login", user);
 				this.$router.push("/");
 			} catch (err) {
+				console.error(err);
 				this.errorMessage = err.message;
 			}
 		},

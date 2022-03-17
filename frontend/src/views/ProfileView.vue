@@ -14,7 +14,7 @@
 			<form
 				v-show="updatingPicture"
 				v-if="login.userId == this.$route.params.id"
-				@submit.prevent="onSubmit"
+				@submit.prevent="updateUserPicture"
 			>
 				<label for="picture">Picture</label>
 				<input id="picture" type="file" required />
@@ -125,11 +125,14 @@ export default {
 			this.logout();
 		},
 
-		async onSubmit() {
+		async updateUserPicture() {
 			const newPicture = document.querySelector("#picture").files[0];
 
 			try {
-				const data = await this.$store.dispatch("updatePicture", newPicture);
+				const data = await this.$store.dispatch(
+					"updateUserPicture",
+					newPicture
+				);
 				console.log(data);
 				this.user.picture = data.newPicture;
 				this.updatingPicture = false;

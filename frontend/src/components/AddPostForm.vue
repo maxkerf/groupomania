@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="onSubmit">
+	<form @submit.prevent="addPost">
 		<label for="text">Text</label>
 		<input id="text" type="text" v-model="text" />
 		<button type="submit">Add Post</button>
@@ -14,7 +14,7 @@ export default {
 		};
 	},
 	methods: {
-		onSubmit() {
+		addPost() {
 			const post = {
 				text: this.text,
 			};

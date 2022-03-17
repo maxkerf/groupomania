@@ -30,7 +30,7 @@ exports.signup = async (req, res) => {
 		res.status(201).json({ message: "User signed up" });
 	} catch (err) {
 		console.error(`Failed to signup ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -55,7 +55,7 @@ exports.login = async (req, res) => {
 		res.status(200).json({ userId, token });
 	} catch (err) {
 		console.error(`Failed to login ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -69,7 +69,7 @@ exports.deleteUser = async (req, res) => {
 		res.status(200).json({ message: "User deleted" });
 	} catch (err) {
 		console.error(`Failed to delete user ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -80,7 +80,7 @@ exports.getOneUser = async (req, res) => {
 		res.status(200).json(user);
 	} catch (err) {
 		console.error(`Failed to get one user ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -94,7 +94,7 @@ exports.updateUserPicture = async (req, res) => {
 		res.status(200).json({ message: "User picture updated", newPicture });
 	} catch (err) {
 		console.error(`Failed to update user picture ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -109,6 +109,6 @@ exports.updateUser = async (req, res) => {
 		res.status(200).json({ message: "User updated" });
 	} catch (err) {
 		console.error(`Failed to update user ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

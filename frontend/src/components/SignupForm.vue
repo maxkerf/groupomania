@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="onSubmit">
+	<form @submit.prevent="signup">
 		<label for="email">Email</label>
 		<input id="email" type="email" v-model="email" />
 		<label for="password">Password</label>
@@ -20,7 +20,7 @@ export default {
 		};
 	},
 	methods: {
-		onSubmit() {
+		signup() {
 			const user = {
 				email: this.email,
 				password: this.password,

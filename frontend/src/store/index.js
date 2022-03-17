@@ -23,7 +23,7 @@ export default createStore({
 	},
 	actions: {
 		async signup({ state }, user) {
-			const res = await fetch(`${state.apiRoot}/signup`, {
+			const res = await fetch(`${state.apiRoot}/users/signup`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -33,12 +33,14 @@ export default createStore({
 			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
-				res.ok ? resolve(data) : reject(Error(data.errorMessage));
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
 			});
 		},
 
 		async login({ state, commit }, user) {
-			const res = await fetch(`${state.apiRoot}/login`, {
+			const res = await fetch(`${state.apiRoot}/users/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -52,7 +54,7 @@ export default createStore({
 					commit("SET_LOGIN", data);
 					resolve();
 				} else {
-					reject(Error(data.errorMessage));
+					reject(Object.assign({ status: res.status }, data));
 				}
 			});
 		},
@@ -90,7 +92,7 @@ export default createStore({
 			});
 		},
 
-		async updatePicture({ state }, newPicture) {
+		async updateUserPicture({ state }, newPicture) {
 			const formData = new FormData();
 			formData.append("picture", newPicture);
 
@@ -101,7 +103,7 @@ export default createStore({
 				},
 				body: formData,
 			});
-			const data = res.status !== 500 ? await res.json() : {};
+			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
 				res.ok

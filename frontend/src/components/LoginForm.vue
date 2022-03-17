@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="onSubmit">
+	<form @submit.prevent="login">
 		<label for="email">Email</label>
 		<input v-model="email" id="email" type="email" />
 		<label for="password">Password</label>
@@ -19,7 +19,7 @@ export default {
 	},
 	props: ["errorMessage"],
 	methods: {
-		onSubmit() {
+		login() {
 			const user = {
 				email: this.email,
 				password: this.password,
