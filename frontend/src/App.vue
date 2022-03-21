@@ -26,6 +26,11 @@ export default {
 
 a {
 	color: black;
+	text-decoration: none;
+
+	&.router-link-active {
+		text-decoration: underline;
+	}
 }
 
 h1 {

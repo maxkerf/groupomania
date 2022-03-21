@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<h1>Home</h1>
 		<AddPostForm @add-post="addPost" />
 		<PostCard
 			v-for="post in posts"

@@ -35,10 +35,6 @@ exports.getPosts = async (req, res) => {
 	}
 };
 
-exports.getPost = async (req, res) => {
-	res.status(200).json(res.locals.post);
-};
-
 exports.countPosts = async (req, res) => {
 	try {
 		const nbPosts = await postManager.countPosts();
@@ -47,6 +43,10 @@ exports.countPosts = async (req, res) => {
 		console.error(`Failed to count posts ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
+};
+
+exports.getPost = async (req, res) => {
+	res.status(200).json(res.locals.post);
 };
 
 exports.deletePost = async (req, res) => {

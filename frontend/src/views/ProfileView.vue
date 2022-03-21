@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Profile<span v-if="notFound"> not found</span></h1>
+		<span v-if="notFound">Profile not found</span>
 		<div v-if="!notFound">
 			<img
 				:src="`${apiRoot}/images/user/${user.picture}`"
