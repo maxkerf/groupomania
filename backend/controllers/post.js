@@ -4,6 +4,7 @@ exports.createPost = async (req, res) => {
 	const newPost = {
 		user_id: res.locals.userId,
 		text: req.body.text,
+		image: req.file.filename,
 	};
 
 	try {
@@ -11,7 +12,7 @@ exports.createPost = async (req, res) => {
 		res.status(201).json({ message: "Post created", postId: data.insertId });
 	} catch (err) {
 		console.error(`Failed to create post ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -23,7 +24,7 @@ exports.getPosts = async (req, res) => {
 		res.status(200).json(posts);
 	} catch (err) {
 		console.error(`Failed to get all posts ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -37,7 +38,7 @@ exports.countPosts = async (req, res) => {
 		res.status(200).json(nbPosts);
 	} catch (err) {
 		console.error(`Failed to count posts ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
@@ -47,6 +48,6 @@ exports.deletePost = async (req, res) => {
 		res.status(200).json({ message: "Post deleted" });
 	} catch (err) {
 		console.error(`Failed to delete post ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

@@ -1,19 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 
 const userManager = require("../managers/user");
 const postManager = require("../managers/post");
-
-async function deleteUserPicture(userId) {
-	const user = await userManager.getUserById(userId);
-	const path = `images/${user.picture}`;
-
-	return new Promise((resolve, reject) => {
-		if (user.picture === "user.svg") return resolve();
-		fs.unlink(path, err => (err ? reject(err) : resolve()));
-	});
-}
+const deleteUserPicture = require("../globalFunctions/deleteUserPicture");
 
 exports.signup = async (req, res) => {
 	try {
@@ -90,10 +80,12 @@ exports.updateUserPicture = async (req, res) => {
 	const newPicture = req.file.filename;
 
 	try {
-		await deleteUserPicture(userId);
+		const user = await userManager.getUserById(userId);
 		await userManager.updateUserPicture(userId, newPicture);
+		await deleteUserPicture(user.picture);
 		res.status(200).json({ message: "User picture updated", newPicture });
 	} catch (err) {
+		await deleteUserPicture(newPicture);
 		console.error(`Failed to update user picture ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}

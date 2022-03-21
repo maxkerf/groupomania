@@ -6,6 +6,8 @@ const postManager = require("../managers/post");
 const authenticateUser = require("../middlewares/authenticateUser");
 const authorizeUser = require("../middlewares/authorizeUser");
 const checkErrors = require("../middlewares/checkErrors");
+const uploadPostImage = require("../middlewares/uploadPostImage");
+const parseBodyFromMulter = require("../middlewares/parseBodyFromMulter");
 
 const router = express.Router();
 
@@ -26,6 +28,8 @@ router.param("id", async (req, res, next, postId) => {
 // Create Post
 router.post(
 	"/",
+	uploadPostImage,
+	parseBodyFromMulter,
 
 	body("text")
 		.notEmpty()

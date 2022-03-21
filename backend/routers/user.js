@@ -5,7 +5,7 @@ const userCtrl = require("../controllers/user");
 const userManager = require("../managers/user");
 const authenticateUser = require("../middlewares/authenticateUser");
 const checkErrors = require("../middlewares/checkErrors");
-const uploadImage = require("../middlewares/uploadImage");
+const uploadUserPicture = require("../middlewares/uploadUserPicture");
 
 async function isEmailUnique(email) {
 	let user;
@@ -123,7 +123,7 @@ router.put(
 );
 
 // Update User Picture
-router.put("/picture", uploadImage, userCtrl.updateUserPicture);
+router.put("/picture", uploadUserPicture, userCtrl.updateUserPicture);
 
 // Delete User
 router.delete("/", userCtrl.deleteUser);
