@@ -2,7 +2,10 @@
 	<div>
 		<h1>Profile<span v-if="notFound"> not found</span></h1>
 		<div v-if="!notFound">
-			<img :src="`${apiRoot}/images/${user.picture}`" alt="profile picture" />
+			<img
+				:src="`${apiRoot}/images/user/${user.picture}`"
+				alt="profile picture"
+			/>
 			<UpdateUserPicture
 				:updatingPicture="updatingPicture"
 				@toggle-updating-picture="updatingPicture = !updatingPicture"

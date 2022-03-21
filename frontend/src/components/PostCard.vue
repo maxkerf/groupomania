@@ -2,7 +2,7 @@
 	<article>
 		<img
 			class="user-picture"
-			:src="`${apiRoot}/images/${post.user_picture}`"
+			:src="`${apiRoot}/images/user/${post.user_picture}`"
 			alt="profile picture"
 		/>
 		<router-link :to="{ name: 'profile', params: { id: post.user_id } }">{{

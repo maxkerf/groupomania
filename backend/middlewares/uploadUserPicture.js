@@ -7,7 +7,7 @@ function getExtension(file) {
 }
 
 const storage = multer.diskStorage({
-	destination: (req, file, cb) => cb(null, "images"),
+	destination: (req, file, cb) => cb(null, "images/user"),
 	filename: (req, file, cb) => {
 		const currentTime = Date.now();
 		const randomNumber = Math.random().toString().slice(2);

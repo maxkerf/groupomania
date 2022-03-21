@@ -1,4 +1,3 @@
 *
 !.gitignore
-!post
-!user
+!user.svg

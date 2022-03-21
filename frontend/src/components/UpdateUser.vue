@@ -6,7 +6,7 @@
 		>
 			<i v-show="updating" class="fa-solid fa-caret-up"></i>
 			<i v-show="!updating" class="fa-solid fa-caret-down"></i>
-			<span> Update</span>
+			<span> Update infos</span>
 		</button>
 		<UpdateUserForm
 			:updating="updating"
