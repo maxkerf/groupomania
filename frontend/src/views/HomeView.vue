@@ -37,9 +37,17 @@ export default {
 		if (this.login.userId === -1) return this.$router.push("/login");
 
 		this.getPosts();
-		this.nbPosts = await this.$store.dispatch("countPosts");
+		this.getNbPosts();
 	},
 	methods: {
+		handleError(err) {
+			if (err.status === 401) {
+				this.$store.dispatch("logout");
+				this.$router.push("/login");
+			}
+			console.error(err);
+		},
+
 		async addPost(post) {
 			try {
 				const data = await this.$store.dispatch("addPost", post);
@@ -48,7 +56,7 @@ export default {
 				this.posts = [postCreated, ...this.posts];
 				this.nbPosts++;
 			} catch (err) {
-				console.error(err);
+				this.handleError(err);
 			}
 		},
 
@@ -57,11 +65,16 @@ export default {
 				const posts = await this.$store.dispatch("getPosts", this.posts.length);
 				this.posts = [...this.posts, ...posts];
 			} catch (err) {
-				if (err.status === 401) {
-					this.$store.dispatch("logout");
-					this.$router.push("/login");
-				}
-				console.error(err);
+				this.handleError(err);
+			}
+		},
+
+		async getNbPosts() {
+			try {
+				const nbPosts = await this.$store.dispatch("countPosts");
+				this.nbPosts = nbPosts;
+			} catch (err) {
+				this.handleError(err);
 			}
 		},
 
@@ -74,11 +87,7 @@ export default {
 				this.posts.splice(this.posts.indexOf(post), 1);
 				this.nbPosts--;
 			} catch (err) {
-				if (err.status === 401) {
-					this.$store.dispatch("logout");
-					this.$router.push("/login");
-				}
-				console.error(err);
+				this.handleError(err);
 			}
 		},
 	},

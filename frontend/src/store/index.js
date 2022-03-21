@@ -51,8 +51,8 @@ export default createStore({
 
 			return new Promise((resolve, reject) => {
 				if (res.ok) {
-					commit("SET_LOGIN", data);
-					resolve();
+					commit("SET_LOGIN", { userId: data.userId, token: data.token });
+					resolve(data);
 				} else {
 					reject(Object.assign({ status: res.status }, data));
 				}
@@ -68,40 +68,6 @@ export default createStore({
 				headers: {
 					Authorization: `Bearer ${state.login.token}`,
 				},
-			});
-			const data = await res.json();
-
-			return new Promise((resolve, reject) => {
-				res.ok
-					? resolve(data)
-					: reject(Object.assign({ status: res.status }, data));
-			});
-		},
-
-		async deleteAccount({ state }) {
-			const res = await fetch(`${state.apiRoot}/users`, {
-				method: "DELETE",
-				headers: {
-					Authorization: `Bearer ${state.login.token}`,
-				},
-			});
-			const data = await res.json();
-
-			return new Promise((resolve, reject) => {
-				res.ok ? resolve(data) : reject(Error(data.message));
-			});
-		},
-
-		async updateUserPicture({ state }, newPicture) {
-			const formData = new FormData();
-			formData.append("picture", newPicture);
-
-			const res = await fetch(`${state.apiRoot}/users/picture`, {
-				method: "PUT",
-				headers: {
-					Authorization: `Bearer ${state.login.token}`,
-				},
-				body: formData,
 			});
 			const data = await res.json();
 
@@ -130,6 +96,40 @@ export default createStore({
 			});
 		},
 
+		async updateUserPicture({ state }, newPicture) {
+			const formData = new FormData();
+			formData.append("picture", newPicture);
+
+			const res = await fetch(`${state.apiRoot}/users/picture`, {
+				method: "PUT",
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+				},
+				body: formData,
+			});
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
+		async deleteAccount({ state }) {
+			const res = await fetch(`${state.apiRoot}/users`, {
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+				},
+			});
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok ? resolve(data) : reject(Error(data.message));
+			});
+		},
+
 		async addPost({ state }, post) {
 			const res = await fetch(`${state.apiRoot}/posts`, {
 				method: "POST",
@@ -142,7 +142,9 @@ export default createStore({
 			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
-				res.ok ? resolve(data) : reject(Error(data.message));
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
 			});
 		},
 

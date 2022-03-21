@@ -35,40 +35,26 @@ exports.signup = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-	const errorMessage = "Wrong email or password";
+	const errorObj = { message: "Wrong email or password" };
 
 	try {
 		const user = await userManager.getUserByEmail(req.body.email);
-		if (!user) return res.status(400).json({ errorMessage });
+		if (!user) return res.status(400).json(errorObj);
 
 		const isPasswordValid = await bcrypt.compare(
 			req.body.password,
 			user.password
 		);
-		if (!isPasswordValid) return res.status(400).json({ errorMessage });
+		if (!isPasswordValid) return res.status(400).json(errorObj);
 
 		const userId = user.id;
 		const token = jwt.sign({ userId }, process.env.TOKEN_SECRET_KEY, {
 			expiresIn: "1h",
 		});
 
-		res.status(200).json({ userId, token });
+		res.status(200).json({ message: "User logged in", userId, token });
 	} catch (err) {
 		console.error(`Failed to login ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
-	}
-};
-
-exports.deleteUser = async (req, res) => {
-	const userId = res.locals.userId;
-
-	try {
-		await deleteUserPicture(userId);
-		await postManager.deleteUserPosts(userId);
-		await userManager.deleteUser(userId);
-		res.status(200).json({ message: "User deleted" });
-	} catch (err) {
-		console.error(`Failed to delete user ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
@@ -80,6 +66,21 @@ exports.getOneUser = async (req, res) => {
 		res.status(200).json(user);
 	} catch (err) {
 		console.error(`Failed to get one user ✖\n${err}`);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+exports.updateUser = async (req, res) => {
+	const userId = res.locals.userId;
+	const newUser = {
+		username: req.body.username,
+	};
+
+	try {
+		await userManager.updateUser(userId, newUser);
+		res.status(200).json({ message: "User updated" });
+	} catch (err) {
+		console.error(`Failed to update user ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
@@ -98,17 +99,16 @@ exports.updateUserPicture = async (req, res) => {
 	}
 };
 
-exports.updateUser = async (req, res) => {
+exports.deleteUser = async (req, res) => {
 	const userId = res.locals.userId;
-	const newUser = {
-		username: req.body.username,
-	};
 
 	try {
-		await userManager.updateUser(userId, newUser);
-		res.status(200).json({ message: "User updated" });
+		await deleteUserPicture(userId);
+		await postManager.deleteUserPosts(userId);
+		await userManager.deleteUser(userId);
+		res.status(200).json({ message: "User deleted" });
 	} catch (err) {
-		console.error(`Failed to update user ✖\n${err}`);
+		console.error(`Failed to delete user ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

@@ -1,9 +1,9 @@
 <template>
 	<form @submit.prevent="login">
 		<label for="email">Email</label>
-		<input v-model="email" id="email" type="email" />
+		<input v-model="email" id="email" type="email" required />
 		<label for="password">Password</label>
-		<input id="password" type="password" v-model="password" />
+		<input id="password" type="password" v-model="password" required />
 		<p>{{ errorMessage }}</p>
 		<button type="submit">Login</button>
 	</form>

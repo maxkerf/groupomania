@@ -28,7 +28,8 @@ export default {
 	methods: {
 		async loginUser(user) {
 			try {
-				await this.$store.dispatch("login", user);
+				const data = await this.$store.dispatch("login", user);
+				console.log(data);
 				this.$router.push("/");
 			} catch (err) {
 				console.error(err);

@@ -25,7 +25,8 @@ export default {
 			try {
 				const signupData = await this.$store.dispatch("signup", user);
 				console.log(signupData);
-				await this.$store.dispatch("login", user);
+				const loginData = await this.$store.dispatch("login", user);
+				console.log(loginData);
 				this.$router.push("/");
 			} catch (err) {
 				console.error(err);

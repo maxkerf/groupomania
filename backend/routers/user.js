@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 const { body } = require("express-validator");
 
 const userCtrl = require("../controllers/user");
@@ -21,6 +20,9 @@ async function isEmailUnique(email) {
 	if (user) throw Error("Email already in use");
 }
 
+const router = express.Router();
+
+// Signup
 router.post(
 	"/signup",
 
@@ -57,6 +59,7 @@ router.post(
 	userCtrl.signup
 );
 
+// Login
 router.post(
 	"/login",
 
@@ -79,9 +82,31 @@ router.post(
 );
 
 router.use(authenticateUser);
-router.delete("/", userCtrl.deleteUser);
-router.put("/picture", uploadImage, userCtrl.updateUserPicture);
-router.put("/", userCtrl.updateUser);
+
+// Get One User
 router.get("/:id", userCtrl.getOneUser);
+
+// Update User
+router.put(
+	"/",
+
+	body("username")
+		.trim()
+		.notEmpty()
+		.withMessage("Username required")
+		.isString()
+		.withMessage("Username must be a string")
+		.isLength({ max: 30 })
+		.withMessage("Username must be at most 30 characters"),
+
+	checkErrors,
+	userCtrl.updateUser
+);
+
+// Update User Picture
+router.put("/picture", uploadImage, userCtrl.updateUserPicture);
+
+// Delete User
+router.delete("/", userCtrl.deleteUser);
 
 module.exports = router;

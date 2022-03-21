@@ -29,11 +29,11 @@ exports.getUserById = userId => {
 	});
 };
 
-exports.deleteUser = userId => {
-	const sql = "DELETE FROM `user` WHERE `id` = ?";
+exports.updateUser = (userId, newUser) => {
+	const sql = "UPDATE user SET ? WHERE id = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, userId, err => (err ? reject(err) : resolve()));
+		db.query(sql, [newUser, userId], err => (err ? reject(err) : resolve()));
 	});
 };
 
@@ -45,10 +45,10 @@ exports.updateUserPicture = (userId, newPicture) => {
 	});
 };
 
-exports.updateUser = (userId, userInfos) => {
-	const sql = "UPDATE user SET ? WHERE id = ?";
+exports.deleteUser = userId => {
+	const sql = "DELETE FROM `user` WHERE `id` = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, [userInfos, userId], err => (err ? reject(err) : resolve()));
+		db.query(sql, userId, err => (err ? reject(err) : resolve()));
 	});
 };

@@ -1,18 +1,15 @@
 const express = require("express");
-const router = express.Router();
+const { body } = require("express-validator");
 
 const postCtrl = require("../controllers/post");
 const postManager = require("../managers/post");
 const authenticateUser = require("../middlewares/authenticateUser");
 const authorizeUser = require("../middlewares/authorizeUser");
+const checkErrors = require("../middlewares/checkErrors");
+
+const router = express.Router();
 
 router.use(authenticateUser);
-router.route("/").post(postCtrl.createPost).get(postCtrl.getPosts);
-router.get("/count", postCtrl.countPosts);
-router
-	.route("/:id")
-	.get(postCtrl.getPost)
-	.delete(authorizeUser, postCtrl.deletePost);
 
 router.param("id", async (req, res, next, postId) => {
 	try {
@@ -22,8 +19,36 @@ router.param("id", async (req, res, next, postId) => {
 		next();
 	} catch (err) {
 		console.error(`Failed to get post ✖\n${err}`);
-		res.sendStatus(500);
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 });
+
+// Create Post
+router.post(
+	"/",
+
+	body("text")
+		.notEmpty()
+		.withMessage("Text required")
+		.isString()
+		.withMessage("Text must be a string")
+		.isLength({ max: 255 })
+		.withMessage("Text must be at most 255 characters"),
+
+	checkErrors,
+	postCtrl.createPost
+);
+
+// Get Posts
+router.get("/", postCtrl.getPosts);
+
+// Count Posts
+router.get("/count", postCtrl.countPosts);
+
+// Get Post
+router.get("/:id", postCtrl.getPost);
+
+// Delete Post
+router.delete("/:id", authorizeUser, postCtrl.deletePost);
 
 module.exports = router;
