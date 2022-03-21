@@ -43,8 +43,6 @@ module.exports = (req, res, next) => {
 				.json(
 					err instanceof multer.MulterError ? err : { message: err.message }
 				);
-		else if (!req.file)
-			return res.status(400).json({ message: "Image required" });
 
 		next();
 	});

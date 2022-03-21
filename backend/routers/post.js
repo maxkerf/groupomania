@@ -25,20 +25,27 @@ router.param("id", async (req, res, next, postId) => {
 	}
 });
 
+const checkPost = async (req, res, next) => {
+	if (req.body.text !== undefined) {
+		await body("text")
+			.notEmpty()
+			.withMessage("Text required")
+			.isString()
+			.withMessage("Text must be a string")
+			.isLength({ max: 255 })
+			.withMessage("Text must be at most 255 characters")
+			.run(req);
+	}
+
+	next();
+};
+
 // Create Post
 router.post(
 	"/",
 	uploadPostImage,
 	parseBodyFromMulter,
-
-	body("text")
-		.notEmpty()
-		.withMessage("Text required")
-		.isString()
-		.withMessage("Text must be a string")
-		.isLength({ max: 255 })
-		.withMessage("Text must be at most 255 characters"),
-
+	checkPost,
 	checkErrors,
 	postCtrl.createPost
 );

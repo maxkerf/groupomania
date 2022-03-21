@@ -9,7 +9,7 @@
 			post.username
 		}}</router-link>
 		<span>{{ new Date(post.creationDate).toLocaleString() }}</span>
-		<p>{{ post.text }}</p>
+		<p v-if="post.text">{{ post.text }}</p>
 		<img
 			class="post-image"
 			v-if="post.image"
@@ -67,7 +67,7 @@ p {
 .post-image {
 	grid-column: 1 / -1;
 	width: 300px;
-	margin-top: 0.5rem;
+	margin-top: 1rem;
 }
 
 button {

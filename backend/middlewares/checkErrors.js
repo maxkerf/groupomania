@@ -8,7 +8,7 @@ module.exports = checkErrors = async (req, res, next) => {
 	if (!errors.isEmpty()) {
 		const errorsArray = errors.array();
 
-		if (req.baseUrl.includes("posts") && req.method === "POST")
+		if (req.baseUrl.includes("posts") && req.method === "POST" && req.file)
 			await deletePostImage(req.file.filename);
 
 		errorsArray.find(error => error.msg.status === 500)

@@ -132,9 +132,15 @@ export default createStore({
 
 		async addPost({ state }, post) {
 			const formData = new FormData();
-			formData.append("image", post.image);
-			delete post.image;
-			formData.append("post", JSON.stringify(post));
+
+			if (post.image) {
+				formData.append("image", post.image);
+				delete post.image;
+			}
+
+			if (post.text) {
+				formData.append("post", JSON.stringify(post));
+			}
 
 			const res = await fetch(`${state.apiRoot}/posts`, {
 				method: "POST",

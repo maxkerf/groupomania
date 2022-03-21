@@ -2,11 +2,17 @@ const postManager = require("../managers/post");
 const deletePostImage = require("../globalFunctions/deletePostImage");
 
 exports.createPost = async (req, res) => {
+	if (!req.body.text && !req.file)
+		return res
+			.status(400)
+			.json({ message: "At least one input (text or image) is required" });
+
 	const newPost = {
 		user_id: res.locals.userId,
-		text: req.body.text,
-		image: req.file.filename,
 	};
+
+	if (req.body.text) newPost.text = req.body.text;
+	if (req.file) newPost.image = req.file.filename;
 
 	try {
 		const data = await postManager.createPost(newPost);
@@ -47,7 +53,7 @@ exports.deletePost = async (req, res) => {
 	const post = res.locals.post;
 
 	try {
-		await deletePostImage(post.image);
+		if (post.image) await deletePostImage(post.image);
 		await postManager.deletePost(post.id);
 		res.status(200).json({ message: "Post deleted" });
 	} catch (err) {
