@@ -1,6 +1,7 @@
 <template>
 	<article>
 		<img
+			class="user-picture"
 			:src="`${apiRoot}/images/${post.user_picture}`"
 			alt="profile picture"
 		/>
@@ -9,6 +10,12 @@
 		}}</router-link>
 		<span>{{ new Date(post.creationDate).toLocaleString() }}</span>
 		<p>{{ post.text }}</p>
+		<img
+			class="post-image"
+			v-if="post.image"
+			:src="`${apiRoot}/images/post/${post.image}`"
+			alt="image"
+		/>
 		<button
 			v-if="post.user_id === login.userId"
 			@click="$emit('delete-post', post)"
@@ -35,12 +42,13 @@ article {
 	padding-left: 0.5rem;
 	margin-top: 1.5rem;
 	display: grid;
-	grid-template-rows: repeat(4, auto);
-	grid-template-columns: repeat(2, auto);
+	grid-template-rows: repeat(5, auto);
+	grid-template-columns: 58px auto;
 	justify-content: start;
+	justify-items: start;
 }
 
-img {
+.user-picture {
 	height: 50px;
 	aspect-ratio: 1;
 	object-fit: cover;
@@ -54,6 +62,12 @@ p {
 	grid-column: 1 / -1;
 	margin: 0;
 	margin-top: 1rem;
+}
+
+.post-image {
+	grid-column: 1 / -1;
+	width: 300px;
+	margin-top: 0.5rem;
 }
 
 button {

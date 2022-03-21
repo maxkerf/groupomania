@@ -1,4 +1,5 @@
 const postManager = require("../managers/post");
+const deletePostImage = require("../globalFunctions/deletePostImage");
 
 exports.createPost = async (req, res) => {
 	const newPost = {
@@ -43,8 +44,11 @@ exports.countPosts = async (req, res) => {
 };
 
 exports.deletePost = async (req, res) => {
+	const post = res.locals.post;
+
 	try {
-		await postManager.deletePost(req.params.id);
+		await deletePostImage(post.image);
+		await postManager.deletePost(post.id);
 		res.status(200).json({ message: "Post deleted" });
 	} catch (err) {
 		console.error(`Failed to delete post ✖\n${err}`);

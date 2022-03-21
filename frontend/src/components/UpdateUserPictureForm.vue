@@ -20,9 +20,9 @@ export default {
 	},
 	methods: {
 		updateUserPicture() {
-			const newPicture = document.querySelector("#picture").files[0];
-
-			this.$emit("update-user-picture", newPicture);
+			const pictureInput = document.querySelector("#picture");
+			this.$emit("update-user-picture", pictureInput.files[0]);
+			pictureInput.value = "";
 		},
 	},
 };

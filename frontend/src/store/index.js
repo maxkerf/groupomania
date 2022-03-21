@@ -131,13 +131,17 @@ export default createStore({
 		},
 
 		async addPost({ state }, post) {
+			const formData = new FormData();
+			formData.append("image", post.image);
+			delete post.image;
+			formData.append("post", JSON.stringify(post));
+
 			const res = await fetch(`${state.apiRoot}/posts`, {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${state.login.token}`,
-					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(post),
+				body: formData,
 			});
 			const data = await res.json();
 
