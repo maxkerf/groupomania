@@ -29,6 +29,16 @@ exports.getUserById = userId => {
 	});
 };
 
+exports.isUsernameUnique = username => {
+	const sql = "SELECT COUNT(*) FROM user WHERE username = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, username, (err, data) =>
+			err ? reject(err) : resolve(!data[0]["COUNT(*)"])
+		);
+	});
+};
+
 exports.updateUser = (userId, newUser) => {
 	const sql = "UPDATE user SET ? WHERE id = ?";
 

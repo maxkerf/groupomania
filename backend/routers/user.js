@@ -18,6 +18,23 @@ async function isEmailUnique(email) {
 	}
 
 	if (user) throw Error("Email already in use");
+
+	return true;
+}
+
+async function isUsernameUnique(username) {
+	let isUnique;
+
+	try {
+		isUnique = await userManager.isUsernameUnique(username);
+	} catch (err) {
+		console.error(`Failed to signup ✖\n${err}`);
+		throw { status: 500 };
+	}
+
+	if (!isUnique) throw Error("Username already in use");
+
+	return true;
 }
 
 const router = express.Router();
@@ -53,7 +70,8 @@ router.post(
 		.isString()
 		.withMessage("Username must be a string")
 		.isLength({ max: 30 })
-		.withMessage("Username must be at most 30 characters"),
+		.withMessage("Username must be at most 30 characters")
+		.custom(isUsernameUnique),
 
 	checkErrors,
 	userCtrl.signup
@@ -97,7 +115,8 @@ router.put(
 		.isString()
 		.withMessage("Username must be a string")
 		.isLength({ max: 30 })
-		.withMessage("Username must be at most 30 characters"),
+		.withMessage("Username must be at most 30 characters")
+		.custom(isUsernameUnique),
 
 	checkErrors,
 	userCtrl.updateUser
