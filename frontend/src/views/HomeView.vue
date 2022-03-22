@@ -5,6 +5,7 @@
 			v-for="post in posts"
 			:key="post.id"
 			:post="post"
+			@react="react"
 			@delete-post="deletePost"
 		/>
 		<button @click="getPosts" v-show="posts.length !== nbPosts">
@@ -85,6 +86,15 @@ export default {
 				console.log(data);
 				this.posts.splice(this.posts.indexOf(post), 1);
 				this.nbPosts--;
+			} catch (err) {
+				this.handleError(err);
+			}
+		},
+
+		async react(postId, type) {
+			try {
+				const data = await this.$store.dispatch("react", { postId, type });
+				console.log(data);
 			} catch (err) {
 				this.handleError(err);
 			}

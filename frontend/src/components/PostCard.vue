@@ -16,12 +16,20 @@
 			:src="`${apiRoot}/images/post/${post.image}`"
 			alt="image"
 		/>
-		<button
-			v-if="post.user_id === login.userId"
-			@click="$emit('delete-post', post)"
-		>
-			Delete
-		</button>
+		<div class="article-footer">
+			<button @click="$emit('react', post.id, 1)">
+				<i class="fa-solid fa-thumbs-up"></i>
+			</button>
+			<button @click="$emit('react', post.id, 0)">
+				<i class="fa-solid fa-thumbs-down"></i>
+			</button>
+			<button
+				v-if="post.user_id === login.userId"
+				@click="$emit('delete-post', post)"
+			>
+				Delete
+			</button>
+		</div>
 	</article>
 </template>
 
@@ -70,7 +78,10 @@ p {
 	margin-top: 1rem;
 }
 
-button {
+.article-footer {
 	margin-top: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
 }
 </style>
