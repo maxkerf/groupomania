@@ -1,4 +1,5 @@
 const postManager = require("../managers/post");
+const reactionManager = require("../managers/reaction");
 const deletePostImage = require("../globalFunctions/deletePostImage");
 
 exports.createPost = async (req, res) => {
@@ -58,6 +59,37 @@ exports.deletePost = async (req, res) => {
 		res.status(200).json({ message: "Post deleted" });
 	} catch (err) {
 		console.error(`Failed to delete post ✖\n${err}`);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+exports.react = async (req, res) => {
+	const newReaction = {
+		user_id: res.locals.userId,
+		post_id: res.locals.post.id,
+		type: req.body.type,
+	};
+
+	try {
+		let message = "";
+
+		const reaction = await reactionManager.reactionExists(newReaction);
+		if (reaction) {
+			if (reaction.type === newReaction.type) {
+				await reactionManager.removeReaction(reaction.id);
+				message = "Post reaction removed";
+			} else {
+				await reactionManager.updateReaction(reaction.id, newReaction.type);
+				message = "Post reaction updated";
+			}
+		} else {
+			await reactionManager.addReaction(newReaction);
+			message = "Post reaction added";
+		}
+
+		res.status(200).json({ message });
+	} catch (err) {
+		console.error(`Failed to react ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

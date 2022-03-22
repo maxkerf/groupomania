@@ -62,4 +62,20 @@ router.get("/:id", postCtrl.getPost);
 // Delete Post
 router.delete("/:id", authorizeUser, postCtrl.deletePost);
 
+// React
+router.post(
+	"/:id/react",
+
+	body("type")
+		.notEmpty()
+		.withMessage("Reaction type required")
+		.isInt()
+		.withMessage("Reaction type must be an integer")
+		.isInt({ min: 0, max: 1 })
+		.withMessage("Invalid reaction (dislike: 0, like: 1)"),
+
+	checkErrors,
+	postCtrl.react
+);
+
 module.exports = router;
