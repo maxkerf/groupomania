@@ -63,6 +63,14 @@ export default {
 		async getPosts() {
 			try {
 				const posts = await this.$store.dispatch("getPosts", this.posts.length);
+
+				/* const data = await Promise.all(
+					posts.map(post =>
+						this.$store.dispatch("getOnePostReactions", post.id)
+					)
+				);
+				posts.forEach((post, i) => (post.reactions = data[i])); */
+
 				this.posts = [...this.posts, ...posts];
 			} catch (err) {
 				this.handleError(err);
@@ -95,6 +103,11 @@ export default {
 			try {
 				const data = await this.$store.dispatch("react", { postId, type });
 				console.log(data);
+				const post = this.posts.find(post => post.id === postId);
+				post.reactions = await this.$store.dispatch(
+					"getOnePostReactions",
+					postId
+				);
 			} catch (err) {
 				this.handleError(err);
 			}

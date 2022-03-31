@@ -4,7 +4,15 @@ exports.addReaction = reaction => {
 	const sql = "INSERT INTO reaction SET ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, reaction, err => (err ? reject(err) : resolve()));
+		db.query(sql, reaction, (err, data) => (err ? reject(err) : resolve(data)));
+	});
+};
+
+exports.getReactionById = id => {
+	const sql = "SELECT * FROM reaction WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
 	});
 };
 
@@ -31,5 +39,13 @@ exports.removeReaction = id => {
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, id, err => (err ? reject(err) : resolve()));
+	});
+};
+
+exports.getOnePostReactions = postId => {
+	const sql = "SELECT * FROM reaction WHERE post_id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, postId, (err, data) => (err ? reject(err) : resolve(data)));
 	});
 };

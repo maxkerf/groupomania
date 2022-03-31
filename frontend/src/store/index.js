@@ -22,6 +22,8 @@ export default createStore({
 		},
 	},
 	actions: {
+		/* USER */
+
 		async signup({ state }, user) {
 			const res = await fetch(`${state.apiRoot}/users/signup`, {
 				method: "POST",
@@ -130,6 +132,8 @@ export default createStore({
 			});
 		},
 
+		/* POST */
+
 		async addPost({ state }, post) {
 			const formData = new FormData();
 
@@ -219,6 +223,8 @@ export default createStore({
 			});
 		},
 
+		/* REACTION */
+
 		async react({ state }, reaction) {
 			const res = await fetch(
 				`${state.apiRoot}/posts/${reaction.postId}/react`,
@@ -231,6 +237,21 @@ export default createStore({
 					body: JSON.stringify({ type: reaction.type }),
 				}
 			);
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
+		async getOnePostReactions({ state }, postId) {
+			const res = await fetch(`${state.apiRoot}/posts/${postId}/reactions`, {
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+				},
+			});
 			const data = await res.json();
 
 			return new Promise((resolve, reject) => {

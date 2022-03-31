@@ -78,4 +78,7 @@ router.post(
 	postCtrl.react
 );
 
+// Get One Post Reactions
+router.get("/:id/reactions", postCtrl.getOnePostReactions);
+
 module.exports = router;

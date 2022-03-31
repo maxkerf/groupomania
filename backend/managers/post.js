@@ -9,8 +9,18 @@ exports.createPost = post => {
 };
 
 exports.getPosts = (offset = 0) => {
-	const sql =
-		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, image, username, picture AS user_picture FROM `post`INNER JOIN `user` ON post.user_id = user.id ORDER BY post.creationDate DESC LIMIT 5 OFFSET ?";
+	const sql = `SELECT 
+	post.id AS id, 
+	user_id, 
+	post.creationDate AS creationDate, 
+	text, 
+	image, 
+	username, 
+	picture AS user_picture 
+	FROM post 
+	INNER JOIN user ON post.user_id = user.id 
+	ORDER BY post.creationDate DESC 
+	LIMIT 5 OFFSET ?`;
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, offset, (err, data) => (err ? reject(err) : resolve(data)));
@@ -28,8 +38,17 @@ exports.countPosts = () => {
 };
 
 exports.getPost = postId => {
-	const sql =
-		"SELECT post.id AS id, user_id, post.creationDate AS creationDate, text, image, username, picture AS user_picture FROM `post` INNER JOIN `user` ON post.user_id = user.id WHERE post.id = ?";
+	const sql = `SELECT 
+		post.id AS id, 
+		user_id, 
+		post.creationDate AS creationDate, 
+		text, 
+		image, 
+		username, 
+		picture AS user_picture 
+		FROM post 
+		INNER JOIN user ON post.user_id = user.id 
+		WHERE post.id = ?`;
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, postId, (err, data) =>

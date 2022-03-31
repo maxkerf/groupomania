@@ -29,6 +29,12 @@ exports.getPosts = async (req, res) => {
 
 	try {
 		const posts = await postManager.getPosts(offset);
+
+		const data = await Promise.all(
+			posts.map(post => reactionManager.getOnePostReactions(post.id))
+		);
+		posts.forEach((post, i) => (post.reactions = data[i]));
+
 		res.status(200).json(posts);
 	} catch (err) {
 		console.error(`Failed to get all posts ✖\n${err}`);
@@ -74,7 +80,11 @@ exports.react = async (req, res) => {
 		let message = "";
 
 		const reaction = await reactionManager.reactionExists(newReaction);
-		if (reaction) {
+
+		if (!reaction) {
+			await reactionManager.addReaction(newReaction);
+			message = "Post reaction added";
+		} else {
 			if (reaction.type === newReaction.type) {
 				await reactionManager.removeReaction(reaction.id);
 				message = "Post reaction removed";
@@ -82,14 +92,23 @@ exports.react = async (req, res) => {
 				await reactionManager.updateReaction(reaction.id, newReaction.type);
 				message = "Post reaction updated";
 			}
-		} else {
-			await reactionManager.addReaction(newReaction);
-			message = "Post reaction added";
 		}
 
 		res.status(200).json({ message });
 	} catch (err) {
 		console.error(`Failed to react ✖\n${err}`);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+};
+
+exports.getOnePostReactions = async (req, res) => {
+	try {
+		const reactions = await reactionManager.getOnePostReactions(
+			res.locals.post.id
+		);
+		res.status(200).json(reactions);
+	} catch (err) {
+		console.error(`Failed to get one post reactions ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

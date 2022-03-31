@@ -17,12 +17,14 @@
 			alt="image"
 		/>
 		<div class="article-footer">
-			<button @click="$emit('react', post.id, 1)">
+			<button @click="react(1)" :class="hasLiked ? 'liked' : ''">
 				<i class="fa-solid fa-thumbs-up"></i>
 			</button>
-			<button @click="$emit('react', post.id, 0)">
+			<span>{{ nbLikes }}</span>
+			<button @click="react(0)" :class="hasDisliked ? 'disliked' : ''">
 				<i class="fa-solid fa-thumbs-down"></i>
 			</button>
+			<span>{{ nbDislikes }}</span>
 			<button
 				v-if="post.user_id === login.userId"
 				@click="$emit('delete-post', post)"
@@ -37,9 +39,45 @@
 import { mapState } from "vuex";
 
 export default {
+	data() {
+		return {
+			reactions: [],
+		};
+	},
 	props: ["post"],
 	computed: {
 		...mapState(["login", "apiRoot"]),
+
+		hasLiked() {
+			return Boolean(
+				this.post.reactions.find(
+					reaction =>
+						reaction.user_id === this.login.userId && reaction.type === 1
+				)
+			);
+		},
+
+		hasDisliked() {
+			return Boolean(
+				this.post.reactions.find(
+					reaction =>
+						reaction.user_id === this.login.userId && reaction.type === 0
+				)
+			);
+		},
+
+		nbLikes() {
+			return this.post.reactions.filter(reaction => reaction.type === 1).length;
+		},
+
+		nbDislikes() {
+			return this.post.reactions.filter(reaction => reaction.type === 0).length;
+		},
+	},
+	methods: {
+		react(type) {
+			this.$emit("react", this.post.id, type);
+		},
 	},
 };
 </script>
@@ -83,5 +121,13 @@ p {
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
+}
+
+.liked {
+	color: blue;
+}
+
+.disliked {
+	color: red;
 }
 </style>
