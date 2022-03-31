@@ -11,12 +11,12 @@ exports.createPost = post => {
 exports.getPosts = (offset = 0) => {
 	const sql = `SELECT 
 	post.id AS id, 
-	user_id, 
+	post.user_id, 
 	post.creationDate AS creationDate, 
-	text, 
-	image, 
-	username, 
-	picture AS user_picture 
+	post.text, 
+	post.image, 
+	user.username AS user_username, 
+	user.picture AS user_picture 
 	FROM post 
 	INNER JOIN user ON post.user_id = user.id 
 	ORDER BY post.creationDate DESC 
@@ -40,12 +40,12 @@ exports.countPosts = () => {
 exports.getPost = postId => {
 	const sql = `SELECT 
 		post.id AS id, 
-		user_id, 
+		post.user_id, 
 		post.creationDate AS creationDate, 
-		text, 
-		image, 
-		username, 
-		picture AS user_picture 
+		post.text, 
+		post.image, 
+		user.username AS user_username, 
+		user.picture AS user_picture 
 		FROM post 
 		INNER JOIN user ON post.user_id = user.id 
 		WHERE post.id = ?`;

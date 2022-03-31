@@ -6,7 +6,7 @@
 			alt="profile picture"
 		/>
 		<router-link :to="{ name: 'profile', params: { id: post.user_id } }">{{
-			post.username
+			post.user_username
 		}}</router-link>
 		<span>{{ new Date(post.creationDate).toLocaleString() }}</span>
 		<p v-if="post.text">{{ post.text }}</p>

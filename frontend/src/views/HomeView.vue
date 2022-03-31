@@ -33,56 +33,48 @@ export default {
 	computed: {
 		...mapState(["login"]),
 	},
-	async created() {
+	created() {
 		if (this.login.userId === -1) return this.$router.push("/login");
 
 		this.getPosts();
 		this.getNbPosts();
 	},
 	methods: {
-		handleError(err) {
+		handleError(err, requestName = "accomplish request") {
+			console.error(`Failed to ${requestName} ✖\n`, err);
 			if (err.status === 401) {
 				this.$store.dispatch("logout");
 				this.$router.push("/login");
-			}
-			console.error(err);
-		},
-
-		async addPost(post) {
-			try {
-				const data = await this.$store.dispatch("addPost", post);
-				console.log(data);
-				const postCreated = await this.$store.dispatch("getPost", data.postId);
-				this.posts = [postCreated, ...this.posts];
-				this.nbPosts++;
-			} catch (err) {
-				this.handleError(err);
 			}
 		},
 
 		async getPosts() {
 			try {
 				const posts = await this.$store.dispatch("getPosts", this.posts.length);
-
-				/* const data = await Promise.all(
-					posts.map(post =>
-						this.$store.dispatch("getOnePostReactions", post.id)
-					)
-				);
-				posts.forEach((post, i) => (post.reactions = data[i])); */
-
 				this.posts = [...this.posts, ...posts];
 			} catch (err) {
-				this.handleError(err);
+				this.handleError(err, "get posts");
 			}
 		},
 
 		async getNbPosts() {
 			try {
-				const nbPosts = await this.$store.dispatch("countPosts");
-				this.nbPosts = nbPosts;
+				this.nbPosts = await this.$store.dispatch("countPosts");
 			} catch (err) {
-				this.handleError(err);
+				this.handleError(err, "get posts number");
+			}
+		},
+
+		async addPost(post) {
+			try {
+				const data = await this.$store.dispatch("addPost", post);
+				console.log(data);
+				const postCreated = data.postCreated;
+				postCreated.reactions = [];
+				this.posts = [postCreated, ...this.posts];
+				this.nbPosts++;
+			} catch (err) {
+				this.handleError(err, "add post");
 			}
 		},
 
@@ -95,7 +87,7 @@ export default {
 				this.posts.splice(this.posts.indexOf(post), 1);
 				this.nbPosts--;
 			} catch (err) {
-				this.handleError(err);
+				this.handleError(err, "delete post");
 			}
 		},
 

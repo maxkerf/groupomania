@@ -83,7 +83,9 @@ exports.updateUserPicture = async (req, res) => {
 		const user = await userManager.getUserById(userId);
 		await userManager.updateUserPicture(userId, newPicture);
 		await deleteUserPicture(user.picture);
-		res.status(200).json({ message: "User picture updated", newPicture });
+		res
+			.status(200)
+			.json({ message: "User picture updated", pictureUpdated: newPicture });
 	} catch (err) {
 		await deleteUserPicture(newPicture);
 		console.error(`Failed to update user picture ✖\n${err}`);

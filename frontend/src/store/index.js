@@ -177,21 +177,6 @@ export default createStore({
 			});
 		},
 
-		async getPost({ state }, postId) {
-			const res = await fetch(`${state.apiRoot}/posts/${postId}`, {
-				headers: {
-					Authorization: `Bearer ${state.login.token}`,
-				},
-			});
-			const data = await res.json();
-
-			return new Promise((resolve, reject) => {
-				res.ok
-					? resolve(data)
-					: reject(Object.assign({ status: res.status }, data));
-			});
-		},
-
 		async countPosts({ state }) {
 			const res = await fetch(`${state.apiRoot}/posts/count`, {
 				headers: {
