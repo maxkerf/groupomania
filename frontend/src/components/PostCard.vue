@@ -17,14 +17,24 @@
 			alt="image"
 		/>
 		<div class="article-footer">
-			<button @click="like" :class="hasLiked ? 'liked' : ''">
-				<i class="fa-solid fa-thumbs-up"></i>
-			</button>
-			<span>{{ nbLikes }}</span>
-			<button @click="dislike" :class="hasDisliked ? 'disliked' : ''">
-				<i class="fa-solid fa-thumbs-down"></i>
-			</button>
-			<span>{{ nbDislikes }}</span>
+			<ReactionBox
+				:type="reactionTypes.like"
+				:postReactions="post.reactions"
+				:userId="login.userId"
+				@react="react"
+			/>
+			<ReactionBox
+				:type="reactionTypes.dislike"
+				:postReactions="post.reactions"
+				:userId="login.userId"
+				@react="react"
+			/>
+			<ReactionBox
+				:type="reactionTypes.love"
+				:postReactions="post.reactions"
+				:userId="login.userId"
+				@react="react"
+			/>
 			<button
 				v-if="post.user_id === login.userId"
 				@click="$emit('delete-post', post)"
@@ -37,55 +47,19 @@
 
 <script>
 import { mapState } from "vuex";
+import ReactionBox from "./ReactionBox.vue";
 
 export default {
+	components: {
+		ReactionBox,
+	},
 	props: ["post"],
 	computed: {
 		...mapState(["login", "apiRoot", "reactionTypes"]),
-
-		hasLiked() {
-			return this.hasReacted(this.reactionTypes.like);
-		},
-
-		hasDisliked() {
-			return this.hasReacted(this.reactionTypes.dislike);
-		},
-
-		nbLikes() {
-			return this.nbReactions(this.reactionTypes.like);
-		},
-
-		nbDislikes() {
-			return this.nbReactions(this.reactionTypes.dislike);
-		},
 	},
 	methods: {
 		react(type) {
 			this.$emit("react", this.post.id, type);
-		},
-
-		hasReacted(type) {
-			return Boolean(
-				this.post.reactions.find(
-					reaction =>
-						reaction.user_id === this.login.userId && reaction.type === type
-				)
-			);
-		},
-
-		nbReactions(type) {
-			const reactions = this.post.reactions.filter(
-				reaction => reaction.type === type
-			);
-			return reactions.length;
-		},
-
-		like() {
-			this.react(this.reactionTypes.like);
-		},
-
-		dislike() {
-			this.react(this.reactionTypes.dislike);
 		},
 	},
 };
@@ -128,15 +102,6 @@ p {
 .article-footer {
 	margin-top: 1rem;
 	display: flex;
-	align-items: center;
 	gap: 0.5rem;
-}
-
-.liked {
-	color: blue;
-}
-
-.disliked {
-	color: red;
 }
 </style>

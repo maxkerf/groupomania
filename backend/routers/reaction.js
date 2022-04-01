@@ -15,8 +15,8 @@ router.post(
 		.withMessage("Reaction type required")
 		.isInt()
 		.withMessage("Reaction type must be an integer")
-		.isInt({ min: 0, max: 1 })
-		.withMessage("Invalid reaction (dislike: 0, like: 1)"),
+		.isInt({ min: 0, max: 2 })
+		.withMessage("Invalid reaction (dislike: 0, like: 1, love: 2)"),
 
 	checkErrors,
 	reactionCtrl.react

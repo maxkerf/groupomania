@@ -11,6 +11,7 @@ export default createStore({
 		reactionTypes: {
 			dislike: 0,
 			like: 1,
+			love: 2,
 		},
 	},
 	getters: {},
