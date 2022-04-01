@@ -4,7 +4,7 @@
 		<input id="text" type="text" v-model="text" maxlength="255" />
 		<span class="text-counter">{{ text.length }}/255</span>
 		<label for="image">Image</label>
-		<input type="file" id="image" accept=".jpg,.jpeg,.png" />
+		<input type="file" id="image" accept=".jpg,.jpeg,.png,.gif" />
 		<button type="submit">Add Post</button>
 	</form>
 </template>

@@ -1,6 +1,6 @@
 const multer = require("multer");
 
-const AUTHORIZED_EXTENSIONS = ["jpg", "jpeg", "png"];
+const AUTHORIZED_EXTENSIONS = ["jpg", "jpeg", "png", "gif"];
 
 function getExtension(file) {
 	return file.mimetype.split("/")[1];

@@ -14,11 +14,12 @@
 export default {
 	data() {
 		return {
-			classes: ["disliked", "liked", "loved"],
+			classes: ["disliked", "liked", "loved", "laughed"],
 			icons: [
 				"fa-solid fa-thumbs-down",
 				"fa-solid fa-thumbs-up",
 				"fa-solid fa-heart",
+				"fa-solid fa-face-laugh-beam",
 			],
 		};
 	},
@@ -57,5 +58,9 @@ export default {
 
 .loved {
 	color: deeppink;
+}
+
+.laughed {
+	color: goldenrod;
 }
 </style>

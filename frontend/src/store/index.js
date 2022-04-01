@@ -12,6 +12,7 @@ export default createStore({
 			dislike: 0,
 			like: 1,
 			love: 2,
+			laugh: 3,
 		},
 	},
 	getters: {},

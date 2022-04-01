@@ -35,6 +35,12 @@
 				:userId="login.userId"
 				@react="react"
 			/>
+			<ReactionBox
+				:type="reactionTypes.laugh"
+				:postReactions="post.reactions"
+				:userId="login.userId"
+				@react="react"
+			/>
 			<button
 				v-if="post.user_id === login.userId"
 				@click="$emit('delete-post', post)"
