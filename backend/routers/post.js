@@ -62,23 +62,8 @@ router.get("/:id", postCtrl.getPost);
 // Delete Post
 router.delete("/:id", authorizeUser, postCtrl.deletePost);
 
-// React
-router.post(
-	"/:id/react",
-
-	body("type")
-		.notEmpty()
-		.withMessage("Reaction type required")
-		.isInt()
-		.withMessage("Reaction type must be an integer")
-		.isInt({ min: 0, max: 1 })
-		.withMessage("Invalid reaction (dislike: 0, like: 1)"),
-
-	checkErrors,
-	postCtrl.react
-);
-
-// Get One Post Reactions
-router.get("/:id/reactions", postCtrl.getOnePostReactions);
+// Sub-collections
+const reactionRouter = require("./reaction");
+router.use("/:id/reactions", reactionRouter);
 
 module.exports = router;

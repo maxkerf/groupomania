@@ -8,6 +8,10 @@ export default createStore({
 	state: {
 		apiRoot: "http://localhost:3000",
 		login,
+		reactionTypes: {
+			dislike: 0,
+			like: 1,
+		},
 	},
 	getters: {},
 	mutations: {
@@ -212,7 +216,7 @@ export default createStore({
 
 		async react({ state }, reaction) {
 			const res = await fetch(
-				`${state.apiRoot}/posts/${reaction.postId}/react`,
+				`${state.apiRoot}/posts/${reaction.postId}/reactions`,
 				{
 					method: "POST",
 					headers: {

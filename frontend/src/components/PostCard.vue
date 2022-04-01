@@ -17,11 +17,11 @@
 			alt="image"
 		/>
 		<div class="article-footer">
-			<button @click="react(1)" :class="hasLiked ? 'liked' : ''">
+			<button @click="like" :class="hasLiked ? 'liked' : ''">
 				<i class="fa-solid fa-thumbs-up"></i>
 			</button>
 			<span>{{ nbLikes }}</span>
-			<button @click="react(0)" :class="hasDisliked ? 'disliked' : ''">
+			<button @click="dislike" :class="hasDisliked ? 'disliked' : ''">
 				<i class="fa-solid fa-thumbs-down"></i>
 			</button>
 			<span>{{ nbDislikes }}</span>
@@ -39,44 +39,53 @@
 import { mapState } from "vuex";
 
 export default {
-	data() {
-		return {
-			reactions: [],
-		};
-	},
 	props: ["post"],
 	computed: {
-		...mapState(["login", "apiRoot"]),
+		...mapState(["login", "apiRoot", "reactionTypes"]),
 
 		hasLiked() {
-			return Boolean(
-				this.post.reactions.find(
-					reaction =>
-						reaction.user_id === this.login.userId && reaction.type === 1
-				)
-			);
+			return this.hasReacted(this.reactionTypes.like);
 		},
 
 		hasDisliked() {
-			return Boolean(
-				this.post.reactions.find(
-					reaction =>
-						reaction.user_id === this.login.userId && reaction.type === 0
-				)
-			);
+			return this.hasReacted(this.reactionTypes.dislike);
 		},
 
 		nbLikes() {
-			return this.post.reactions.filter(reaction => reaction.type === 1).length;
+			return this.nbReactions(this.reactionTypes.like);
 		},
 
 		nbDislikes() {
-			return this.post.reactions.filter(reaction => reaction.type === 0).length;
+			return this.nbReactions(this.reactionTypes.dislike);
 		},
 	},
 	methods: {
 		react(type) {
 			this.$emit("react", this.post.id, type);
+		},
+
+		hasReacted(type) {
+			return Boolean(
+				this.post.reactions.find(
+					reaction =>
+						reaction.user_id === this.login.userId && reaction.type === type
+				)
+			);
+		},
+
+		nbReactions(type) {
+			const reactions = this.post.reactions.filter(
+				reaction => reaction.type === type
+			);
+			return reactions.length;
+		},
+
+		like() {
+			this.react(this.reactionTypes.like);
+		},
+
+		dislike() {
+			this.react(this.reactionTypes.dislike);
 		},
 	},
 };
