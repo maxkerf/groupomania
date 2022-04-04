@@ -49,3 +49,11 @@ exports.getOnePostReactions = postId => {
 		db.query(sql, postId, (err, data) => (err ? reject(err) : resolve(data)));
 	});
 };
+
+exports.deletePostReactions = postId => {
+	const sql = "DELETE FROM reaction WHERE post_id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, postId, err => (err ? reject(err) : resolve()));
+	});
+};

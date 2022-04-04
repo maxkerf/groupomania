@@ -60,10 +60,13 @@ router.get("/count", postCtrl.countPosts);
 router.get("/:id", postCtrl.getPost);
 
 // Delete Post
-router.delete("/:id", authorizeUser, postCtrl.deletePost);
+router.delete("/:id", authorizeUser.post, postCtrl.deletePost);
 
 // Sub-collections
 const reactionRouter = require("./reaction");
 router.use("/:id/reactions", reactionRouter);
+
+const commentRouter = require("./comment");
+router.use("/:id/comments", commentRouter);
 
 module.exports = router;

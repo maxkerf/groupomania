@@ -1,4 +1,5 @@
 const postManager = require("../managers/post");
+const commentManager = require("../managers/comment");
 const reactionManager = require("../managers/reaction");
 const handleError = require("../globalFunctions/handleError");
 const deletePostImage = require("../globalFunctions/deletePostImage");
@@ -62,55 +63,13 @@ exports.deletePost = async (req, res) => {
 	const post = res.locals.post;
 
 	try {
+		await reactionManager.deletePostReactions(post.id);
+		await commentManager.deletePostComments(post.id);
 		if (post.image) await deletePostImage(post.image);
 		await postManager.deletePost(post.id);
 		res.status(200).json({ message: "Post deleted" });
 	} catch (err) {
 		console.error(`Failed to delete post ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
-	}
-};
-
-exports.react = async (req, res) => {
-	const newReaction = {
-		user_id: res.locals.userId,
-		post_id: res.locals.post.id,
-		type: req.body.type,
-	};
-
-	try {
-		let message = "";
-
-		const reaction = await reactionManager.reactionExists(newReaction);
-
-		if (!reaction) {
-			await reactionManager.addReaction(newReaction);
-			message = "Post reaction added";
-		} else {
-			if (reaction.type === newReaction.type) {
-				await reactionManager.removeReaction(reaction.id);
-				message = "Post reaction removed";
-			} else {
-				await reactionManager.updateReaction(reaction.id, newReaction.type);
-				message = "Post reaction updated";
-			}
-		}
-
-		res.status(200).json({ message });
-	} catch (err) {
-		console.error(`Failed to react ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
-	}
-};
-
-exports.getOnePostReactions = async (req, res) => {
-	try {
-		const reactions = await reactionManager.getOnePostReactions(
-			res.locals.post.id
-		);
-		res.status(200).json(reactions);
-	} catch (err) {
-		console.error(`Failed to get one post reactions ✖\n${err}`);
 		res.status(500).json({ message: "Internal Server Error" });
 	}
 };

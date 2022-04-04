@@ -1,7 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 
-const reactionCtrl = require("../controllers/post");
+const reactionCtrl = require("../controllers/reaction");
 const checkErrors = require("../middlewares/checkErrors");
 
 const router = express.Router({ mergeParams: true });
