@@ -9,7 +9,17 @@ exports.createComment = comment => {
 };
 
 exports.getComments = postId => {
-	const sql = "SELECT * FROM comment WHERE post_id = ?";
+	const sql = `SELECT
+	comment.id,
+	comment.user_id,
+	comment.post_id,
+	comment.text,
+	comment.creationDate,
+	user.username AS user_username,
+	user.picture AS user_picture
+	FROM comment
+	INNER JOIN user ON comment.user_id = user.id
+	WHERE comment.post_id = ?`;
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, postId, (err, data) => (err ? reject(err) : resolve(data)));
@@ -17,7 +27,17 @@ exports.getComments = postId => {
 };
 
 exports.getComment = id => {
-	const sql = "SELECT * FROM comment WHERE id = ?";
+	const sql = `SELECT
+	comment.id,
+	comment.user_id,
+	comment.post_id,
+	comment.text,
+	comment.creationDate,
+	user.username AS user_username,
+	user.picture AS user_picture
+	FROM comment
+	INNER JOIN user ON comment.user_id = user.id
+	WHERE comment.id = ?`;
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));

@@ -48,24 +48,80 @@
 				Delete
 			</button>
 		</div>
+		<AddCommentForm class="add-comment-form" @add-comment="addComment" />
+		<CommentsBox :comments="comments" @delete-comment="deleteComment" />
 	</article>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import ReactionBox from "./ReactionBox.vue";
+import AddCommentForm from "./AddCommentForm.vue";
+import CommentsBox from "./CommentsBox.vue";
+import handleError from "../handleError.js";
 
 export default {
 	components: {
 		ReactionBox,
+		AddCommentForm,
+		CommentsBox,
+	},
+	data() {
+		return {
+			comments: [],
+		};
 	},
 	props: ["post"],
 	computed: {
 		...mapState(["login", "apiRoot", "reactionTypes"]),
 	},
+	created() {
+		this.getPostComments();
+	},
 	methods: {
 		react(type) {
 			this.$emit("react", this.post.id, type);
+		},
+
+		async addComment(comment) {
+			try {
+				const payload = {
+					postId: this.post.id,
+					comment,
+				};
+				const data = await this.$store.dispatch("addComment", payload);
+				console.log(data);
+				this.comments.push(data.commentCreated);
+			} catch (err) {
+				this.handleError(err, this, "add comment");
+			}
+		},
+
+		async getPostComments() {
+			try {
+				this.comments = await this.$store.dispatch(
+					"getPostComments",
+					this.post.id
+				);
+			} catch (err) {
+				handleError(err, this, "get post comments");
+			}
+		},
+
+		async deleteComment(comment) {
+			if (!confirm("Do you really want to delete this comment?")) return;
+
+			try {
+				const payload = {
+					postId: this.post.id,
+					commentId: comment.id,
+				};
+				const data = await this.$store.dispatch("deleteComment", payload);
+				console.log(data);
+				this.comments.splice(this.comments.indexOf(comment), 1);
+			} catch (err) {
+				handleError(err, this, "delete comment");
+			}
 		},
 	},
 };
@@ -77,7 +133,7 @@ article {
 	padding-left: 0.5rem;
 	margin-top: 1.5rem;
 	display: grid;
-	grid-template-rows: repeat(5, auto);
+	grid-template-rows: repeat(7, auto);
 	grid-template-columns: 58px auto;
 	justify-content: start;
 	justify-items: start;
@@ -106,6 +162,7 @@ p {
 }
 
 .article-footer {
+	grid-column: 1 / -1;
 	margin-top: 1rem;
 	display: flex;
 	gap: 0.5rem;

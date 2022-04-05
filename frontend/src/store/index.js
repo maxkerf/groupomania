@@ -251,6 +251,63 @@ export default createStore({
 					: reject(Object.assign({ status: res.status }, data));
 			});
 		},
+
+		/* COMMENT */
+
+		async addComment({ state }, payload) {
+			const res = await fetch(
+				`${state.apiRoot}/posts/${payload.postId}/comments`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${state.login.token}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(payload.comment),
+				}
+			);
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
+		async getPostComments({ state }, postId) {
+			const res = await fetch(`${state.apiRoot}/posts/${postId}/comments`, {
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+				},
+			});
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
+		async deleteComment({ state }, payload) {
+			const res = await fetch(
+				`${state.apiRoot}/posts/${payload.postId}/comments/${payload.commentId}`,
+				{
+					method: "DELETE",
+					headers: {
+						Authorization: `Bearer ${state.login.token}`,
+					},
+				}
+			);
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
 	},
 	modules: {},
 });

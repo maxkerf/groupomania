@@ -18,6 +18,7 @@
 import { mapState } from "vuex";
 import AddPostForm from "../components/AddPostForm.vue";
 import PostCard from "../components/PostCard.vue";
+import handleError from "../handleError.js";
 
 export default {
 	data() {
@@ -40,20 +41,12 @@ export default {
 		this.getNbPosts();
 	},
 	methods: {
-		handleError(err, requestName = "accomplish request") {
-			console.error(`Failed to ${requestName} ✖\n`, err);
-			if (err.status === 401) {
-				this.$store.dispatch("logout");
-				this.$router.push("/login");
-			}
-		},
-
 		async getPosts() {
 			try {
 				const posts = await this.$store.dispatch("getPosts", this.posts.length);
 				this.posts = [...this.posts, ...posts];
 			} catch (err) {
-				this.handleError(err, "get posts");
+				handleError(err, this, "get posts");
 			}
 		},
 
@@ -61,7 +54,7 @@ export default {
 			try {
 				this.nbPosts = await this.$store.dispatch("countPosts");
 			} catch (err) {
-				this.handleError(err, "get posts number");
+				handleError(err, this, "get posts number");
 			}
 		},
 
@@ -74,7 +67,7 @@ export default {
 				this.posts = [postCreated, ...this.posts];
 				this.nbPosts++;
 			} catch (err) {
-				this.handleError(err, "add post");
+				handleError(err, this, "add post");
 			}
 		},
 
@@ -87,7 +80,7 @@ export default {
 				this.posts.splice(this.posts.indexOf(post), 1);
 				this.nbPosts--;
 			} catch (err) {
-				this.handleError(err, "delete post");
+				handleError(err, this, "delete post");
 			}
 		},
 
@@ -101,7 +94,7 @@ export default {
 					postId
 				);
 			} catch (err) {
-				this.handleError(err);
+				handleError(err, this, "react");
 			}
 		},
 	},
