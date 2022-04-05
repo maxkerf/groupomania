@@ -49,7 +49,12 @@
 			</button>
 		</div>
 		<AddCommentForm class="add-comment-form" @add-comment="addComment" />
-		<CommentsBox :comments="comments" @delete-comment="deleteComment" />
+		<CommentsBox
+			:comments="comments"
+			:nbComments="nbComments"
+			@get-more-comments="getPostComments(comments.length)"
+			@delete-comment="deleteComment"
+		/>
 	</article>
 </template>
 
@@ -69,6 +74,7 @@ export default {
 	data() {
 		return {
 			comments: [],
+			nbComments: 0,
 		};
 	},
 	props: ["post"],
@@ -77,6 +83,7 @@ export default {
 	},
 	created() {
 		this.getPostComments();
+		this.getNumberComments();
 	},
 	methods: {
 		react(type) {
@@ -89,22 +96,38 @@ export default {
 					postId: this.post.id,
 					comment,
 				};
+
 				const data = await this.$store.dispatch("addComment", payload);
 				console.log(data);
+
 				this.comments.push(data.commentCreated);
+				this.nbComments++;
 			} catch (err) {
 				this.handleError(err, this, "add comment");
 			}
 		},
 
-		async getPostComments() {
+		async getPostComments(offset = 0) {
 			try {
-				this.comments = await this.$store.dispatch(
-					"getPostComments",
+				const payload = {
+					postId: this.post.id,
+					offset,
+				};
+				const comments = await this.$store.dispatch("getPostComments", payload);
+				this.comments = [...this.comments, ...comments];
+			} catch (err) {
+				handleError(err, this, "get post comments");
+			}
+		},
+
+		async getNumberComments() {
+			try {
+				this.nbComments = await this.$store.dispatch(
+					"getNumberComments",
 					this.post.id
 				);
 			} catch (err) {
-				handleError(err, this, "get post comments");
+				handleError(err, this, "get number comments");
 			}
 		},
 
@@ -116,9 +139,12 @@ export default {
 					postId: this.post.id,
 					commentId: comment.id,
 				};
+
 				const data = await this.$store.dispatch("deleteComment", payload);
 				console.log(data);
+
 				this.comments.splice(this.comments.indexOf(comment), 1);
+				this.nbComments--;
 			} catch (err) {
 				handleError(err, this, "delete comment");
 			}

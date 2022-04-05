@@ -8,7 +8,7 @@ exports.createComment = comment => {
 	});
 };
 
-exports.getComments = postId => {
+exports.getComments = (postId, offset = 0) => {
 	const sql = `SELECT
 	comment.id,
 	comment.user_id,
@@ -19,10 +19,23 @@ exports.getComments = postId => {
 	user.picture AS user_picture
 	FROM comment
 	INNER JOIN user ON comment.user_id = user.id
-	WHERE comment.post_id = ?`;
+	WHERE comment.post_id = ?
+	LIMIT 3 OFFSET ?`;
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, postId, (err, data) => (err ? reject(err) : resolve(data)));
+		db.query(sql, [postId, offset], (err, data) =>
+			err ? reject(err) : resolve(data)
+		);
+	});
+};
+
+exports.getNumberComments = postId => {
+	const sql = "SELECT COUNT(*) FROM comment WHERE post_id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, postId, (err, data) =>
+			err ? reject(err) : resolve(data[0]["COUNT(*)"])
+		);
 	});
 };
 

@@ -38,6 +38,9 @@ router.post(
 // Get Comments
 router.get("/", commentCtrl.getComments);
 
+// Get Number Comments
+router.get("/number", commentCtrl.getNumberComments);
+
 // Delete Comment
 router.delete("/:id", authorizeUser.comment, commentCtrl.deleteComment);
 

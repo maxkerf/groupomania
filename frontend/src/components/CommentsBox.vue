@@ -6,6 +6,12 @@
 			:comment="comment"
 			@delete-comment="comment => $emit('delete-comment', comment)"
 		/>
+		<button
+			v-show="comments.length !== nbComments"
+			@click="$emit('get-more-comments')"
+		>
+			Show more comments
+		</button>
 	</div>
 </template>
 
@@ -16,7 +22,7 @@ export default {
 	components: {
 		CommentBox,
 	},
-	props: ["comments"],
+	props: ["comments", "nbComments"],
 };
 </script>
 
@@ -26,5 +32,9 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+}
+
+button {
+	margin-top: 1rem;
 }
 </style>

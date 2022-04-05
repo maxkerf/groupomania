@@ -18,11 +18,27 @@ exports.createComment = async (req, res) => {
 };
 
 exports.getComments = async (req, res) => {
+	const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+
 	try {
-		const comments = await commentManager.getComments(res.locals.post.id);
+		const comments = await commentManager.getComments(
+			res.locals.post.id,
+			offset
+		);
 		res.status(200).json(comments);
 	} catch (err) {
 		handleError(err, res, "get comments");
+	}
+};
+
+exports.getNumberComments = async (req, res) => {
+	try {
+		const nbComments = await commentManager.getNumberComments(
+			res.locals.post.id
+		);
+		res.status(200).json(nbComments);
+	} catch (err) {
+		handleError(err, res, "get number comments");
 	}
 };
 
