@@ -7,6 +7,7 @@
 			@delete-comment="comment => $emit('delete-comment', comment)"
 		/>
 		<button
+			class="get-more-comments-btn"
 			v-show="comments.length !== nbComments"
 			@click="$emit('get-more-comments')"
 		>
@@ -34,7 +35,7 @@ export default {
 	align-items: flex-start;
 }
 
-button {
+.get-more-comments-btn {
 	margin-top: 1rem;
 }
 </style>

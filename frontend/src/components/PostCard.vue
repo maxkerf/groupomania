@@ -48,8 +48,16 @@
 				Delete
 			</button>
 		</div>
-		<AddCommentForm class="add-comment-form" @add-comment="addComment" />
+		<button
+			title="Show/hide comments"
+			@click="showComments = !showComments"
+			class="comments-btn"
+		>
+			{{ formatNumberComments }}
+		</button>
+		<AddCommentForm @add-comment="addComment" />
 		<CommentsBox
+			v-show="showComments"
 			:comments="comments"
 			:nbComments="nbComments"
 			@get-more-comments="getPostComments(comments.length)"
@@ -75,11 +83,19 @@ export default {
 		return {
 			comments: [],
 			nbComments: 0,
+			showComments: true,
 		};
 	},
 	props: ["post"],
 	computed: {
 		...mapState(["login", "apiRoot", "reactionTypes"]),
+
+		formatNumberComments() {
+			if (this.nbComments === 0) return "No comment";
+			else if (this.nbComments === 1) return "1 comment";
+
+			return `${this.nbComments} comments`;
+		},
 	},
 	created() {
 		this.getPostComments();
@@ -100,8 +116,9 @@ export default {
 				const data = await this.$store.dispatch("addComment", payload);
 				console.log(data);
 
-				this.comments.push(data.commentCreated);
+				this.comments.unshift(data.commentCreated);
 				this.nbComments++;
+				this.showComments = true;
 			} catch (err) {
 				this.handleError(err, this, "add comment");
 			}
@@ -159,7 +176,7 @@ article {
 	padding-left: 0.5rem;
 	margin-top: 1.5rem;
 	display: grid;
-	grid-template-rows: repeat(7, auto);
+	grid-template-rows: repeat(8, auto);
 	grid-template-columns: 58px auto;
 	justify-content: start;
 	justify-items: start;
@@ -192,5 +209,10 @@ p {
 	margin-top: 1rem;
 	display: flex;
 	gap: 0.5rem;
+}
+
+.comments-btn {
+	margin-top: 1rem;
+	grid-column: 1 / -1;
 }
 </style>

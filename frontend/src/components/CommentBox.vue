@@ -1,6 +1,10 @@
 <template>
 	<div class="comment-box">
-		<span class="date">{{ formatDate }}</span>
+		<span
+			class="date"
+			:title="new Date(comment.creationDate).toLocaleString()"
+			>{{ formatDate }}</span
+		>
 		<button
 			v-if="comment.user_id === login.userId"
 			@click="$emit('delete-comment', comment)"

@@ -13,7 +13,7 @@ export default {
 		};
 	},
 	methods: {
-		addComment() {
+		addComment(e) {
 			const comment = {
 				text: this.text,
 			};
@@ -21,6 +21,7 @@ export default {
 			this.$emit("add-comment", comment);
 
 			this.text = "";
+			e.srcElement[0].blur(); // input element
 		},
 	},
 };
