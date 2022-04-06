@@ -43,16 +43,15 @@ exports.getNumberComments = async (req, res) => {
 };
 
 exports.updateComment = async (req, res) => {
-	const comment = {
+	const commentId = res.locals.comment.id;
+
+	const newComment = {
 		text: req.body.text,
 	};
 
 	try {
-		const data = await commentManager.updateComment(
-			res.locals.comment.id,
-			comment
-		);
-		const commentUpdated = await commentManager.getComment(data.insertId);
+		await commentManager.updateComment(commentId, newComment);
+		const commentUpdated = await commentManager.getComment(commentId);
 		res.status(200).json({ message: "Comment updated", commentUpdated });
 	} catch (err) {
 		handleError(err, res, "update comment");

@@ -69,6 +69,7 @@
 			:nbComments="nbComments"
 			@get-more-comments="getPostComments(comments.length)"
 			@delete-comment="deleteComment"
+			@update-comment="updateComment"
 		/>
 		<AddCommentForm @add-comment="addComment" />
 	</article>
@@ -129,7 +130,7 @@ export default {
 				this.nbComments++;
 				this.showComments = true;
 			} catch (err) {
-				this.handleError(err, this, "add comment");
+				handleError(err, this, "add comment");
 			}
 		},
 
@@ -155,6 +156,27 @@ export default {
 				);
 			} catch (err) {
 				handleError(err, this, "get number comments");
+			}
+		},
+
+		async updateComment(commentId, newComment) {
+			try {
+				const payload = {
+					postId: this.post.id,
+					commentId,
+					newComment,
+				};
+
+				const data = await this.$store.dispatch("updateComment", payload);
+				console.log(data);
+
+				const commentToUpdate = this.comments.find(
+					comment => comment.id === commentId
+				);
+				if (commentToUpdate)
+					Object.assign(commentToUpdate, data.commentUpdated);
+			} catch (err) {
+				handleError(err, this, "update comment");
 			}
 		},
 

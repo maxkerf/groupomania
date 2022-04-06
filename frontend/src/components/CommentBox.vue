@@ -1,11 +1,23 @@
 <template>
 	<div class="comment-box">
-		<span
-			class="date"
-			:title="new Date(comment.creationDate).toLocaleString()"
-			>{{ formatDate }}</span
+		<div class="date-box">
+			<span
+				class="creation-date"
+				:title="new Date(comment.creationDate).toLocaleString()"
+				>{{ formatDate }}</span
+			>
+			<span
+				v-if="comment.lastUpdate"
+				:title="new Date(comment.lastUpdate).toLocaleString()"
+				class="last-update"
+			>
+				- Updated</span
+			>
+		</div>
+		<div
+			v-if="comment.user_id === login.userId && !updating"
+			class="dropdown-box"
 		>
-		<div v-if="comment.user_id === login.userId" class="dropdown-box">
 			<button
 				@click="showDropdownMenu = !showDropdownMenu"
 				class="dropdown-btn"
@@ -13,7 +25,7 @@
 				<i class="fa-solid fa-ellipsis"></i>
 			</button>
 			<div v-show="showDropdownMenu" class="dropdown-menu">
-				<button>Update</button>
+				<button @click="showUpdateForm">Update</button>
 				<button @click="$emit('delete-comment', comment)">Delete</button>
 			</div>
 		</div>
@@ -27,18 +39,30 @@
 			:to="{ name: 'profile', params: { id: comment.user_id } }"
 			>{{ comment.user_username }}</router-link
 		>
-		<p class="comment">{{ comment.text }}</p>
+		<p v-if="!updating" class="comment">{{ comment.text }}</p>
+		<UpdateCommentForm
+			v-if="updating"
+			class="update-comment-form"
+			:comment="comment"
+			@blur="updating = false"
+			@update-comment="updateComment"
+		/>
 	</div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import UpdateCommentForm from "../components/UpdateCommentForm.vue";
 
 export default {
 	data() {
 		return {
 			showDropdownMenu: false,
+			updating: false,
 		};
+	},
+	components: {
+		UpdateCommentForm,
 	},
 	props: ["comment"],
 	computed: {
@@ -81,6 +105,16 @@ export default {
 				12 * (endDate.getFullYear() - startDate.getFullYear())
 			);
 		},
+
+		showUpdateForm() {
+			this.updating = true;
+			this.showDropdownMenu = false;
+		},
+
+		updateComment(newComment) {
+			this.updating = false;
+			this.$emit("update-comment", this.comment.id, newComment);
+		},
 	},
 };
 </script>
@@ -95,7 +129,7 @@ export default {
 	border-top-left-radius: unset;
 
 	display: grid;
-	grid-template-columns: 40px auto auto;
+	grid-template-columns: 40px auto auto auto;
 	grid-template-rows: repeat(3, auto);
 	grid-template-areas:
 		"date date dropdown"
@@ -103,7 +137,7 @@ export default {
 		"pic com com";
 }
 
-.date {
+.date-box {
 	grid-area: date;
 	font-size: 0.75rem;
 	margin-bottom: 0.25rem;
@@ -157,5 +191,9 @@ export default {
 	grid-area: com;
 	margin: 0;
 	padding-right: 0.5rem;
+}
+
+.update-comment-form {
+	grid-area: com;
 }
 </style>

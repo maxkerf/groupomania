@@ -311,6 +311,27 @@ export default createStore({
 			});
 		},
 
+		async updateComment({ state }, payload) {
+			const res = await fetch(
+				`${state.apiRoot}/posts/${payload.postId}/comments/${payload.commentId}`,
+				{
+					method: "PUT",
+					headers: {
+						Authorization: `Bearer ${state.login.token}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(payload.newComment),
+				}
+			);
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
 		async deleteComment({ state }, payload) {
 			const res = await fetch(
 				`${state.apiRoot}/posts/${payload.postId}/comments/${payload.commentId}`,

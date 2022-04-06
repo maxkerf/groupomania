@@ -12,6 +12,10 @@
 			:key="comment.id"
 			:comment="comment"
 			@delete-comment="comment => $emit('delete-comment', comment)"
+			@update-comment="
+				(commentId, newComment) =>
+					$emit('update-comment', commentId, newComment)
+			"
 		/>
 	</div>
 </template>
