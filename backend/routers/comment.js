@@ -41,6 +41,22 @@ router.get("/", commentCtrl.getComments);
 // Get Number Comments
 router.get("/number", commentCtrl.getNumberComments);
 
+// Update Comment
+router.put(
+	"/:id",
+
+	body("text")
+		.notEmpty()
+		.withMessage("Text required")
+		.isString()
+		.withMessage("Text must be a string")
+		.isLength({ max: 255 })
+		.withMessage("Text must be at most 255 characters"),
+
+	authorizeUser.comment,
+	commentCtrl.updateComment
+);
+
 // Delete Comment
 router.delete("/:id", authorizeUser.comment, commentCtrl.deleteComment);
 

@@ -42,6 +42,23 @@ exports.getNumberComments = async (req, res) => {
 	}
 };
 
+exports.updateComment = async (req, res) => {
+	const comment = {
+		text: req.body.text,
+	};
+
+	try {
+		const data = await commentManager.updateComment(
+			res.locals.comment.id,
+			comment
+		);
+		const commentUpdated = await commentManager.getComment(data.insertId);
+		res.status(200).json({ message: "Comment updated", commentUpdated });
+	} catch (err) {
+		handleError(err, res, "update comment");
+	}
+};
+
 exports.deleteComment = async (req, res) => {
 	try {
 		await commentManager.deleteComment(res.locals.comment.id);

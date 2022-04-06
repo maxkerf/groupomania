@@ -15,6 +15,7 @@ exports.getComments = (postId, offset = 0) => {
 	comment.post_id,
 	comment.text,
 	comment.creationDate,
+	comment.lastUpdate,
 	user.username AS user_username,
 	user.picture AS user_picture
 	FROM comment
@@ -47,6 +48,7 @@ exports.getComment = id => {
 	comment.post_id,
 	comment.text,
 	comment.creationDate,
+	comment.lastUpdate,
 	user.username AS user_username,
 	user.picture AS user_picture
 	FROM comment
@@ -55,6 +57,16 @@ exports.getComment = id => {
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, id, (err, data) => (err ? reject(err) : resolve(data[0])));
+	});
+};
+
+exports.updateComment = (id, comment) => {
+	const sql = "UPDATE comment SET ?, lastUpdate = NOW() WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, [comment, id], (err, data) =>
+			err ? reject(err) : resolve(data)
+		);
 	});
 };
 
