@@ -59,6 +59,17 @@ router.get("/count", postCtrl.countPosts);
 // Get Post
 router.get("/:id", postCtrl.getPost);
 
+// Update Post
+router.put(
+	"/:id",
+	authorizeUser.post,
+	uploadPostImage,
+	parseBodyFromMulter,
+	checkPost,
+	checkErrors,
+	postCtrl.updatePost
+);
+
 // Delete Post
 router.delete("/:id", authorizeUser.post, postCtrl.deletePost);
 

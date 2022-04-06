@@ -57,6 +57,16 @@ exports.getPost = postId => {
 	});
 };
 
+exports.updatePost = (postId, newPost) => {
+	const sql = "UPDATE post SET ?, lastUpdate = NOW() WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, [newPost, postId], (err, data) =>
+			err ? reject(err) : resolve(data)
+		);
+	});
+};
+
 exports.deletePost = postId => {
 	const sql = "DELETE FROM `post` WHERE `id` = ?";
 

@@ -22,8 +22,7 @@ exports.createPost = async (req, res) => {
 		const postCreated = await postManager.getPost(data.insertId);
 		res.status(201).json({ message: "Post created", postCreated });
 	} catch (err) {
-		console.error(`Failed to create post ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "create post");
 	}
 };
 
@@ -50,13 +49,34 @@ exports.countPosts = async (req, res) => {
 		const nbPosts = await postManager.countPosts();
 		res.status(200).json(nbPosts);
 	} catch (err) {
-		console.error(`Failed to count posts ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "count posts");
 	}
 };
 
 exports.getPost = async (req, res) => {
 	res.status(200).json(res.locals.post);
+};
+
+exports.updatePost = async (req, res) => {
+	const postId = res.locals.post.id;
+
+	if (!req.body.text && !req.file)
+		return res
+			.status(400)
+			.json({ message: "At least one input (text or image) is required" });
+
+	const newPost = {};
+
+	if (req.body.text) newPost.text = req.body.text;
+	if (req.file) newPost.image = req.file.filename;
+
+	try {
+		await postManager.updatePost(postId, newPost);
+		const postUpdated = await postManager.getPost(postId);
+		res.status(200).json({ message: "Post updated", postUpdated });
+	} catch (err) {
+		handleError(err, res, "update post");
+	}
 };
 
 exports.deletePost = async (req, res) => {
@@ -69,7 +89,6 @@ exports.deletePost = async (req, res) => {
 		await postManager.deletePost(post.id);
 		res.status(200).json({ message: "Post deleted" });
 	} catch (err) {
-		console.error(`Failed to delete post ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "delete post");
 	}
 };
