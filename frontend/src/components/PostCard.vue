@@ -5,9 +5,23 @@
 			:src="`${apiRoot}/images/user/${post.user_picture}`"
 			alt="profile picture"
 		/>
-		<router-link :to="{ name: 'profile', params: { id: post.user_id } }">{{
-			post.user_username
-		}}</router-link>
+		<router-link
+			class="username"
+			:to="{ name: 'profile', params: { id: post.user_id } }"
+			>{{ post.user_username }}</router-link
+		>
+		<div v-if="post.user_id === login.userId" class="dropdown-box">
+			<button
+				@click="showDropdownMenu = !showDropdownMenu"
+				class="dropdown-btn"
+			>
+				<i class="fa-solid fa-ellipsis"></i>
+			</button>
+			<div v-show="showDropdownMenu" class="dropdown-menu">
+				<button>Update</button>
+				<button @click="$emit('delete-post', post)">Delete</button>
+			</div>
+		</div>
 		<span>{{ new Date(post.creationDate).toLocaleString() }}</span>
 		<p v-if="post.text">{{ post.text }}</p>
 		<img
@@ -42,20 +56,13 @@
 				@react="react"
 			/>
 			<button
-				v-if="post.user_id === login.userId"
-				@click="$emit('delete-post', post)"
+				title="Show/hide comments"
+				@click="showComments = !showComments"
+				class="comments-btn"
 			>
-				Delete
+				{{ formatNumberComments }}
 			</button>
 		</div>
-		<button
-			title="Show/hide comments"
-			@click="showComments = !showComments"
-			class="comments-btn"
-		>
-			{{ formatNumberComments }}
-		</button>
-		<AddCommentForm @add-comment="addComment" />
 		<CommentsBox
 			v-show="showComments"
 			:comments="comments"
@@ -63,6 +70,7 @@
 			@get-more-comments="getPostComments(comments.length)"
 			@delete-comment="deleteComment"
 		/>
+		<AddCommentForm @add-comment="addComment" />
 	</article>
 </template>
 
@@ -84,6 +92,7 @@ export default {
 			comments: [],
 			nbComments: 0,
 			showComments: true,
+			showDropdownMenu: false,
 		};
 	},
 	props: ["post"],
@@ -116,7 +125,7 @@ export default {
 				const data = await this.$store.dispatch("addComment", payload);
 				console.log(data);
 
-				this.comments.unshift(data.commentCreated);
+				this.comments.push(data.commentCreated);
 				this.nbComments++;
 				this.showComments = true;
 			} catch (err) {
@@ -131,7 +140,8 @@ export default {
 					offset,
 				};
 				const comments = await this.$store.dispatch("getPostComments", payload);
-				this.comments = [...this.comments, ...comments];
+				comments.reverse();
+				this.comments = [...comments, ...this.comments];
 			} catch (err) {
 				handleError(err, this, "get post comments");
 			}
@@ -176,8 +186,8 @@ article {
 	padding-left: 0.5rem;
 	margin-top: 1.5rem;
 	display: grid;
-	grid-template-rows: repeat(8, auto);
-	grid-template-columns: 58px auto;
+	grid-template-rows: repeat(7, auto);
+	grid-template-columns: 58px auto auto;
 	justify-content: start;
 	justify-items: start;
 }
@@ -190,6 +200,38 @@ article {
 	border-radius: 50%;
 	grid-row: 1 / 3;
 	margin-right: 0.5rem;
+}
+
+.username {
+	font-weight: 500;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.dropdown-box {
+	margin-left: 1rem;
+	position: relative;
+	display: flex;
+	justify-self: end;
+}
+
+.dropdown-btn {
+	border: unset;
+	background: unset;
+	cursor: pointer;
+	padding: 0.125rem 0.375rem;
+	border-radius: 1rem;
+
+	&:hover {
+		background-color: #ddd;
+	}
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 25px;
 }
 
 p {
@@ -209,10 +251,5 @@ p {
 	margin-top: 1rem;
 	display: flex;
 	gap: 0.5rem;
-}
-
-.comments-btn {
-	margin-top: 1rem;
-	grid-column: 1 / -1;
 }
 </style>

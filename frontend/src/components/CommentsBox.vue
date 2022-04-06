@@ -1,11 +1,5 @@
 <template>
 	<div class="comments-box">
-		<CommentBox
-			v-for="comment in comments"
-			:key="comment.id"
-			:comment="comment"
-			@delete-comment="comment => $emit('delete-comment', comment)"
-		/>
 		<button
 			class="get-more-comments-btn"
 			v-show="comments.length !== nbComments"
@@ -13,6 +7,12 @@
 		>
 			Show more comments
 		</button>
+		<CommentBox
+			v-for="comment in comments"
+			:key="comment.id"
+			:comment="comment"
+			@delete-comment="comment => $emit('delete-comment', comment)"
+		/>
 	</div>
 </template>
 

@@ -20,6 +20,7 @@ exports.getComments = (postId, offset = 0) => {
 	FROM comment
 	INNER JOIN user ON comment.user_id = user.id
 	WHERE comment.post_id = ?
+	ORDER BY comment.creationDate DESC
 	LIMIT 3 OFFSET ?`;
 
 	return new Promise((resolve, reject) => {

@@ -5,19 +5,28 @@
 			:title="new Date(comment.creationDate).toLocaleString()"
 			>{{ formatDate }}</span
 		>
-		<button
-			v-if="comment.user_id === login.userId"
-			@click="$emit('delete-comment', comment)"
-			class="delete-btn"
-		>
-			Delete
-		</button>
+		<div v-if="comment.user_id === login.userId" class="dropdown-box">
+			<button
+				@click="showDropdownMenu = !showDropdownMenu"
+				class="dropdown-btn"
+			>
+				<i class="fa-solid fa-ellipsis"></i>
+			</button>
+			<div v-show="showDropdownMenu" class="dropdown-menu">
+				<button>Update</button>
+				<button @click="$emit('delete-comment', comment)">Delete</button>
+			</div>
+		</div>
 		<img
 			class="profile-picture"
 			:src="`${apiRoot}/images/user/${comment.user_picture}`"
 			alt="user profile picture"
 		/>
-		<span class="username">{{ comment.user_username }}</span>
+		<router-link
+			class="username"
+			:to="{ name: 'profile', params: { id: comment.user_id } }"
+			>{{ comment.user_username }}</router-link
+		>
 		<p class="comment">{{ comment.text }}</p>
 	</div>
 </template>
@@ -26,6 +35,11 @@
 import { mapState } from "vuex";
 
 export default {
+	data() {
+		return {
+			showDropdownMenu: false,
+		};
+	},
 	props: ["comment"],
 	computed: {
 		...mapState(["apiRoot", "login"]),
@@ -84,7 +98,7 @@ export default {
 	grid-template-columns: 40px auto auto;
 	grid-template-rows: repeat(3, auto);
 	grid-template-areas:
-		"date date btn"
+		"date date dropdown"
 		"pic name name"
 		"pic com com";
 }
@@ -95,10 +109,28 @@ export default {
 	margin-bottom: 0.25rem;
 }
 
-.delete-btn {
-	grid-area: btn;
+.dropdown-box {
+	grid-area: dropdown;
 	margin-left: 1rem;
-	justify-self: end;
+	position: relative;
+	display: flex;
+}
+
+.dropdown-btn {
+	border: unset;
+	background: unset;
+	cursor: pointer;
+	padding: 0.125rem 0.25rem;
+	border-radius: 1rem;
+
+	&:hover {
+		background-color: #fff;
+	}
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 20px;
 }
 
 .profile-picture {
@@ -113,6 +145,12 @@ export default {
 .username {
 	grid-area: name;
 	font-weight: 500;
+	justify-self: start;
+	padding-right: 0.5rem;
+
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 .comment {
