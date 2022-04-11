@@ -1,14 +1,10 @@
 <template>
-	<form
-		v-show="updating"
-		v-if="login.userId == this.$route.params.id"
-		@submit.prevent="updateUser"
-	>
+	<form @submit.prevent="updateUser" ref="form">
 		<label for="username">Username</label>
 		<input
 			id="username"
 			type="text"
-			:value="user.username"
+			v-model="username"
 			required
 			maxlength="30"
 		/>
@@ -17,18 +13,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
-	props: ["updating", "user"],
-	computed: {
-		...mapState(["login"]),
+	props: ["user"],
+	data() {
+		return {
+			username: this.user.username,
+		};
+	},
+	mounted() {
+		this.$refs.form.querySelector("input").focus();
 	},
 	methods: {
 		updateUser() {
-			const username = document.querySelector("#username").value;
-			const newUser = { username };
-
+			const newUser = { username: this.username };
 			this.$emit("update-user", newUser);
 		},
 	},
@@ -37,15 +34,16 @@ export default {
 
 <style lang="scss" scoped>
 form {
-	border-left: 2px solid;
-	padding-left: 0.25rem;
-
 	& > * {
 		display: block;
 	}
 
-	button {
+	input {
 		margin-top: 0.25rem;
+	}
+
+	button {
+		margin-top: 1rem;
 	}
 }
 </style>

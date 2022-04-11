@@ -6,22 +6,29 @@
 				:src="`${apiRoot}/images/user/${user.picture}`"
 				alt="profile picture"
 			/>
-			<UpdateUserPicture
-				:updatingPicture="updatingPicture"
-				@toggle-updating-picture="updatingPicture = !updatingPicture"
-				@update-user-picture="updateUserPicture"
-			/>
+			<button
+				v-if="login.userId == this.$route.params.id"
+				@click="toggleModal($refs.updatePictureModal)"
+			>
+				Update picture
+			</button>
+			<ModalBox :toggleModal="toggleModal" ref="updatePictureModal">
+				<UpdateUserPictureForm @update-user-picture="updateUserPicture" />
+			</ModalBox>
 			<hr />
 			<span>Username: {{ user.username }}</span>
 			<span>
 				Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
 			</span>
-			<UpdateUser
-				:updating="updating"
-				:user="user"
-				@toggle-updating="updating = !updating"
-				@update-user="updateUser"
-			/>
+			<button
+				v-if="login.userId == this.$route.params.id"
+				@click="toggleModal($refs.updateInfosModal)"
+			>
+				Update infos
+			</button>
+			<ModalBox :toggleModal="toggleModal" ref="updateInfosModal">
+				<UpdateUserForm :user="user" @update-user="updateUser" />
+			</ModalBox>
 			<hr />
 			<button v-if="login.userId == this.$route.params.id" @click="logout">
 				Logout
@@ -37,9 +44,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import UpdateUserPicture from "../components/UpdateUserPicture.vue";
-import UpdateUser from "../components/UpdateUser.vue";
+import { mapActions, mapState } from "vuex";
+import UpdateUserPictureForm from "../components/UpdateUserPictureForm.vue";
+import UpdateUserForm from "../components/UpdateUserForm.vue";
+import ModalBox from "../components/ModalBox.vue";
 
 export default {
 	data() {
@@ -48,13 +56,12 @@ export default {
 			user: {
 				picture: "user.svg",
 			},
-			updating: false,
-			updatingPicture: false,
 		};
 	},
 	components: {
-		UpdateUserPicture,
-		UpdateUser,
+		UpdateUserPictureForm,
+		UpdateUserForm,
+		ModalBox,
 	},
 	computed: {
 		...mapState(["login", "apiRoot"]),
@@ -73,6 +80,8 @@ export default {
 		);
 	},
 	methods: {
+		...mapActions(["toggleModal"]),
+
 		async getOneUser() {
 			try {
 				this.user = await this.$store.dispatch(
@@ -118,8 +127,8 @@ export default {
 					newPicture
 				);
 				console.log(data);
-				this.user.picture = data.newPicture;
-				this.updatingPicture = false;
+				this.user.picture = data.pictureUpdated;
+				this.toggleModal(this.$refs.updatePictureModal);
 			} catch (err) {
 				console.error(err);
 			}
@@ -129,8 +138,8 @@ export default {
 			try {
 				const data = await this.$store.dispatch("updateUser", newUser);
 				console.log(data);
-				this.updating = false;
 				this.user.username = newUser.username;
+				this.toggleModal(this.$refs.updateInfosModal);
 			} catch (err) {
 				console.error(err);
 			}
@@ -142,13 +151,13 @@ export default {
 <style lang="scss" scoped>
 div > * {
 	display: block;
-
-	& + * {
-		margin-top: 0.5rem;
-	}
 }
 
 img {
 	height: 100px;
+}
+
+button {
+	margin-top: 0.5rem;
 }
 </style>
