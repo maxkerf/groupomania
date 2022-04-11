@@ -1,35 +1,51 @@
 <template>
 	<div>
-		<AddPostForm @add-post="addPost" />
+		<button @click="toggleModal($refs.createPostModal)">Add post</button>
 		<PostCard
 			v-for="post in posts"
 			:key="post.id"
 			:post="post"
 			@react="react"
 			@delete-post="deletePost"
+			@launch-post-update="launchPostUpdate"
 		/>
-		<button @click="getPosts" v-show="posts.length !== nbPosts">
+		<button
+			@click="getPosts"
+			v-show="posts.length !== nbPosts"
+			class="show-more-posts-btn"
+		>
 			Show more
 		</button>
+		<ModalBox :toggleModal="toggleModal" ref="createPostModal">
+			<AddPostForm @add-post="addPost" />
+		</ModalBox>
+		<ModalBox :toggleModal="toggleModal" ref="updatePostModal">
+			<UpdatePostForm :post="postToUpdate" @update-post="updatePost" />
+		</ModalBox>
 	</div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import AddPostForm from "../components/AddPostForm.vue";
-import PostCard from "../components/PostCard.vue";
+import { mapActions, mapState } from "vuex";
 import handleError from "../handleError.js";
+import PostCard from "../components/PostCard.vue";
+import AddPostForm from "../components/AddPostForm.vue";
+import UpdatePostForm from "../components/UpdatePostForm.vue";
+import ModalBox from "../components/ModalBox.vue";
 
 export default {
 	data() {
 		return {
 			posts: [],
 			nbPosts: 0,
+			postToUpdate: {},
 		};
 	},
 	components: {
-		AddPostForm,
 		PostCard,
+		AddPostForm,
+		UpdatePostForm,
+		ModalBox,
 	},
 	computed: {
 		...mapState(["login"]),
@@ -41,6 +57,15 @@ export default {
 		this.getNbPosts();
 	},
 	methods: {
+		...mapActions(["toggleModal"]),
+
+		launchPostUpdate(postToUpdate) {
+			this.postToUpdate = postToUpdate;
+			this.toggleModal(this.$refs.updatePostModal);
+		},
+
+		/* REQUESTS */
+
 		async getPosts() {
 			try {
 				const posts = await this.$store.dispatch("getPosts", this.posts.length);
@@ -62,10 +87,9 @@ export default {
 			try {
 				const data = await this.$store.dispatch("addPost", post);
 				console.log(data);
-				const postCreated = data.postCreated;
-				postCreated.reactions = [];
-				this.posts = [postCreated, ...this.posts];
+				this.posts = [data.postCreated, ...this.posts];
 				this.nbPosts++;
+				this.toggleModal(this.$refs.createPostModal);
 			} catch (err) {
 				handleError(err, this, "add post");
 			}
@@ -81,6 +105,23 @@ export default {
 				this.nbPosts--;
 			} catch (err) {
 				handleError(err, this, "delete post");
+			}
+		},
+
+		async updatePost(postId, newPost) {
+			const payload = {
+				postId,
+				newPost,
+			};
+
+			try {
+				const data = await this.$store.dispatch("updatePost", payload);
+				console.log(data);
+				const postToUpdate = this.posts.find(post => post.id === postId);
+				if (postToUpdate) Object.assign(postToUpdate, data.postUpdated);
+				this.toggleModal(this.$refs.updatePostModal);
+			} catch (err) {
+				handleError(err, this, "update post");
 			}
 		},
 
@@ -102,7 +143,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button {
+.show-more-posts-btn {
 	margin-top: 1.5rem;
 }
 </style>

@@ -28,6 +28,13 @@ export default createStore({
 		},
 	},
 	actions: {
+		/* OTHER */
+
+		toggleModal(context, component) {
+			component.showModal = !component.showModal;
+			document.querySelector("body").classList.toggle("freeze-body-scroll");
+		},
+
 		/* USER */
 
 		async signup({ state }, user) {
@@ -188,6 +195,34 @@ export default createStore({
 				headers: {
 					Authorization: `Bearer ${state.login.token}`,
 				},
+			});
+			const data = await res.json();
+
+			return new Promise((resolve, reject) => {
+				res.ok
+					? resolve(data)
+					: reject(Object.assign({ status: res.status }, data));
+			});
+		},
+
+		async updatePost({ state }, payload) {
+			const formData = new FormData();
+
+			if (payload.newPost.image) {
+				formData.append("image", payload.newPost.image);
+				delete payload.newPost.image;
+			}
+
+			if (payload.newPost.text) {
+				formData.append("post", JSON.stringify(payload.newPost));
+			}
+
+			const res = await fetch(`${state.apiRoot}/posts/${payload.postId}`, {
+				method: "PUT",
+				headers: {
+					Authorization: `Bearer ${state.login.token}`,
+				},
+				body: formData,
 			});
 			const data = await res.json();
 

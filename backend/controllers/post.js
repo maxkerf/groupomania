@@ -20,6 +20,7 @@ exports.createPost = async (req, res) => {
 	try {
 		const data = await postManager.createPost(newPost);
 		const postCreated = await postManager.getPost(data.insertId);
+		postCreated.reactions = [];
 		res.status(201).json({ message: "Post created", postCreated });
 	} catch (err) {
 		handleError(err, res, "create post");
@@ -58,7 +59,7 @@ exports.getPost = async (req, res) => {
 };
 
 exports.updatePost = async (req, res) => {
-	const postId = res.locals.post.id;
+	const post = res.locals.post;
 
 	if (!req.body.text && !req.file)
 		return res
@@ -71,8 +72,9 @@ exports.updatePost = async (req, res) => {
 	if (req.file) newPost.image = req.file.filename;
 
 	try {
-		await postManager.updatePost(postId, newPost);
-		const postUpdated = await postManager.getPost(postId);
+		if (newPost.image && post.image) await deletePostImage(post.image);
+		await postManager.updatePost(post.id, newPost);
+		const postUpdated = await postManager.getPost(post.id);
 		res.status(200).json({ message: "Post updated", postUpdated });
 	} catch (err) {
 		handleError(err, res, "update post");

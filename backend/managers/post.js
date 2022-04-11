@@ -10,10 +10,11 @@ exports.createPost = post => {
 
 exports.getPosts = (offset = 0) => {
 	const sql = `SELECT 
-	post.id AS id, 
+	post.id, 
 	post.user_id, 
-	post.creationDate AS creationDate, 
-	post.text, 
+	post.creationDate, 
+	post.lastUpdate,
+  post.text, 
 	post.image, 
 	user.username AS user_username, 
 	user.picture AS user_picture 
@@ -39,9 +40,10 @@ exports.countPosts = () => {
 
 exports.getPost = postId => {
 	const sql = `SELECT 
-		post.id AS id, 
+		post.id, 
 		post.user_id, 
-		post.creationDate AS creationDate, 
+		post.creationDate,
+		post.lastUpdate,
 		post.text, 
 		post.image, 
 		user.username AS user_username, 

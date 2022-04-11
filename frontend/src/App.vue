@@ -20,6 +20,10 @@ export default {
 </script>
 
 <style lang="scss">
+body.freeze-body-scroll {
+	overflow: hidden;
+}
+
 #app {
 	font-family: system-ui, sans-serif;
 }

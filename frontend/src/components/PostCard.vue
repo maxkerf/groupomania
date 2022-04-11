@@ -1,5 +1,5 @@
 <template>
-	<article>
+	<article ref="article">
 		<img
 			class="user-picture"
 			:src="`${apiRoot}/images/user/${post.user_picture}`"
@@ -18,11 +18,11 @@
 				<i class="fa-solid fa-ellipsis"></i>
 			</button>
 			<div v-show="showDropdownMenu" class="dropdown-menu">
-				<button>Update</button>
+				<button @click="launchPostUpdate">Update</button>
 				<button @click="$emit('delete-post', post)">Delete</button>
 			</div>
 		</div>
-		<span>{{ new Date(post.creationDate).toLocaleString() }}</span>
+		<span class="date">{{ new Date(post.creationDate).toLocaleString() }}</span>
 		<p v-if="post.text">{{ post.text }}</p>
 		<img
 			class="post-image"
@@ -112,6 +112,11 @@ export default {
 		this.getNumberComments();
 	},
 	methods: {
+		launchPostUpdate() {
+			this.showDropdownMenu = false;
+			this.$emit("launch-post-update", this.post);
+		},
+
 		react(type) {
 			this.$emit("react", this.post.id, type);
 		},
@@ -254,6 +259,10 @@ article {
 .dropdown-menu {
 	position: absolute;
 	top: 25px;
+}
+
+.date {
+	grid-row-start: 2;
 }
 
 p {
