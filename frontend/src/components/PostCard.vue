@@ -10,18 +10,10 @@
 			:to="{ name: 'profile', params: { id: post.user_id } }"
 			>{{ post.user_username }}</router-link
 		>
-		<div v-if="post.user_id === login.userId" class="dropdown-box">
-			<button
-				@click="showDropdownMenu = !showDropdownMenu"
-				class="dropdown-btn"
-			>
-				<i class="fa-solid fa-ellipsis"></i>
-			</button>
-			<div v-show="showDropdownMenu" class="dropdown-menu">
-				<button @click="launchPostUpdate">Update</button>
-				<button @click="$emit('delete-post', post)">Delete</button>
-			</div>
-		</div>
+		<DropdownBox v-if="post.user_id === login.userId" attachedElement="post">
+			<button @click="$emit('launch-post-update', post)">Update</button>
+			<button @click="$emit('delete-post', post)">Delete</button>
+		</DropdownBox>
 		<span class="date">{{ new Date(post.creationDate).toLocaleString() }}</span>
 		<p v-if="post.text">{{ post.text }}</p>
 		<img
@@ -80,6 +72,7 @@ import { mapState } from "vuex";
 import ReactionBox from "./ReactionBox.vue";
 import AddCommentForm from "./AddCommentForm.vue";
 import CommentsBox from "./CommentsBox.vue";
+import DropdownBox from "./DropdownBox.vue";
 import handleError from "../handleError.js";
 
 export default {
@@ -87,6 +80,7 @@ export default {
 		ReactionBox,
 		AddCommentForm,
 		CommentsBox,
+		DropdownBox,
 	},
 	data() {
 		return {
@@ -112,11 +106,6 @@ export default {
 		this.getNumberComments();
 	},
 	methods: {
-		launchPostUpdate() {
-			this.showDropdownMenu = false;
-			this.$emit("launch-post-update", this.post);
-		},
-
 		react(type) {
 			this.$emit("react", this.post.id, type);
 		},

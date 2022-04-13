@@ -14,21 +14,13 @@
 				- Updated</span
 			>
 		</div>
-		<div
+		<DropdownBox
 			v-if="comment.user_id === login.userId && !updating"
-			class="dropdown-box"
+			attachedElement="comment"
 		>
-			<button
-				@click="showDropdownMenu = !showDropdownMenu"
-				class="dropdown-btn"
-			>
-				<i class="fa-solid fa-ellipsis"></i>
-			</button>
-			<div v-show="showDropdownMenu" class="dropdown-menu">
-				<button @click="showUpdateForm">Update</button>
-				<button @click="$emit('delete-comment', comment)">Delete</button>
-			</div>
-		</div>
+			<button @click="this.updating = true">Update</button>
+			<button @click="$emit('delete-comment', comment)">Delete</button>
+		</DropdownBox>
 		<img
 			class="profile-picture"
 			:src="`${apiRoot}/images/user/${comment.user_picture}`"
@@ -53,16 +45,17 @@
 <script>
 import { mapState } from "vuex";
 import UpdateCommentForm from "../components/UpdateCommentForm.vue";
+import DropdownBox from "../components/DropdownBox.vue";
 
 export default {
 	data() {
 		return {
-			showDropdownMenu: false,
 			updating: false,
 		};
 	},
 	components: {
 		UpdateCommentForm,
+		DropdownBox,
 	},
 	props: ["comment"],
 	computed: {
@@ -106,11 +99,6 @@ export default {
 			);
 		},
 
-		showUpdateForm() {
-			this.updating = true;
-			this.showDropdownMenu = false;
-		},
-
 		updateComment(newComment) {
 			this.updating = false;
 			this.$emit("update-comment", this.comment.id, newComment);
@@ -141,30 +129,6 @@ export default {
 	grid-area: date;
 	font-size: 0.75rem;
 	margin-bottom: 0.25rem;
-}
-
-.dropdown-box {
-	grid-area: dropdown;
-	margin-left: 1rem;
-	position: relative;
-	display: flex;
-}
-
-.dropdown-btn {
-	border: unset;
-	background: unset;
-	cursor: pointer;
-	padding: 0.125rem 0.25rem;
-	border-radius: 1rem;
-
-	&:hover {
-		background-color: #fff;
-	}
-}
-
-.dropdown-menu {
-	position: absolute;
-	top: 20px;
 }
 
 .profile-picture {
