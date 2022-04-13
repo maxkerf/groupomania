@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="app-container">
 		<nav v-if="login.userId !== -1">
 			<router-link to="/">Home</router-link>
 			<router-link :to="{ name: 'profile', params: { id: login.userId } }">
@@ -7,6 +7,7 @@
 			</router-link>
 		</nav>
 		<router-view />
+		<footer>Footer example</footer>
 	</div>
 </template>
 
@@ -20,12 +21,28 @@ export default {
 </script>
 
 <style lang="scss">
-body.freeze-body-scroll {
-	overflow: hidden;
+body {
+	margin: 0;
 }
 
-#app {
+.app-container {
 	font-family: system-ui, sans-serif;
+	height: 100vh;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+}
+
+nav {
+	display: flex;
+	gap: 1rem;
+	padding: 1rem;
+	background-color: #aaa;
+}
+
+footer {
+	text-align: center;
+	padding: 1rem;
+	background-color: #aaa;
 }
 
 a {
@@ -39,11 +56,5 @@ a {
 
 h1 {
 	margin-top: 0;
-}
-
-nav {
-	display: flex;
-	gap: 1rem;
-	margin-bottom: 1rem;
 }
 </style>

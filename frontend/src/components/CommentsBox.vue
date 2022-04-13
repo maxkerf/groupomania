@@ -37,9 +37,13 @@ export default {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	width: 100%;
+	max-height: 200px;
+	overflow: hidden scroll;
+	margin-top: 1rem;
 }
 
 .get-more-comments-btn {
-	margin-top: 1rem;
+	margin-bottom: 1rem;
 }
 </style>

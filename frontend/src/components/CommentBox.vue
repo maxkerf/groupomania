@@ -109,10 +109,9 @@ export default {
 
 <style lang="scss" scoped>
 .comment-box {
-	margin-top: 1rem;
 	padding: 0.5rem;
 	padding-top: 0.25rem;
-	background-color: #ddd;
+	background-color: #bbb;
 	border-radius: 1rem;
 	border-top-left-radius: unset;
 
@@ -123,6 +122,10 @@ export default {
 		"date date dropdown"
 		"pic name name"
 		"pic com com";
+
+	& + & {
+		margin-top: 1rem;
+	}
 }
 
 .date-box {

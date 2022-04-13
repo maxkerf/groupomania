@@ -32,7 +32,6 @@ export default createStore({
 
 		toggleModal(context, component) {
 			component.showModal = !component.showModal;
-			document.querySelector("body").classList.toggle("freeze-body-scroll");
 		},
 
 		/* USER */

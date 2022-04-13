@@ -1,21 +1,25 @@
 <template>
-	<div>
-		<button @click="toggleModal($refs.createPostModal)">Add post</button>
-		<PostCard
-			v-for="post in posts"
-			:key="post.id"
-			:post="post"
-			@react="react"
-			@delete-post="deletePost"
-			@launch-post-update="launchPostUpdate"
-		/>
-		<button
-			@click="getPosts"
-			v-show="posts.length !== nbPosts"
-			class="show-more-posts-btn"
-		>
-			Show more
+	<div class="home-view">
+		<button class="add-post-btn" @click="toggleModal($refs.createPostModal)">
+			Add post
 		</button>
+		<div class="post-cards-box">
+			<PostCard
+				v-for="post in posts"
+				:key="post.id"
+				:post="post"
+				@react="react"
+				@delete-post="deletePost"
+				@launch-post-update="launchPostUpdate"
+			/>
+			<button
+				@click="getPosts"
+				v-show="posts.length !== nbPosts"
+				class="show-more-posts-btn"
+			>
+				Show more
+			</button>
+		</div>
 		<ModalBox :toggleModal="toggleModal" ref="createPostModal">
 			<AddPostForm @add-post="addPost" />
 		</ModalBox>
@@ -143,6 +147,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.home-view {
+	overflow: hidden;
+	display: grid;
+	grid-template-rows: auto 1fr;
+}
+
+.add-post-btn {
+	margin: 1rem;
+	justify-self: center;
+}
+
+.post-cards-box {
+	background-color: #eee;
+	overflow: hidden scroll;
+	padding: 1rem;
+}
+
 .show-more-posts-btn {
 	margin-top: 1.5rem;
 }

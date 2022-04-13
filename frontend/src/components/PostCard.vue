@@ -200,12 +200,15 @@ export default {
 article {
 	border-left: solid 2px;
 	padding-left: 0.5rem;
-	margin-top: 1.5rem;
 	display: grid;
 	grid-template-rows: repeat(7, auto);
 	grid-template-columns: 58px auto auto;
 	justify-content: start;
 	justify-items: start;
+
+	& + article {
+		margin-top: 1.5rem;
+	}
 }
 
 .user-picture {

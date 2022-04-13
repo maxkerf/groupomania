@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="profile-view">
 		<span v-if="notFound">Profile not found</span>
 		<div v-if="!notFound">
 			<img
@@ -149,6 +149,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile-view {
+	padding: 1rem;
+}
+
 div > * {
 	display: block;
 }
