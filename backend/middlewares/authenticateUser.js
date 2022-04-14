@@ -12,7 +12,7 @@ module.exports = authenticateUser = async (req, res, next) => {
 		const user = await userManager.getUserById(userId);
 		if (!user) throw { message: "User doesn't exist anymore" };
 
-		res.locals.userId = userId;
+		res.locals.authenticatedUser = user;
 		next();
 	} catch (err) {
 		res.status(401).json(err);

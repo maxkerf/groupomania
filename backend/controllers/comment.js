@@ -3,7 +3,7 @@ const handleError = require("../globalFunctions/handleError");
 
 exports.createComment = async (req, res) => {
 	const comment = {
-		user_id: res.locals.userId,
+		user_id: res.locals.authenticatedUser.id,
 		post_id: res.locals.post.id,
 		text: req.body.text,
 	};

@@ -3,7 +3,7 @@ const handleError = require("../globalFunctions/handleError");
 
 exports.react = async (req, res) => {
 	const newReaction = {
-		user_id: res.locals.userId,
+		user_id: res.locals.authenticatedUser.id,
 		post_id: res.locals.post.id,
 		type: req.body.type,
 	};

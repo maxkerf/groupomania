@@ -11,7 +11,7 @@ exports.createPost = async (req, res) => {
 			.json({ message: "At least one input (text or image) is required" });
 
 	const newPost = {
-		user_id: res.locals.userId,
+		user_id: res.locals.authenticatedUser.id,
 	};
 
 	if (req.body.text) newPost.text = req.body.text;

@@ -4,8 +4,10 @@ const { body } = require("express-validator");
 const userCtrl = require("../controllers/user");
 const userManager = require("../managers/user");
 const authenticateUser = require("../middlewares/authenticateUser");
+const authorizeUser = require("../middlewares/authorizeUser");
 const checkErrors = require("../middlewares/checkErrors");
 const uploadUserPicture = require("../middlewares/uploadUserPicture");
+const handleError = require("../globalFunctions/handleError");
 
 async function isEmailUnique(email) {
 	let user;
@@ -38,6 +40,17 @@ async function isUsernameUnique(username) {
 }
 
 const router = express.Router();
+
+router.param("id", async (req, res, next, id) => {
+	try {
+		const user = await userManager.getUserById(id);
+		if (!user) return res.status(404).json({ message: "User not found" });
+		res.locals.user = user;
+		next();
+	} catch (err) {
+		handleError(err, res, "get user");
+	}
+});
 
 // Signup
 router.post(
@@ -106,7 +119,9 @@ router.get("/:id", userCtrl.getOneUser);
 
 // Update User
 router.put(
-	"/",
+	"/:id",
+
+	authorizeUser.user,
 
 	body("username")
 		.trim()
@@ -123,9 +138,14 @@ router.put(
 );
 
 // Update User Picture
-router.put("/picture", uploadUserPicture, userCtrl.updateUserPicture);
+router.put(
+	"/:id/picture",
+	authorizeUser.user,
+	uploadUserPicture,
+	userCtrl.updateUserPicture
+);
 
 // Delete User
-router.delete("/", userCtrl.deleteUser);
+router.delete("/:id", authorizeUser.user, userCtrl.deleteUser);
 
 module.exports = router;

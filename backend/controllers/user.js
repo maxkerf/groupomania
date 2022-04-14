@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const userManager = require("../managers/user");
 const postManager = require("../managers/post");
+const handleError = require("../globalFunctions/handleError");
 const deleteUserPicture = require("../globalFunctions/deleteUserPicture");
 
 exports.signup = async (req, res) => {
@@ -19,8 +20,7 @@ exports.signup = async (req, res) => {
 
 		res.status(201).json({ message: "User signed up" });
 	} catch (err) {
-		console.error(`Failed to signup ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "signup");
 	}
 };
 
@@ -44,24 +44,16 @@ exports.login = async (req, res) => {
 
 		res.status(200).json({ message: "User logged in", userId, token });
 	} catch (err) {
-		console.error(`Failed to login ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "login");
 	}
 };
 
 exports.getOneUser = async (req, res) => {
-	try {
-		const user = await userManager.getUserById(req.params.id);
-		if (!user) return res.status(404).json({ message: "User not found" });
-		res.status(200).json(user);
-	} catch (err) {
-		console.error(`Failed to get one user ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
-	}
+	res.status(200).json(res.locals.user);
 };
 
 exports.updateUser = async (req, res) => {
-	const userId = res.locals.userId;
+	const userId = res.locals.user.id;
 	const newUser = {
 		username: req.body.username,
 	};
@@ -70,13 +62,12 @@ exports.updateUser = async (req, res) => {
 		await userManager.updateUser(userId, newUser);
 		res.status(200).json({ message: "User updated" });
 	} catch (err) {
-		console.error(`Failed to update user ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "update user");
 	}
 };
 
 exports.updateUserPicture = async (req, res) => {
-	const userId = res.locals.userId;
+	const userId = res.locals.user.id;
 	const newPicture = req.file.filename;
 
 	try {
@@ -88,21 +79,19 @@ exports.updateUserPicture = async (req, res) => {
 			.json({ message: "User picture updated", pictureUpdated: newPicture });
 	} catch (err) {
 		await deleteUserPicture(newPicture);
-		console.error(`Failed to update user picture ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "update user picture");
 	}
 };
 
 exports.deleteUser = async (req, res) => {
-	const userId = res.locals.userId;
+	const user = res.locals.user;
 
 	try {
-		await deleteUserPicture(userId);
-		await postManager.deleteUserPosts(userId);
-		await userManager.deleteUser(userId);
+		await deleteUserPicture(user.picture);
+		await postManager.deleteUserPosts(user.id);
+		await userManager.deleteUser(user.id);
 		res.status(200).json({ message: "User deleted" });
 	} catch (err) {
-		console.error(`Failed to delete user ✖\n${err}`);
-		res.status(500).json({ message: "Internal Server Error" });
+		handleError(err, res, "delete user");
 	}
 };

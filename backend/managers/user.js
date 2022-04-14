@@ -9,7 +9,7 @@ exports.createUser = user => {
 };
 
 exports.getUserByEmail = userEmail => {
-	const sql = "SELECT id, password FROM `user` WHERE `email` = ?";
+	const sql = "SELECT id, password FROM user WHERE email = ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, userEmail, (err, data) =>
@@ -20,7 +20,7 @@ exports.getUserByEmail = userEmail => {
 
 exports.getUserById = userId => {
 	const sql =
-		"SELECT id, username, creationDate, picture FROM `user` WHERE `id` = ?";
+		"SELECT id, username, creationDate, picture, role FROM user WHERE id = ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, userId, (err, data) =>
