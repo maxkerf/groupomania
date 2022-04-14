@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="signup-view">
 		<h1>Signup</h1>
 		<p>Already among us? <router-link to="/login">Login</router-link></p>
 		<SignupForm @signup="signup" />
@@ -35,3 +35,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.signup-view {
+	padding: 1rem;
+}
+</style>

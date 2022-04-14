@@ -15,7 +15,11 @@
 			>
 		</div>
 		<DropdownBox
-			v-if="comment.user_id === login.userId && !updating"
+			v-if="
+				(login.userRole === userRoles.admin ||
+					comment.user_id === login.userId) &&
+				!updating
+			"
 			attachedElement="comment"
 		>
 			<button @click="this.updating = true">Update</button>
@@ -59,7 +63,7 @@ export default {
 	},
 	props: ["comment"],
 	computed: {
-		...mapState(["apiRoot", "login"]),
+		...mapState(["apiRoot", "login", "userRoles"]),
 
 		formatDate() {
 			const currentDate = new Date(Date.now());

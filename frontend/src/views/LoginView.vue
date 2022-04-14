@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="login-view">
 		<h1>Login</h1>
 		<p>No account yet? <router-link to="/signup">Signup</router-link></p>
 		<LoginForm @login="loginUser" :errorMessage="errorMessage" />
@@ -39,3 +39,9 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+.login-view {
+	padding: 1rem;
+}
+</style>

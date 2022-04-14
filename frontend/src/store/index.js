@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-const DEFAULT_LOGIN = { userId: -1, token: "" };
+const DEFAULT_LOGIN = { userId: -1, userRole: -1, token: "" };
 let login = localStorage.getItem("login");
 login = login ? JSON.parse(login) : DEFAULT_LOGIN;
 
@@ -8,6 +8,10 @@ export default createStore({
 	state: {
 		apiRoot: "http://localhost:3000",
 		login,
+		userRoles: {
+			basic: 0,
+			admin: 1,
+		},
 		reactionTypes: {
 			dislike: 0,
 			like: 1,
@@ -65,7 +69,11 @@ export default createStore({
 
 			return new Promise((resolve, reject) => {
 				if (res.ok) {
-					commit("SET_LOGIN", { userId: data.userId, token: data.token });
+					commit("SET_LOGIN", {
+						userId: data.userId,
+						userRole: data.userRole,
+						token: data.token,
+					});
 					resolve(data);
 				} else {
 					reject(Object.assign({ status: res.status }, data));
@@ -92,14 +100,14 @@ export default createStore({
 			});
 		},
 
-		async updateUser({ state }, newUser) {
-			const res = await fetch(`${state.apiRoot}/users`, {
+		async updateUser({ state }, payload) {
+			const res = await fetch(`${state.apiRoot}/users/${payload.userId}`, {
 				method: "PUT",
 				headers: {
 					Authorization: `Bearer ${state.login.token}`,
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(newUser),
+				body: JSON.stringify(payload.newUser),
 			});
 			const data = await res.json();
 
@@ -110,17 +118,20 @@ export default createStore({
 			});
 		},
 
-		async updateUserPicture({ state }, newPicture) {
+		async updateUserPicture({ state }, payload) {
 			const formData = new FormData();
-			formData.append("picture", newPicture);
+			formData.append("picture", payload.newPicture);
 
-			const res = await fetch(`${state.apiRoot}/users/picture`, {
-				method: "PUT",
-				headers: {
-					Authorization: `Bearer ${state.login.token}`,
-				},
-				body: formData,
-			});
+			const res = await fetch(
+				`${state.apiRoot}/users/${payload.userId}/picture`,
+				{
+					method: "PUT",
+					headers: {
+						Authorization: `Bearer ${state.login.token}`,
+					},
+					body: formData,
+				}
+			);
 			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
@@ -130,8 +141,8 @@ export default createStore({
 			});
 		},
 
-		async deleteAccount({ state }) {
-			const res = await fetch(`${state.apiRoot}/users`, {
+		async deleteAccount({ state }, userId) {
+			const res = await fetch(`${state.apiRoot}/users/${userId}`, {
 				method: "DELETE",
 				headers: {
 					Authorization: `Bearer ${state.login.token}`,

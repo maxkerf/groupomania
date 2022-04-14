@@ -10,7 +10,10 @@
 			:to="{ name: 'profile', params: { id: post.user_id } }"
 			>{{ post.user_username }}</router-link
 		>
-		<DropdownBox v-if="post.user_id === login.userId" attachedElement="post">
+		<DropdownBox
+			v-if="login.userRole === userRoles.admin || post.user_id === login.userId"
+			attachedElement="post"
+		>
 			<button @click="$emit('launch-post-update', post)">Update</button>
 			<button @click="$emit('delete-post', post)">Delete</button>
 		</DropdownBox>
@@ -94,7 +97,7 @@ export default {
 	},
 	props: ["post"],
 	computed: {
-		...mapState(["login", "apiRoot", "reactionTypes"]),
+		...mapState(["login", "apiRoot", "reactionTypes", "userRoles"]),
 
 		formatNumberComments() {
 			if (this.nbComments === 0) return "No comment";

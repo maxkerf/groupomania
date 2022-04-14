@@ -7,7 +7,10 @@
 				alt="profile picture"
 			/>
 			<button
-				v-if="login.userId == this.$route.params.id"
+				v-if="
+					login.userRole === userRoles.admin ||
+					login.userId == this.$route.params.id
+				"
 				@click="toggleModal($refs.updatePictureModal)"
 			>
 				Update picture
@@ -21,7 +24,10 @@
 				Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
 			</span>
 			<button
-				v-if="login.userId == this.$route.params.id"
+				v-if="
+					login.userRole === userRoles.admin ||
+					login.userId == this.$route.params.id
+				"
 				@click="toggleModal($refs.updateInfosModal)"
 			>
 				Update infos
@@ -34,7 +40,10 @@
 				Logout
 			</button>
 			<button
-				v-if="login.userId == this.$route.params.id"
+				v-if="
+					login.userRole === userRoles.admin ||
+					login.userId == this.$route.params.id
+				"
 				@click="deleteAccount"
 			>
 				Delete account
@@ -64,7 +73,7 @@ export default {
 		ModalBox,
 	},
 	computed: {
-		...mapState(["login", "apiRoot"]),
+		...mapState(["login", "apiRoot", "userRoles"]),
 	},
 	async created() {
 		if (this.login.userId === -1) return this.$router.push("/login");
@@ -107,25 +116,28 @@ export default {
 			this.$router.push("/login");
 		},
 
-		async deleteAccount() {
-			if (!confirm("Do you really want to delete your account?")) return;
-
+		async updateUser(newUser) {
+			const payload = {
+				userId: this.user.id,
+				newUser,
+			};
 			try {
-				const data = await this.$store.dispatch("deleteAccount");
+				const data = await this.$store.dispatch("updateUser", payload);
 				console.log(data);
+				this.user.username = newUser.username;
+				this.toggleModal(this.$refs.updateInfosModal);
 			} catch (err) {
 				console.error(err);
 			}
-
-			this.logout();
 		},
 
 		async updateUserPicture(newPicture) {
+			const payload = {
+				userId: this.user.id,
+				newPicture,
+			};
 			try {
-				const data = await this.$store.dispatch(
-					"updateUserPicture",
-					newPicture
-				);
+				const data = await this.$store.dispatch("updateUserPicture", payload);
 				console.log(data);
 				this.user.picture = data.pictureUpdated;
 				this.toggleModal(this.$refs.updatePictureModal);
@@ -134,15 +146,18 @@ export default {
 			}
 		},
 
-		async updateUser(newUser) {
+		async deleteAccount() {
+			if (!confirm("Do you really want to delete the account?")) return;
+
 			try {
-				const data = await this.$store.dispatch("updateUser", newUser);
+				const data = await this.$store.dispatch("deleteAccount", this.user.id);
 				console.log(data);
-				this.user.username = newUser.username;
-				this.toggleModal(this.$refs.updateInfosModal);
 			} catch (err) {
 				console.error(err);
 			}
+
+			if (this.login.userRole === this.userRoles.admin) this.$router.push("/");
+			else this.logout();
 		},
 	},
 };

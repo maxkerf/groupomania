@@ -42,7 +42,10 @@ exports.login = async (req, res) => {
 			expiresIn: "10h",
 		});
 
-		res.status(200).json({ message: "User logged in", userId, token });
+		const userRole = user.role;
+		res
+			.status(200)
+			.json({ message: "User logged in", userId, userRole, token });
 	} catch (err) {
 		handleError(err, res, "login");
 	}

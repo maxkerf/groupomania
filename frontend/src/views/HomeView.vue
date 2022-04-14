@@ -100,19 +100,6 @@ export default {
 			}
 		},
 
-		async deletePost(post) {
-			if (!confirm("Do you really want to delete this post?")) return;
-
-			try {
-				const data = await this.$store.dispatch("deletePost", post.id);
-				console.log(data);
-				this.posts.splice(this.posts.indexOf(post), 1);
-				this.nbPosts--;
-			} catch (err) {
-				handleError(err, this, "delete post");
-			}
-		},
-
 		async updatePost(postId, newPost) {
 			const payload = {
 				postId,
@@ -127,6 +114,19 @@ export default {
 				this.toggleModal(this.$refs.updatePostModal);
 			} catch (err) {
 				handleError(err, this, "update post");
+			}
+		},
+
+		async deletePost(post) {
+			if (!confirm("Do you really want to delete this post?")) return;
+
+			try {
+				const data = await this.$store.dispatch("deletePost", post.id);
+				console.log(data);
+				this.posts.splice(this.posts.indexOf(post), 1);
+				this.nbPosts--;
+			} catch (err) {
+				handleError(err, this, "delete post");
 			}
 		},
 
