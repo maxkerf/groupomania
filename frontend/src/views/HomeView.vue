@@ -3,7 +3,7 @@
 		<button class="add-post-btn" @click="toggleModal($refs.createPostModal)">
 			Add post
 		</button>
-		<div class="post-cards-box">
+		<div class="post-cards-box" ref="postCardsBox">
 			<PostCard
 				v-for="post in posts"
 				:key="post.id"
@@ -94,6 +94,7 @@ export default {
 				this.posts = [data.postCreated, ...this.posts];
 				this.nbPosts++;
 				this.toggleModal(this.$refs.createPostModal);
+				this.$refs.postCardsBox.scroll({ top: 0, behavior: "smooth" });
 			} catch (err) {
 				handleError(err, this, "add post");
 			}

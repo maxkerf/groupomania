@@ -59,9 +59,10 @@
 			v-show="showComments"
 			:comments="comments"
 			:nbComments="nbComments"
-			@get-more-comments="getPostComments(comments.length)"
+			@get-more-comments="getMoreComments()"
 			@delete-comment="deleteComment"
 			@update-comment="updateComment"
+			ref="commentsBox"
 		/>
 		<AddCommentForm @add-comment="addComment" />
 	</article>
@@ -88,6 +89,7 @@ export default {
 			nbComments: 0,
 			showComments: true,
 			showDropdownMenu: false,
+			whatsUpdated: "",
 		};
 	},
 	props: ["post"],
@@ -105,7 +107,19 @@ export default {
 		this.getPostComments();
 		this.getNumberComments();
 	},
+	updated() {
+		const commentsBox = this.$refs.commentsBox._.subTree.el;
+		commentsBox.scroll({
+			top: this.whatsUpdated === "getMoreComments" ? 0 : 1000,
+		});
+		this.whatsUpdated = "";
+	},
 	methods: {
+		getMoreComments() {
+			this.whatsUpdated = "getMoreComments";
+			this.getPostComments(this.comments.length);
+		},
+
 		react(type) {
 			this.$emit("react", this.post.id, type);
 		},

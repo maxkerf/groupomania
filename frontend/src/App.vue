@@ -7,7 +7,7 @@
 			</router-link>
 		</nav>
 		<router-view />
-		<footer>Footer example</footer>
+		<footer v-if="login.userId !== -1">Footer example</footer>
 	</div>
 </template>
 
