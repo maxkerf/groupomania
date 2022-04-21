@@ -1,41 +1,43 @@
 <template>
-	<div class="comment-box">
-		<div class="date-box">
-			<span
-				class="creation-date"
-				:title="new Date(comment.creationDate).toLocaleString()"
-				>{{ formatDate }}</span
-			>
-			<span
-				v-if="comment.lastUpdate"
-				:title="new Date(comment.lastUpdate).toLocaleString()"
-				class="last-update"
-			>
-				- Updated</span
-			>
-		</div>
-		<DropdownBox
-			v-if="
-				(login.userRole === userRoles.admin ||
-					comment.user_id === login.userId) &&
-				!updating
-			"
-			attachedElement="comment"
-		>
-			<button @click="this.updating = true">Update</button>
-			<button @click="$emit('delete-comment', comment)">Delete</button>
-		</DropdownBox>
-		<img
-			class="profile-picture"
-			:src="`${apiRoot}/images/user/${comment.user_picture}`"
-			alt="user profile picture"
+	<div :class="`comment-box${updating ? ' updating' : ''}`">
+		<DateBox
+			v-if="!updating"
+			:creationDate="comment.creationDate"
+			:lastUpdate="comment.lastUpdate"
 		/>
-		<router-link
-			class="username"
-			:to="{ name: 'profile', params: { id: comment.user_id } }"
-			>{{ comment.user_username }}</router-link
-		>
-		<p v-if="!updating" class="comment">{{ comment.text }}</p>
+		<div v-if="!updating">
+			<img
+				class="profile-picture"
+				:src="`${apiRoot}/images/user/${comment.user_picture}`"
+				alt="user profile picture"
+			/>
+			<router-link
+				class="username"
+				:to="{ name: 'profile', params: { id: comment.user_id } }"
+				>{{ comment.user_username }}</router-link
+			>
+			<DropdownBox
+				class="dropdown-box"
+				v-if="
+					(login.userRole === userRoles.admin ||
+						comment.user_id === login.userId) &&
+					!updating
+				"
+				attachedElement="comment"
+			>
+				<DropdownMenuBtn
+					@click="this.updating = true"
+					name="Update"
+					icon="fa-solid fa-pen"
+				/>
+				<DropdownMenuBtn
+					@click="$emit('delete-comment', comment)"
+					name="Delete"
+					icon="fa-solid fa-x"
+				/>
+			</DropdownBox>
+			<p class="comment">{{ comment.text }}</p>
+		</div>
 		<UpdateCommentForm
 			v-if="updating"
 			class="update-comment-form"
@@ -50,6 +52,8 @@
 import { mapState } from "vuex";
 import UpdateCommentForm from "../components/UpdateCommentForm.vue";
 import DropdownBox from "../components/DropdownBox.vue";
+import DropdownMenuBtn from "../components/DropdownMenuBtn.vue";
+import DateBox from "../components/DateBox.vue";
 
 export default {
 	data() {
@@ -60,6 +64,8 @@ export default {
 	components: {
 		UpdateCommentForm,
 		DropdownBox,
+		DropdownMenuBtn,
+		DateBox,
 	},
 	props: ["comment"],
 	computed: {
@@ -113,58 +119,59 @@ export default {
 
 <style lang="scss" scoped>
 .comment-box {
-	padding: 0.5rem;
-	padding-top: 0.25rem;
-	background-color: #bbb;
-	border-radius: 1rem;
-	border-top-left-radius: unset;
+	&.updating {
+		width: 100%;
+	}
 
-	display: grid;
-	grid-template-columns: 40px auto auto auto;
-	grid-template-rows: repeat(3, auto);
-	grid-template-areas:
-		"date date dropdown"
-		"pic name name"
-		"pic com com";
-
-	& + & {
-		margin-top: 1rem;
+	& > div:nth-child(2) {
+		background-color: #515151;
+		padding: 0.25rem;
+		border-radius: 0.5rem;
+		border-top-left-radius: unset;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-rows: auto 1fr;
 	}
 }
 
 .date-box {
-	grid-area: date;
 	font-size: 0.75rem;
 	margin-bottom: 0.25rem;
+	color: #b0b3b8;
 }
 
 .profile-picture {
-	grid-area: pic;
+	grid-row: span 2;
 	height: 30px;
 	aspect-ratio: 1;
 	border-radius: 50%;
 	object-fit: cover;
-	object-position: top;
+	margin-right: 0.5rem;
 }
 
 .username {
-	grid-area: name;
+	text-decoration: none;
+	color: #e4e6eb;
 	font-weight: 500;
 	justify-self: start;
-	padding-right: 0.5rem;
 
 	&:hover {
 		text-decoration: underline;
 	}
 }
 
+.dropdown-box {
+	grid-row: span 2;
+	align-self: flex-start;
+	margin-left: 0.5rem;
+}
+
 .comment {
-	grid-area: com;
 	margin: 0;
-	padding-right: 0.5rem;
 }
 
 .update-comment-form {
-	grid-area: com;
+	grid-column-start: 2;
+	grid-row-start: 2;
 }
 </style>

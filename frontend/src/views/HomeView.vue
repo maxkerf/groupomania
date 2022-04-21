@@ -1,7 +1,19 @@
 <template>
-	<div class="home-view">
-		<button class="add-post-btn" @click="toggleModal($refs.createPostModal)">
-			Add post
+	<div class="home-view" ref="homeView" @scroll="handleScroll">
+		<button
+			class="add-post-btn"
+			@click="toggleModal($refs.createPostModal)"
+			title="Add a post"
+		>
+			<i class="fa-solid fa-pen"></i>
+		</button>
+		<button
+			v-show="showScrollTopBtn"
+			class="scroll-top-btn"
+			@click="scrollTop"
+			title="Scroll to top"
+		>
+			<i class="fa-solid fa-angle-up"></i>
 		</button>
 		<div class="post-cards-box" ref="postCardsBox">
 			<PostCard
@@ -43,6 +55,7 @@ export default {
 			posts: [],
 			nbPosts: 0,
 			postToUpdate: {},
+			showScrollTopBtn: false,
 		};
 	},
 	components: {
@@ -66,6 +79,14 @@ export default {
 		launchPostUpdate(postToUpdate) {
 			this.postToUpdate = postToUpdate;
 			this.toggleModal(this.$refs.updatePostModal);
+		},
+
+		scrollTop() {
+			this.$refs.homeView.scroll({ top: 0, behavior: "smooth" });
+		},
+
+		handleScroll(e) {
+			this.showScrollTopBtn = e.srcElement.scrollTop > 200;
 		},
 
 		/* REQUESTS */
@@ -94,7 +115,7 @@ export default {
 				this.posts = [data.postCreated, ...this.posts];
 				this.nbPosts++;
 				this.toggleModal(this.$refs.createPostModal);
-				this.$refs.postCardsBox.scroll({ top: 0, behavior: "smooth" });
+				this.scrollTop();
 			} catch (err) {
 				handleError(err, this, "add post");
 			}
@@ -149,20 +170,62 @@ export default {
 
 <style lang="scss" scoped>
 .home-view {
-	overflow: hidden;
-	display: grid;
-	grid-template-rows: auto 1fr;
-}
-
-.add-post-btn {
-	margin: 1rem;
-	justify-self: center;
+	overflow: hidden scroll;
+	position: relative;
 }
 
 .post-cards-box {
-	background-color: #eee;
-	overflow: hidden scroll;
 	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+}
+
+.add-post-btn {
+	position: fixed;
+	left: 50%;
+	// card/2 + btn + scrollbar/2 + gap
+	transform: translateX(calc((200px + 100% + 10px + 0.5rem) * -1));
+	border: unset;
+	padding: unset;
+	cursor: pointer;
+	font-size: 1.25rem;
+	margin-top: 1rem;
+	display: grid;
+	place-items: center;
+	background-color: #242526;
+	color: #e4e6eb;
+	width: 2em;
+	height: 2em;
+	border-radius: 50%;
+
+	&:hover {
+		color: #ffd7d7;
+	}
+}
+
+.scroll-top-btn {
+	position: fixed;
+	bottom: 86px;
+	left: 50%;
+	transform: translateX(200px); // card/2
+	border: unset;
+	padding: unset;
+	cursor: pointer;
+	font-size: 1.25rem;
+	margin-top: 1rem;
+	display: grid;
+	place-items: center;
+	background-color: #242526;
+	color: #e4e6eb;
+	width: 2em;
+	height: 2em;
+	border-radius: 50%;
+
+	&:hover {
+		color: #ffd7d7;
+	}
 }
 
 .show-more-posts-btn {

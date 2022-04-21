@@ -33,17 +33,30 @@ export default {
 
 <style lang="scss" scoped>
 .comments-box {
-	grid-column: 1 / -1;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	gap: 0.5rem;
 	width: 100%;
 	max-height: 200px;
 	overflow: hidden scroll;
-	margin-top: 1rem;
+	padding: 0 0.75rem;
+	box-sizing: border-box;
+	margin-top: 0.75rem;
 }
 
 .get-more-comments-btn {
-	margin-bottom: 1rem;
+	border: unset;
+	background-color: unset;
+	padding: unset;
+	font-family: unset;
+	font-size: 0.875rem;
+	cursor: pointer;
+	color: #b0b3b8;
+
+	&:hover {
+		text-decoration: underline;
+		color: #ffd7d7;
+	}
 }
 </style>

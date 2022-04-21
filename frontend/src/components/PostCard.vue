@@ -1,73 +1,99 @@
 <template>
-	<article ref="article">
-		<img
-			class="user-picture"
-			:src="`${apiRoot}/images/user/${post.user_picture}`"
-			alt="profile picture"
-		/>
-		<router-link
-			class="username"
-			:to="{ name: 'profile', params: { id: post.user_id } }"
-			>{{ post.user_username }}</router-link
-		>
-		<DropdownBox
-			v-if="login.userRole === userRoles.admin || post.user_id === login.userId"
-			attachedElement="post"
-		>
-			<button @click="$emit('launch-post-update', post)">Update</button>
-			<button @click="$emit('delete-post', post)">Delete</button>
-		</DropdownBox>
-		<span class="date">{{ new Date(post.creationDate).toLocaleString() }}</span>
-		<p v-if="post.text">{{ post.text }}</p>
-		<img
-			class="post-image"
-			v-if="post.image"
-			:src="`${apiRoot}/images/post/${post.image}`"
-			alt="image"
-		/>
-		<div class="article-footer">
-			<ReactionBox
-				:type="reactionTypes.like"
-				:postReactions="post.reactions"
-				:userId="login.userId"
-				@react="react"
+	<article class="post-card" ref="article">
+		<div class="post-card-header">
+			<img
+				class="user-picture"
+				:src="`${apiRoot}/images/user/${post.user_picture}`"
+				alt="profile picture"
 			/>
-			<ReactionBox
-				:type="reactionTypes.dislike"
-				:postReactions="post.reactions"
-				:userId="login.userId"
-				@react="react"
-			/>
-			<ReactionBox
-				:type="reactionTypes.love"
-				:postReactions="post.reactions"
-				:userId="login.userId"
-				@react="react"
-			/>
-			<ReactionBox
-				:type="reactionTypes.laugh"
-				:postReactions="post.reactions"
-				:userId="login.userId"
-				@react="react"
-			/>
-			<button
-				title="Show/hide comments"
-				@click="showComments = !showComments"
-				class="comments-btn"
+			<router-link
+				class="username"
+				:to="{ name: 'profile', params: { id: post.user_id } }"
+				>{{ post.user_username }}</router-link
 			>
-				{{ formatNumberComments }}
-			</button>
+			<DropdownBox
+				class="dropdown-box"
+				v-if="
+					login.userRole === userRoles.admin || post.user_id === login.userId
+				"
+				attachedElement="post"
+			>
+				<DropdownMenuBtn
+					@click="$emit('launch-post-update', post)"
+					name="Update"
+					icon="fa-solid fa-pen"
+				/>
+				<DropdownMenuBtn
+					@click="$emit('delete-post', post)"
+					name="Delete"
+					icon="fa-solid fa-x"
+				/>
+			</DropdownBox>
+			<DateBox
+				class="date"
+				:creationDate="post.creationDate"
+				:lastUpdate="post.lastUpdate"
+			/>
 		</div>
-		<CommentsBox
-			v-show="showComments"
-			:comments="comments"
-			:nbComments="nbComments"
-			@get-more-comments="getMoreComments()"
-			@delete-comment="deleteComment"
-			@update-comment="updateComment"
-			ref="commentsBox"
-		/>
-		<AddCommentForm @add-comment="addComment" />
+		<div class="post-card-content">
+			<p v-if="post.text">{{ post.text }}</p>
+			<img
+				class="post-image"
+				v-if="post.image"
+				:src="`${apiRoot}/images/post/${post.image}`"
+				alt="image"
+			/>
+		</div>
+		<div class="community-feedbacks">
+			<div>
+				<div class="reactions-box">
+					<ReactionBox
+						:type="reactionTypes.like"
+						:postReactions="post.reactions"
+						:userId="login.userId"
+						@react="react"
+					/>
+					<ReactionBox
+						:type="reactionTypes.dislike"
+						:postReactions="post.reactions"
+						:userId="login.userId"
+						@react="react"
+					/>
+					<ReactionBox
+						:type="reactionTypes.love"
+						:postReactions="post.reactions"
+						:userId="login.userId"
+						@react="react"
+					/>
+					<ReactionBox
+						:type="reactionTypes.laugh"
+						:postReactions="post.reactions"
+						:userId="login.userId"
+						@react="react"
+					/>
+				</div>
+				<button
+					v-if="comments.length"
+					title="Show/hide comments"
+					@click="showComments = !showComments"
+					class="comments-btn"
+				>
+					{{ formatNumberComments }}
+				</button>
+			</div>
+			<div class="linebreak"><hr /></div>
+			<CommentsBox
+				class="comments-box"
+				v-show="showComments"
+				:comments="comments"
+				:nbComments="nbComments"
+				@get-more-comments="getMoreComments()"
+				@delete-comment="deleteComment"
+				@update-comment="updateComment"
+				ref="commentsBox"
+			/>
+			<AddCommentForm @add-comment="addComment" />
+		</div>
 	</article>
 </template>
 
@@ -77,6 +103,8 @@ import ReactionBox from "./ReactionBox.vue";
 import AddCommentForm from "./AddCommentForm.vue";
 import CommentsBox from "./CommentsBox.vue";
 import DropdownBox from "./DropdownBox.vue";
+import DropdownMenuBtn from "./DropdownMenuBtn.vue";
+import DateBox from "./DateBox.vue";
 import handleError from "../handleError.js";
 
 export default {
@@ -85,12 +113,14 @@ export default {
 		AddCommentForm,
 		CommentsBox,
 		DropdownBox,
+		DropdownMenuBtn,
+		DateBox,
 	},
 	data() {
 		return {
 			comments: [],
 			nbComments: 0,
-			showComments: true,
+			showComments: false,
 			showDropdownMenu: false,
 			whatsUpdated: "",
 		};
@@ -100,8 +130,7 @@ export default {
 		...mapState(["login", "apiRoot", "reactionTypes", "userRoles"]),
 
 		formatNumberComments() {
-			if (this.nbComments === 0) return "No comment";
-			else if (this.nbComments === 1) return "1 comment";
+			if (this.nbComments === 1) return "1 comment";
 
 			return `${this.nbComments} comments`;
 		},
@@ -214,31 +243,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-article {
-	border-left: solid 2px;
-	padding-left: 0.5rem;
-	display: grid;
-	grid-template-rows: repeat(7, auto);
-	grid-template-columns: 58px auto auto;
-	justify-content: start;
-	justify-items: start;
+.post-card {
+	background-color: #242526;
+	color: #e4e6eb;
+	width: 400px;
+	border-radius: 0.75rem;
+}
 
-	& + article {
-		margin-top: 1.5rem;
-	}
+.post-card-header {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-rows: repeat(2, 1fr);
+	padding: 0.75rem;
+	padding-bottom: 0;
 }
 
 .user-picture {
+	grid-row: span 2;
 	height: 50px;
 	aspect-ratio: 1;
 	object-fit: cover;
-	object-position: top;
 	border-radius: 50%;
-	grid-row: 1 / 3;
 	margin-right: 0.5rem;
 }
 
 .username {
+	justify-self: start;
+	align-self: flex-end;
+	text-decoration: none;
+	color: #e4e6eb;
 	font-weight: 500;
 
 	&:hover {
@@ -247,49 +280,70 @@ article {
 }
 
 .dropdown-box {
+	grid-row: span 2;
+	align-self: flex-start;
 	margin-left: 1rem;
-	position: relative;
-	display: flex;
-	justify-self: end;
-}
-
-.dropdown-btn {
-	border: unset;
-	background: unset;
-	cursor: pointer;
-	padding: 0.125rem 0.375rem;
-	border-radius: 1rem;
-
-	&:hover {
-		background-color: #ddd;
-	}
-}
-
-.dropdown-menu {
-	position: absolute;
-	top: 25px;
 }
 
 .date {
+	grid-column-start: 2;
 	grid-row-start: 2;
+	align-self: flex-start;
 }
 
-p {
-	grid-column: 1 / -1;
-	margin: 0;
-	margin-top: 1rem;
+.post-card-content {
+	p {
+		padding: 0 0.75rem;
+		margin: 0;
+		margin-top: 0.75rem;
+	}
+
+	img {
+		display: block;
+		width: 100%;
+		margin-top: 0.75rem;
+	}
 }
 
-.post-image {
-	grid-column: 1 / -1;
-	width: 300px;
-	margin-top: 1rem;
+.community-feedbacks {
+	& > div:nth-child(1) {
+		display: flex;
+		justify-content: space-between;
+		padding: 0.5rem;
+	}
 }
 
-.article-footer {
-	grid-column: 1 / -1;
-	margin-top: 1rem;
+.reactions-box {
 	display: flex;
 	gap: 0.5rem;
+}
+
+.comments-btn {
+	border: unset;
+	background-color: unset;
+	padding: unset;
+	font-family: unset;
+	font-size: 0.875rem;
+	cursor: pointer;
+	color: #b0b3b8;
+
+	&:hover {
+		text-decoration: underline;
+		color: #ffd7d7;
+	}
+}
+
+.linebreak {
+	padding: 0 0.75rem;
+
+	& > hr {
+		border: 0;
+		border-top: 1px solid #515151;
+		margin: 0;
+	}
+}
+
+.comments-box {
+	grid-column: span 2;
 }
 </style>

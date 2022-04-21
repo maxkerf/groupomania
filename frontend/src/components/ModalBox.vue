@@ -14,7 +14,7 @@
 export default {
 	data() {
 		return {
-			showModal: false,
+			showModal: true,
 		};
 	},
 	props: ["toggleModal"],
@@ -30,6 +30,7 @@ export default {
 	bottom: 0;
 	display: grid;
 	place-items: center;
+	z-index: 10;
 }
 
 .modal-overlay {
@@ -39,10 +40,12 @@ export default {
 }
 
 .modal {
-	background-color: #fff;
+	background-color: #242526;
+	color: #e4e6eb;
 	position: absolute;
 	padding: 1rem;
 	border-radius: 0.5rem;
+	border: 3px solid lighten(#242526, 10%);
 }
 
 .close-modal-btn {
@@ -52,16 +55,17 @@ export default {
 	border: unset;
 	background-color: unset;
 	font-size: unset;
-	padding: 0;
+	padding: unset;
+	color: unset;
 	cursor: pointer;
 	width: 1.5rem;
-	aspect-ratio: 1;
+	height: 1.5rem;
 	border-radius: 50%;
 	display: grid;
 	place-items: center;
 
 	&:hover {
-		background-color: #ddd;
+		background-color: lighten(#242526, 10%);
 	}
 }
 </style>

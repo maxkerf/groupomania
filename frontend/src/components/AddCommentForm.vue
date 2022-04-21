@@ -1,7 +1,15 @@
 <template>
 	<form @submit.prevent="addComment">
-		<input type="text" name="text" id="text" v-model="text" />
-		<button type="submit">Comment</button>
+		<div>
+			<input
+				type="text"
+				name="text"
+				v-model="text"
+				placeholder="Add a comment"
+				maxlength="255"
+			/>
+			<span class="text-counter">{{ text.length }}/255</span>
+		</div>
 	</form>
 </template>
 
@@ -29,9 +37,36 @@ export default {
 
 <style lang="scss" scoped>
 form {
-	grid-column: 1 / -1;
-	margin-top: 1rem;
-	display: flex;
-	gap: 0.5rem;
+	margin-top: 0.75rem;
+	padding: 0 0.75rem 0.75rem 0.75rem;
+
+	& div {
+		background-color: #515151;
+		border-radius: 0.5rem;
+		padding: 0.25rem 0.5rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+	}
+}
+
+input {
+	flex: 1;
+	border: unset;
+	background-color: unset;
+	padding: unset;
+	font-size: unset;
+	color: unset;
+	font-family: unset;
+	outline: unset;
+
+	&::placeholder {
+		color: #b0b3b8;
+	}
+}
+
+.text-counter {
+	font-size: 0.75rem;
 }
 </style>
