@@ -5,8 +5,12 @@
 				<img class="logo" src="logo.svg" alt="Logo" />
 			</router-link>
 			<nav>
-				<router-link :to="{ name: 'profile', params: { id: login.userId } }">
-					Profile
+				<router-link
+					class="profile-link"
+					:to="{ name: 'profile', params: { id: login.userId } }"
+				>
+					<img :src="`${apiRoot}/images/user/${user.picture}`" alt="" />
+					<span>{{ user.username }}</span>
 				</router-link>
 			</nav>
 		</header>
@@ -18,10 +22,32 @@
 </template>
 
 <script>
+import handleError from "./handleError.js";
 import { mapState } from "vuex";
+
 export default {
+	data() {
+		return {
+			user: {},
+		};
+	},
+
 	computed: {
-		...mapState(["login"]),
+		...mapState(["login", "apiRoot"]),
+	},
+
+	created() {
+		this.getOneUser();
+	},
+
+	methods: {
+		async getOneUser() {
+			try {
+				this.user = await this.$store.dispatch("getOneUser", this.login.userId);
+			} catch (err) {
+				handleError(err, this, "get one user");
+			}
+		},
 	},
 };
 </script>
@@ -61,11 +87,44 @@ nav {
 	a {
 		text-decoration: unset;
 		color: #e4e6eb;
+	}
+}
 
-		&:hover {
-			text-decoration: underline;
-			color: #ffd7d7;
+.profile-link {
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+	padding: 0.25rem 0.375rem 0.25rem 0.25rem;
+	position: relative;
+
+	&::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		z-index: -1;
+		background-color: lighten(#242526, 10%);
+		border-radius: 2rem;
+		border-bottom-right-radius: 0;
+		opacity: 0;
+		transition: opacity 150ms;
+	}
+
+	&:hover {
+		color: #ffd7d7;
+
+		&::after {
+			opacity: 1;
 		}
+	}
+
+	img {
+		width: 2em;
+		height: 2em;
+		object-fit: cover;
+		border-radius: 50%;
 	}
 }
 
