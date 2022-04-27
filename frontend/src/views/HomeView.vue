@@ -32,10 +32,18 @@
 				Show more
 			</button>
 		</div>
-		<ModalBox :toggleModal="toggleModal" ref="createPostModal">
+		<ModalBox
+			:toggleModal="toggleModal"
+			ref="createPostModal"
+			title="Add a post"
+		>
 			<AddPostForm @add-post="addPost" />
 		</ModalBox>
-		<ModalBox :toggleModal="toggleModal" ref="updatePostModal">
+		<ModalBox
+			:toggleModal="toggleModal"
+			ref="updatePostModal"
+			title="Update a post"
+		>
 			<UpdatePostForm :post="postToUpdate" @update-post="updatePost" />
 		</ModalBox>
 	</div>

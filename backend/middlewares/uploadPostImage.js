@@ -1,6 +1,7 @@
 const multer = require("multer");
 
 const AUTHORIZED_EXTENSIONS = ["jpg", "jpeg", "png", "gif"];
+const MAX_FILE_SIZE = 1024 * 1024; // 1Mo
 
 function getExtension(file) {
 	return file.mimetype.split("/")[1];
@@ -34,7 +35,11 @@ const fileFilter = (req, file, cb) => {
 };
 
 module.exports = (req, res, next) => {
-	const upload = multer({ storage, fileFilter }).single("image");
+	const upload = multer({
+		storage,
+		fileFilter,
+		limits: { fileSize: MAX_FILE_SIZE },
+	}).single("image");
 
 	upload(req, res, err => {
 		if (err)

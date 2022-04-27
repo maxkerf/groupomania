@@ -66,12 +66,15 @@ exports.updatePost = async (req, res) => {
 			.status(400)
 			.json({ message: "At least one input (text or image) is required" });
 
-	const newPost = {};
+	const newPost = {
+		text: req.body.text,
+	};
 
-	if (req.body.text) newPost.text = req.body.text;
-	if (req.file) newPost.image = req.file.filename;
+	if (req.file?.originalname !== post.image) newPost.image = req.file.filename;
 
 	try {
+		if (req.file?.originalname === post.image)
+			await deletePostImage(req.file.filename);
 		if (newPost.image && post.image) await deletePostImage(post.image);
 		await postManager.updatePost(post.id, newPost);
 		const postUpdated = await postManager.getPost(post.id);

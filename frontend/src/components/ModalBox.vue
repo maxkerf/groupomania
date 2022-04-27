@@ -2,7 +2,12 @@
 	<div v-if="showModal" class="modal-box">
 		<div @click="toggleModal(this)" class="modal-overlay"></div>
 		<div class="modal">
-			<button @click="toggleModal(this)" class="close-modal-btn" title="Close">
+			<span class="modal-title">{{ title }}</span>
+			<button
+				@click="toggleModal(this)"
+				class="close-modal-btn"
+				title="Close modal"
+			>
 				<i class="fa-solid fa-xmark"></i>
 			</button>
 			<slot></slot>
@@ -14,10 +19,17 @@
 export default {
 	data() {
 		return {
-			showModal: true,
+			showModal: false,
 		};
 	},
-	props: ["toggleModal"],
+	props: {
+		title: {
+			type: String,
+			required: true,
+			default: "Title",
+		},
+		toggleModal: Function,
+	},
 };
 </script>
 
@@ -34,7 +46,7 @@ export default {
 }
 
 .modal-overlay {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.75);
 	width: 100%;
 	height: 100%;
 }
@@ -44,28 +56,53 @@ export default {
 	color: #e4e6eb;
 	position: absolute;
 	padding: 1rem;
-	border-radius: 0.5rem;
 	border: 3px solid lighten(#242526, 10%);
+	border-radius: 0.5rem;
+	min-width: 15em;
+	max-width: 20em;
+	display: grid;
+	gap: 1rem;
+}
+
+.modal-title {
+	font-weight: 500;
+	display: block;
+	text-align: center;
+	justify-self: center;
+	width: calc(100% - 4em);
 }
 
 .close-modal-btn {
-	position: absolute;
-	right: 0.5rem;
-	top: 0.5rem;
 	border: unset;
 	background-color: unset;
 	font-size: unset;
 	padding: unset;
 	color: unset;
+	position: absolute;
+	right: 0.5em;
+	top: 0.5em;
 	cursor: pointer;
-	width: 1.5rem;
-	height: 1.5rem;
-	border-radius: 50%;
+	width: 1.5em;
+	height: 1.5em;
 	display: grid;
 	place-items: center;
+	z-index: 0;
 
-	&:hover {
+	&::after {
+		content: "";
+		position: absolute;
 		background-color: lighten(#242526, 10%);
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		z-index: -1;
+		opacity: 0;
+		transition: opacity 200ms;
+	}
+
+	&:hover::after {
+		opacity: 1;
 	}
 }
 </style>
+3

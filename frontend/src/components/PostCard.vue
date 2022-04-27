@@ -296,6 +296,7 @@ export default {
 		padding: 0 0.75rem;
 		margin: 0;
 		margin-top: 0.75rem;
+		white-space: pre;
 	}
 
 	img {
