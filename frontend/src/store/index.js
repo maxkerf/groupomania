@@ -23,7 +23,12 @@ export default createStore({
 	mutations: {
 		SET_LOGIN(state, login) {
 			state.login = login;
-			localStorage.setItem("login", JSON.stringify(login));
+			localStorage.setItem("login", JSON.stringify(state.login));
+		},
+
+		SET_LOGIN_USER_PICTURE(state, picture) {
+			state.login.user.picture = picture;
+			localStorage.setItem("login", JSON.stringify(state.login));
 		},
 
 		REMOVE_LOGIN(state) {
@@ -117,7 +122,7 @@ export default createStore({
 			});
 		},
 
-		async updateUserPicture({ state }, payload) {
+		async updateUserPicture({ state, commit }, payload) {
 			const formData = new FormData();
 			formData.append("picture", payload.newPicture);
 
@@ -134,9 +139,12 @@ export default createStore({
 			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
-				res.ok
-					? resolve(data)
-					: reject(Object.assign({ status: res.status }, data));
+				if (res.ok) {
+					commit("SET_LOGIN_USER_PICTURE", data.pictureUpdated);
+					resolve(data);
+				} else {
+					reject(Object.assign({ status: res.status }, data));
+				}
 			});
 		},
 

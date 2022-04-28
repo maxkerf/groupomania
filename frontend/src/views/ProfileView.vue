@@ -1,7 +1,9 @@
 <template>
 	<div class="profile-view">
 		<img
-			:src="`${apiRoot}/images/user/${user.picture}`"
+			:src="`${
+				user.picture ? `${apiRoot}/images/user/${user.picture}` : '/user.svg'
+			}`"
 			alt="profile picture"
 		/>
 		<button
@@ -16,9 +18,12 @@
 		<ModalBox
 			:toggleModal="toggleModal"
 			ref="updatePictureModal"
-			title="Update user picture"
+			title="Update profile picture"
 		>
-			<UpdateUserPictureForm @update-user-picture="updateUserPicture" />
+			<UpdateUserPictureForm
+				:user="user"
+				@update-user-picture="updateUserPicture"
+			/>
 		</ModalBox>
 		<hr />
 		<span>Username: {{ user.username }}</span>
