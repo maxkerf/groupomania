@@ -19,8 +19,8 @@
 			<DropdownBox
 				class="dropdown-box"
 				v-if="
-					(login.userRole === userRoles.admin ||
-						comment.user_id === login.userId) &&
+					(login.user.role === userRoles.admin ||
+						comment.user_id === login.user.id) &&
 					!updating
 				"
 				attachedElement="comment"

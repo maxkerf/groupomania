@@ -1,54 +1,59 @@
 <template>
 	<div class="profile-view">
-		<span v-if="notFound">Profile not found</span>
-		<div v-if="!notFound">
-			<img
-				:src="`${apiRoot}/images/user/${user.picture}`"
-				alt="profile picture"
-			/>
-			<button
-				v-if="
-					login.userRole === userRoles.admin ||
-					login.userId == this.$route.params.id
-				"
-				@click="toggleModal($refs.updatePictureModal)"
-			>
-				Update picture
-			</button>
-			<ModalBox :toggleModal="toggleModal" ref="updatePictureModal">
-				<UpdateUserPictureForm @update-user-picture="updateUserPicture" />
-			</ModalBox>
-			<hr />
-			<span>Username: {{ user.username }}</span>
-			<span>
-				Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
-			</span>
-			<button
-				v-if="
-					login.userRole === userRoles.admin ||
-					login.userId == this.$route.params.id
-				"
-				@click="toggleModal($refs.updateInfosModal)"
-			>
-				Update infos
-			</button>
-			<ModalBox :toggleModal="toggleModal" ref="updateInfosModal">
-				<UpdateUserForm :user="user" @update-user="updateUser" />
-			</ModalBox>
-			<hr />
-			<button v-if="login.userId == this.$route.params.id" @click="logout">
-				Logout
-			</button>
-			<button
-				v-if="
-					login.userRole === userRoles.admin ||
-					login.userId == this.$route.params.id
-				"
-				@click="deleteAccount"
-			>
-				Delete account
-			</button>
-		</div>
+		<img
+			:src="`${apiRoot}/images/user/${user.picture}`"
+			alt="profile picture"
+		/>
+		<button
+			v-if="
+				login.user.role === userRoles.admin ||
+				login.user.id == this.$route.params.id
+			"
+			@click="toggleModal($refs.updatePictureModal)"
+		>
+			Update picture
+		</button>
+		<ModalBox
+			:toggleModal="toggleModal"
+			ref="updatePictureModal"
+			title="Update user picture"
+		>
+			<UpdateUserPictureForm @update-user-picture="updateUserPicture" />
+		</ModalBox>
+		<hr />
+		<span>Username: {{ user.username }}</span>
+		<span>
+			Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
+		</span>
+		<button
+			v-if="
+				login.user.role === userRoles.admin ||
+				login.user.id == this.$route.params.id
+			"
+			@click="toggleModal($refs.updateInfosModal)"
+		>
+			Update infos
+		</button>
+		<ModalBox
+			:toggleModal="toggleModal"
+			ref="updateInfosModal"
+			title="Update user infos"
+		>
+			<UpdateUserForm :user="user" @update-user="updateUser" />
+		</ModalBox>
+		<hr />
+		<button v-if="login.user.id == this.$route.params.id" @click="logout">
+			Logout
+		</button>
+		<button
+			v-if="
+				login.user.role === userRoles.admin ||
+				login.user.id == this.$route.params.id
+			"
+			@click="deleteAccount"
+		>
+			Delete account
+		</button>
 	</div>
 </template>
 
@@ -57,11 +62,11 @@ import { mapActions, mapState } from "vuex";
 import UpdateUserPictureForm from "../components/UpdateUserPictureForm.vue";
 import UpdateUserForm from "../components/UpdateUserForm.vue";
 import ModalBox from "../components/ModalBox.vue";
+import handleError from "../handleError.js";
 
 export default {
 	data() {
 		return {
-			notFound: false,
 			user: {
 				picture: "user.svg",
 			},
@@ -76,14 +81,22 @@ export default {
 		...mapState(["login", "apiRoot", "userRoles"]),
 	},
 	async created() {
-		if (this.login.userId === -1) return this.$router.push("/login");
+		if (this.login.user.id === -1) return this.$router.push("/login");
 
 		this.$watch(
 			() => {
 				return this.$route.params.id;
 			},
 			() => {
-				if (this.$route.name === "profile") this.getOneUser();
+				if (this.$route.name === "profile") {
+					console.log(this.$route.params.id);
+					console.log(this.login.user.id);
+					if (this.$route.params.id == this.login.user.id) {
+						this.user = this.login.user;
+					} else {
+						this.getOneUser();
+					}
+				}
 			},
 			{ immediate: true }
 		);
@@ -98,16 +111,7 @@ export default {
 					this.$route.params.id
 				);
 			} catch (err) {
-				switch (err.status) {
-					case 401:
-						this.logout();
-						break;
-					case 404:
-						this.notFound = true;
-						break;
-					default:
-				}
-				console.error(err);
+				handleError(err, this, "get one user");
 			}
 		},
 
@@ -156,7 +160,7 @@ export default {
 				console.error(err);
 			}
 
-			if (this.login.userRole === this.userRoles.admin) this.$router.push("/");
+			if (this.login.user.role === this.userRoles.admin) this.$router.push("/");
 			else this.logout();
 		},
 	},

@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-const DEFAULT_LOGIN = { userId: -1, userRole: -1, token: "" };
+const DEFAULT_LOGIN = { token: "", user: { id: -1, role: -1 } };
 let login = localStorage.getItem("login");
 login = login ? JSON.parse(login) : DEFAULT_LOGIN;
 
@@ -70,9 +70,8 @@ export default createStore({
 			return new Promise((resolve, reject) => {
 				if (res.ok) {
 					commit("SET_LOGIN", {
-						userId: data.userId,
-						userRole: data.userRole,
 						token: data.token,
+						user: data.user,
 					});
 					resolve(data);
 				} else {

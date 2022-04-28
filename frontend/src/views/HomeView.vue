@@ -76,7 +76,7 @@ export default {
 		...mapState(["login"]),
 	},
 	created() {
-		if (this.login.userId === -1) return this.$router.push("/login");
+		if (this.login.user.id === -1) return this.$router.push("/login");
 
 		this.getPosts();
 		this.getNbPosts();

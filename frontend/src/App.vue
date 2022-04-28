@@ -1,28 +1,27 @@
 <template>
 	<div class="app-container">
-		<header v-if="login.userId !== -1">
+		<header v-if="login.user.id !== -1">
 			<router-link to="/">
-				<img class="logo" src="logo.svg" alt="Logo" />
+				<img class="logo" src="/logo.svg" alt="Logo" />
 			</router-link>
 			<nav>
 				<router-link
 					class="profile-link"
-					:to="{ name: 'profile', params: { id: login.userId } }"
+					:to="{ name: 'profile', params: { id: login.user.id } }"
 				>
-					<img :src="`${apiRoot}/images/user/${user.picture}`" alt="" />
-					<span>{{ user.username }}</span>
+					<img :src="`${apiRoot}/images/user/${login.user.picture}`" alt="" />
+					<span>{{ login.user.username }}</span>
 				</router-link>
 			</nav>
 		</header>
 		<router-view />
-		<footer v-if="login.userId !== -1">
+		<footer v-if="login.user.id !== -1">
 			© All rights reserved.<br />2022 - Maxime Kerfourn
 		</footer>
 	</div>
 </template>
 
 <script>
-import handleError from "./handleError.js";
 import { mapState } from "vuex";
 
 export default {
@@ -34,20 +33,6 @@ export default {
 
 	computed: {
 		...mapState(["login", "apiRoot"]),
-	},
-
-	created() {
-		this.getOneUser();
-	},
-
-	methods: {
-		async getOneUser() {
-			try {
-				this.user = await this.$store.dispatch("getOneUser", this.login.userId);
-			} catch (err) {
-				handleError(err, this, "get one user");
-			}
-		},
 	},
 };
 </script>

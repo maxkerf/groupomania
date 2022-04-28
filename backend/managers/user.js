@@ -9,7 +9,7 @@ exports.createUser = user => {
 };
 
 exports.getUserByEmail = userEmail => {
-	const sql = "SELECT id, password, role FROM user WHERE email = ?";
+	const sql = "SELECT id, password FROM user WHERE email = ?";
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, userEmail, (err, data) =>

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<router-link v-if="login.userId === -1" to="/">Home</router-link>
+		<router-link v-if="login.user.id === -1" to="/">Home</router-link>
 		<h1>Not Found</h1>
 	</div>
 </template>

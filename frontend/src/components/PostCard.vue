@@ -14,7 +14,7 @@
 			<DropdownBox
 				class="dropdown-box"
 				v-if="
-					login.userRole === userRoles.admin || post.user_id === login.userId
+					login.user.role === userRoles.admin || post.user_id === login.user.id
 				"
 				attachedElement="post"
 			>
@@ -50,25 +50,25 @@
 					<ReactionBox
 						:type="reactionTypes.like"
 						:postReactions="post.reactions"
-						:userId="login.userId"
+						:userId="login.user.id"
 						@react="react"
 					/>
 					<ReactionBox
 						:type="reactionTypes.dislike"
 						:postReactions="post.reactions"
-						:userId="login.userId"
+						:userId="login.user.id"
 						@react="react"
 					/>
 					<ReactionBox
 						:type="reactionTypes.love"
 						:postReactions="post.reactions"
-						:userId="login.userId"
+						:userId="login.user.id"
 						@react="react"
 					/>
 					<ReactionBox
 						:type="reactionTypes.laugh"
 						:postReactions="post.reactions"
-						:userId="login.userId"
+						:userId="login.user.id"
 						@react="react"
 					/>
 				</div>

@@ -42,10 +42,10 @@ exports.login = async (req, res) => {
 			expiresIn: "10h",
 		});
 
-		const userRole = user.role;
+		const authenticatedUser = await userManager.getUserById(userId);
 		res
 			.status(200)
-			.json({ message: "User logged in", userId, userRole, token });
+			.json({ message: "User logged in", token, user: authenticatedUser });
 	} catch (err) {
 		handleError(err, res, "login");
 	}

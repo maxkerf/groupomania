@@ -23,7 +23,7 @@ export default {
 		...mapState(["login"]),
 	},
 	created() {
-		if (this.login.userId !== -1) return this.$router.push("/");
+		if (this.login.user.id !== -1) return this.$router.push("/");
 	},
 	methods: {
 		async loginUser(user) {
