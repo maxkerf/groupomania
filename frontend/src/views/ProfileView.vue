@@ -89,8 +89,6 @@ export default {
 			},
 			() => {
 				if (this.$route.name === "profile") {
-					console.log(this.$route.params.id);
-					console.log(this.login.user.id);
 					if (this.$route.params.id == this.login.user.id) {
 						this.user = this.login.user;
 					} else {

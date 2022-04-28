@@ -4,6 +4,10 @@ const reactionManager = require("../managers/reaction");
 const handleError = require("../globalFunctions/handleError");
 const deletePostImage = require("../globalFunctions/deletePostImage");
 
+Object.prototype.isEmpty = function () {
+	return Object.keys(this).length ? false : true;
+};
+
 exports.createPost = async (req, res) => {
 	if (!req.body.text && !req.file)
 		return res
@@ -66,17 +70,34 @@ exports.updatePost = async (req, res) => {
 			.status(400)
 			.json({ message: "At least one input (text or image) is required" });
 
-	const newPost = {
-		text: req.body.text,
-	};
-
-	if (req.file?.originalname !== post.image) newPost.image = req.file.filename;
+	const newPost = {};
 
 	try {
-		if (req.file?.originalname === post.image)
-			await deletePostImage(req.file.filename);
-		if (newPost.image && post.image) await deletePostImage(post.image);
-		await postManager.updatePost(post.id, newPost);
+		if (req.file && !post.image) {
+			newPost.image = req.file.filename;
+		} else if (!req.file && post.image) {
+			await deletePostImage(post.image);
+			newPost.image = null;
+		} else if (req.file && post.image) {
+			if (req.file.originalname === post.image) {
+				await deletePostImage(req.file.filename);
+			} else {
+				await deletePostImage(post.image);
+				newPost.image = req.file.filename;
+			}
+		}
+
+		if (req.body.text && !post.text) {
+			newPost.text = req.body.text;
+		} else if (!req.body.text && post.text) {
+			newPost.text = null;
+		} else if (req.body.text && post.text) {
+			if (req.body.text !== post.text) {
+				newPost.text = req.body.text;
+			}
+		}
+
+		if (!newPost.isEmpty()) await postManager.updatePost(post.id, newPost);
 		const postUpdated = await postManager.getPost(post.id);
 		res.status(200).json({ message: "Post updated", postUpdated });
 	} catch (err) {

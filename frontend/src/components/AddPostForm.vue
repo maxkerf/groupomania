@@ -54,6 +54,7 @@ export default {
 	data() {
 		return {
 			text: "",
+			image: undefined,
 			imagePreviewSource: "",
 			showImagePreview: false,
 		};
@@ -77,34 +78,33 @@ export default {
 
 		onImageInputChange(e) {
 			const file = e.srcElement.files[0];
+
 			if (!file) {
+				this.image = undefined;
 				this.imagePreviewSource = "";
 				this.showImagePreview = false;
 				return;
 			}
 
+			this.image = file;
 			this.imagePreviewSource = URL.createObjectURL(file);
 			this.showImagePreview = true;
 		},
 
 		onRemoveImagePreviewBtnClick() {
 			this.$refs.imageInput.value = "";
+			this.image = undefined;
 			this.imagePreviewSource = "";
 			this.showImagePreview = false;
 		},
 
 		addPost() {
-			const imageInput = this.$refs.imageInput;
-
 			const post = {
 				text: this.text,
-				image: imageInput.files[0],
+				image: this.image,
 			};
 
 			this.$emit("add-post", post);
-
-			this.text = "";
-			imageInput.value = "";
 		},
 	},
 };
