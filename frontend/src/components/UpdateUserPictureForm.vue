@@ -1,16 +1,17 @@
 <template>
 	<form @submit.prevent="onFormSubmit">
-		<ImageUpdateBox
-			:image="user.picture"
-			updatedGroup="user"
-			@update-image-input="updateImageInput"
+		<ImageInputBox
+			:image="image"
+			:oldImage="user.picture"
+			updatedImageGroup="user"
+			@update-image="updateImage"
 		/>
 		<SubmitFormBtn>Save</SubmitFormBtn>
 	</form>
 </template>
 
 <script>
-import ImageUpdateBox from "./ImageUpdateBox.vue";
+import ImageInputBox from "./ImageInputBox.vue";
 import SubmitFormBtn from "./SubmitFormBtn.vue";
 
 export default {
@@ -18,17 +19,17 @@ export default {
 
 	data() {
 		return {
-			image: undefined,
+			image: null,
 		};
 	},
 
 	components: {
-		ImageUpdateBox,
+		ImageInputBox,
 		SubmitFormBtn,
 	},
 
 	methods: {
-		updateImageInput(newImage) {
+		updateImage(newImage) {
 			this.image = newImage;
 		},
 
@@ -38,3 +39,11 @@ export default {
 	},
 };
 </script>
+
+<style lang="scss" scoped>
+form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+</style>

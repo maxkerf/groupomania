@@ -5,7 +5,7 @@
 				class="image-label"
 				for="image"
 				title="Add an image"
-				v-show="!showImagePreview"
+				v-show="!image"
 			>
 				<i class="fa-solid fa-image"></i>
 			</label>
@@ -18,7 +18,7 @@
 				@change="onImageInputChange"
 			/>
 		</div>
-		<div class="image-preview-box" v-show="showImagePreview">
+		<div class="image-preview-box" v-show="image">
 			<img :src="imagePreviewSource" alt="Image preview" />
 			<button
 				class="remove-image-btn"
@@ -46,53 +46,43 @@ async function createFileFromUrl(url, filename) {
 }
 
 export default {
-	props: ["image", "updatedGroup"],
-
-	data() {
-		return {
-			imagePreviewSource: "",
-			showImagePreview: false,
-		};
+	props: {
+		image: {
+			type: [File, null],
+			required: true,
+		},
+		oldImage: String,
+		updatedImageGroup: String,
 	},
 
 	computed: {
 		...mapState(["apiRoot"]),
+
+		imagePreviewSource() {
+			return this.image ? URL.createObjectURL(this.image) : "";
+		},
 	},
 
 	async created() {
-		if (this.image) {
-			const url = `${this.apiRoot}/images/${this.updatedGroup}/${this.image}`;
-			this.updateImageInput(await createFileFromUrl(url, this.image));
-			this.imagePreviewSource = url;
-			this.showImagePreview = true;
+		if (this.oldImage) {
+			const url = `${this.apiRoot}/images/${this.updatedImageGroup}/${this.oldImage}`;
+			this.emitImage(await createFileFromUrl(url, this.oldImage));
 		}
 	},
 
 	methods: {
-		updateImageInput(newImage) {
-			this.$emit("update-image-input", newImage);
+		emitImage(newImage) {
+			this.$emit("update-image", newImage);
 		},
 
 		onImageInputChange(e) {
 			const file = e.srcElement.files[0];
-
-			if (!file) {
-				this.updateImageInput(undefined);
-				this.imagePreviewSource = "";
-				this.showImagePreview = false;
-				return;
-			}
-
-			this.updateImageInput(file);
-			this.imagePreviewSource = URL.createObjectURL(file);
-			this.showImagePreview = true;
+			this.emitImage(file ? file : null);
 		},
 
 		onRemoveImageBtnClick() {
 			this.$refs.imageInput.value = "";
-			this.updateImageInput(undefined);
-			this.imagePreviewSource = "";
-			this.showImagePreview = false;
+			this.emitImage(null);
 		},
 	},
 };
