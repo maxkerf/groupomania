@@ -4,13 +4,13 @@
 			class="text-input"
 			name="text"
 			id="text"
-			maxlength="255"
+			:maxlength="maxlength"
 			rows="1"
-			placeholder="Write something here..."
+			:placeholder="placeholder"
 			ref="textInput"
 			@input="onTextInput"
 		></textarea>
-		<span class="text-counter">{{ text.length }}/255</span>
+		<span class="text-counter">{{ text.length }}/{{ maxlength }}</span>
 	</div>
 </template>
 
@@ -22,16 +22,30 @@ export default {
 			required: true,
 		},
 		oldText: String,
+		focus: {
+			type: Boolean,
+			default: false,
+		},
+		maxlength: {
+			type: Number,
+			default: 255,
+		},
+		placeholder: {
+			type: String,
+			default: "Write something here...",
+		},
+	},
+
+	watch: {
+		text(newText) {
+			this.$refs.textInput.value = newText;
+			this.resizeTextInput();
+		},
 	},
 
 	mounted() {
-		if (this.oldText) {
-			this.$refs.textInput.value = this.oldText;
-			this.emitText(this.oldText);
-			this.resizeTextInput();
-		}
-
-		this.focusTextInput();
+		if (this.oldText) this.emitText(this.oldText);
+		if (this.focus) this.focusTextInput();
 	},
 
 	methods: {
@@ -51,7 +65,6 @@ export default {
 
 		onTextInput(e) {
 			this.emitText(e.srcElement.value);
-			this.resizeTextInput();
 		},
 	},
 };
@@ -60,11 +73,13 @@ export default {
 <style lang="scss" scoped>
 .textarea-input-box {
 	background-color: #515151;
-	padding: 0.5rem;
+	padding: 0.25rem 0.5rem;
 	border-radius: 0.5rem;
 	display: flex;
 	justify-content: space-between;
 	gap: 1rem;
+	min-height: 2em;
+	box-sizing: border-box;
 }
 
 .text-input {
@@ -78,6 +93,7 @@ export default {
 	background-color: unset;
 	outline: unset;
 	overflow: hidden;
+	transform: translateY(1px);
 
 	&::placeholder {
 		color: #b0b3b8;
@@ -86,5 +102,6 @@ export default {
 
 .text-counter {
 	font-size: 0.75em;
+	transform: translateY(calc(5em / 16));
 }
 </style>

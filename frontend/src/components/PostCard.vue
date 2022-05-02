@@ -36,7 +36,7 @@
 			/>
 		</div>
 		<div class="post-card-content">
-			<p v-if="post.text">{{ post.text }}</p>
+			<p v-if="post.text" ref="text"></p>
 			<img
 				class="post-image"
 				v-if="post.image"
@@ -73,9 +73,9 @@
 					/>
 				</div>
 				<button
-					v-if="comments.length"
+					v-if="nbComments"
 					title="Show/hide comments"
-					@click="showComments = !showComments"
+					@click="toggleComments"
 					class="comments-btn"
 				>
 					{{ formatNumberComments }}
@@ -125,28 +125,57 @@ export default {
 			whatsUpdated: "",
 		};
 	},
+
 	props: ["post"],
+
 	computed: {
 		...mapState(["login", "apiRoot", "reactionTypes", "userRoles"]),
 
 		formatNumberComments() {
-			if (this.nbComments === 1) return "1 comment";
-
-			return `${this.nbComments} comments`;
+			return `${this.nbComments} comment${this.nbComments === 1 ? "" : "s"}`;
 		},
 	},
+
+	watch: {
+		async "post.text"() {
+			await this.$nextTick();
+			if (this.post.text) this.formatText();
+		},
+	},
+
 	created() {
-		this.getPostComments();
 		this.getNumberComments();
 	},
+
+	mounted() {
+		if (this.post.text) this.formatText();
+	},
+
 	updated() {
 		const commentsBox = this.$refs.commentsBox._.subTree.el;
 		commentsBox.scroll({
 			top: this.whatsUpdated === "getMoreComments" ? 0 : 1000,
 		});
+
 		this.whatsUpdated = "";
 	},
+
 	methods: {
+		formatText() {
+			// clear
+			this.$refs.text.innerText = "";
+			// add line break elements
+			this.post.text.split("\n").forEach(el => {
+				this.$refs.text.innerText += el;
+				this.$refs.text.appendChild(document.createElement("br"));
+			});
+		},
+
+		toggleComments() {
+			this.showComments = !this.showComments;
+			if (this.comments.length === 0) this.getPostComments();
+		},
+
 		getMoreComments() {
 			this.whatsUpdated = "getMoreComments";
 			this.getPostComments(this.comments.length);
@@ -166,9 +195,10 @@ export default {
 				const data = await this.$store.dispatch("addComment", payload);
 				console.log(data);
 
-				this.comments.push(data.commentCreated);
 				this.nbComments++;
 				this.showComments = true;
+				await this.$nextTick();
+				this.comments.push(data.commentCreated);
 			} catch (err) {
 				handleError(err, this, "add comment");
 			}
@@ -260,10 +290,10 @@ export default {
 
 .user-picture {
 	grid-row: span 2;
-	height: 50px;
-	aspect-ratio: 1;
-	object-fit: cover;
+	height: 3em;
+	width: 3em;
 	border-radius: 50%;
+	object-fit: cover;
 	margin-right: 0.5rem;
 }
 
@@ -296,7 +326,7 @@ export default {
 		padding: 0 0.75rem;
 		margin: 0;
 		margin-top: 0.75rem;
-		white-space: pre;
+		overflow-wrap: anywhere;
 	}
 
 	img {
@@ -310,7 +340,7 @@ export default {
 	& > div:nth-child(1) {
 		display: flex;
 		justify-content: space-between;
-		padding: 0.5rem;
+		padding: 0.5rem 0.75rem;
 	}
 }
 

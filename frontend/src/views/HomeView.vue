@@ -66,21 +66,25 @@ export default {
 			showScrollTopBtn: false,
 		};
 	},
+
 	components: {
 		PostCard,
 		AddPostForm,
 		UpdatePostForm,
 		ModalBox,
 	},
+
 	computed: {
 		...mapState(["login"]),
 	},
+
 	created() {
 		if (this.login.user.id === -1) return this.$router.push("/login");
 
 		this.getPosts();
 		this.getNbPosts();
 	},
+
 	methods: {
 		...mapActions(["toggleModal"]),
 

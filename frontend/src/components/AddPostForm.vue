@@ -1,6 +1,6 @@
 <template>
-	<form @submit.prevent="onFormSubmit">
-		<TextareaInputBox :text="text" @update-text="updateText" />
+	<form @submit.prevent="onFormSubmit" ref="form">
+		<TextareaInputBox :text="text" :focus="true" @update-text="updateText" />
 		<ImageInputBox :image="image" @update-image="updateImage" />
 		<SubmitFormBtn>Post</SubmitFormBtn>
 	</form>

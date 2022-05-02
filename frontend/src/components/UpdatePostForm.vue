@@ -3,6 +3,7 @@
 		<TextareaInputBox
 			:text="text"
 			:oldText="post.text"
+			:focus="true"
 			@update-text="updateText"
 		/>
 		<ImageInputBox

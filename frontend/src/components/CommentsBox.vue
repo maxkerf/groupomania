@@ -27,6 +27,7 @@ export default {
 	components: {
 		CommentBox,
 	},
+
 	props: ["comments", "nbComments"],
 };
 </script>
@@ -38,7 +39,7 @@ export default {
 	align-items: flex-start;
 	gap: 0.5rem;
 	width: 100%;
-	max-height: 200px;
+	max-height: 226px;
 	overflow: hidden scroll;
 	padding: 0 0.75rem;
 	box-sizing: border-box;

@@ -21,7 +21,7 @@ exports.getPosts = (offset = 0) => {
 	FROM post 
 	INNER JOIN user ON post.user_id = user.id 
 	ORDER BY post.creationDate DESC 
-	LIMIT 5 OFFSET ?`;
+	LIMIT 1 OFFSET ?`;
 
 	return new Promise((resolve, reject) => {
 		db.query(sql, offset, (err, data) => (err ? reject(err) : resolve(data)));

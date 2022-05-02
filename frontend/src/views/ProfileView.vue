@@ -44,7 +44,7 @@
 			ref="updateInfosModal"
 			title="Update user infos"
 		>
-			<UpdateUserForm :user="user" @update-user="updateUser" />
+			<UpdateUserInfosForm :user="user" @update-user="updateUser" />
 		</ModalBox>
 		<hr />
 		<button v-if="login.user.id == this.$route.params.id" @click="logout">
@@ -65,7 +65,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import UpdateUserPictureForm from "../components/UpdateUserPictureForm.vue";
-import UpdateUserForm from "../components/UpdateUserForm.vue";
+import UpdateUserInfosForm from "../components/UpdateUserInfosForm.vue";
 import ModalBox from "../components/ModalBox.vue";
 import handleError from "../handleError.js";
 
@@ -79,7 +79,7 @@ export default {
 	},
 	components: {
 		UpdateUserPictureForm,
-		UpdateUserForm,
+		UpdateUserInfosForm,
 		ModalBox,
 	},
 	computed: {
@@ -173,10 +173,6 @@ export default {
 <style lang="scss" scoped>
 .profile-view {
 	padding: 1rem;
-}
-
-div > * {
-	display: block;
 }
 
 img {

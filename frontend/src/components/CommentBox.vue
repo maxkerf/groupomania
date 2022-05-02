@@ -1,11 +1,10 @@
 <template>
 	<div :class="`comment-box${updating ? ' updating' : ''}`">
 		<DateBox
-			v-if="!updating"
 			:creationDate="comment.creationDate"
 			:lastUpdate="comment.lastUpdate"
 		/>
-		<div v-if="!updating">
+		<div v-show="!updating">
 			<img
 				class="profile-picture"
 				:src="`${apiRoot}/images/user/${comment.user_picture}`"
@@ -18,17 +17,17 @@
 			>
 			<DropdownBox
 				class="dropdown-box"
-				v-if="
-					(login.user.role === userRoles.admin ||
-						comment.user_id === login.user.id) &&
-					!updating
+				v-show="
+					login.user.role === userRoles.admin ||
+					comment.user_id === login.user.id
 				"
 				attachedElement="comment"
 			>
 				<DropdownMenuBtn
-					@click="this.updating = true"
+					@click="toggleUpdating"
 					name="Update"
 					icon="fa-solid fa-pen"
+					ref="updateCommentBtn"
 				/>
 				<DropdownMenuBtn
 					@click="$emit('delete-comment', comment)"
@@ -36,13 +35,13 @@
 					icon="fa-solid fa-x"
 				/>
 			</DropdownBox>
-			<p class="comment">{{ comment.text }}</p>
+			<p class="comment" ref="text"></p>
 		</div>
 		<UpdateCommentForm
 			v-if="updating"
 			class="update-comment-form"
 			:comment="comment"
-			@blur="updating = false"
+			ref="updateCommentForm"
 			@update-comment="updateComment"
 		/>
 	</div>
@@ -61,13 +60,16 @@ export default {
 			updating: false,
 		};
 	},
+
 	components: {
 		UpdateCommentForm,
 		DropdownBox,
 		DropdownMenuBtn,
 		DateBox,
 	},
+
 	props: ["comment"],
+
 	computed: {
 		...mapState(["apiRoot", "login", "userRoles"]),
 
@@ -100,7 +102,28 @@ export default {
 			return `${result} ago`;
 		},
 	},
+
+	watch: {
+		"comment.text"() {
+			this.formatText();
+		},
+	},
+
+	mounted() {
+		this.formatText();
+	},
+
 	methods: {
+		formatText() {
+			// clear
+			this.$refs.text.innerText = "";
+			// add line break elements
+			this.comment.text.split("\n").forEach(el => {
+				this.$refs.text.innerText += el;
+				this.$refs.text.appendChild(document.createElement("br"));
+			});
+		},
+
 		getMonthDifference(startDate, endDate) {
 			return (
 				endDate.getMonth() -
@@ -109,8 +132,43 @@ export default {
 			);
 		},
 
-		updateComment(newComment) {
+		startUpdating() {
+			this.updating = true;
+			window.addEventListener("click", this.handleWindowClick);
+		},
+
+		stopUpdating() {
 			this.updating = false;
+			window.removeEventListener("click", this.handleWindowClick);
+		},
+
+		toggleUpdating() {
+			this.updating ? this.stopUpdating() : this.startUpdating();
+		},
+
+		isEventInsideElement(e, el) {
+			return e.path.find(i => i === el) ? true : false;
+		},
+
+		isEventInsideOneOfElements(e, els) {
+			for (const el of els) {
+				if (this.isEventInsideElement(e, el)) return true;
+			}
+
+			return false;
+		},
+
+		handleWindowClick(e) {
+			const updateCommentBtn = this.$refs.updateCommentBtn._.subTree.el;
+			const updateCommentForm = this.$refs.updateCommentForm._.subTree.el;
+
+			const els = [updateCommentBtn, ...updateCommentForm.children];
+
+			if (!this.isEventInsideOneOfElements(e, els)) this.toggleUpdating();
+		},
+
+		updateComment(newComment) {
+			this.toggleUpdating();
 			this.$emit("update-comment", this.comment.id, newComment);
 		},
 	},
@@ -123,7 +181,7 @@ export default {
 		width: 100%;
 	}
 
-	& > div:nth-child(2) {
+	& > div:nth-of-type(2) {
 		background-color: #515151;
 		padding: 0.25rem;
 		border-radius: 0.5rem;
@@ -168,6 +226,7 @@ export default {
 
 .comment {
 	margin: 0;
+	overflow-wrap: anywhere;
 }
 
 .update-comment-form {
