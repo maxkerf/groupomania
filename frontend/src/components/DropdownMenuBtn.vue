@@ -27,14 +27,32 @@ export default {
 	grid-template-columns: 1em 1fr;
 	align-items: center;
 	gap: 0.5em;
+	position: relative;
 
 	& span {
 		justify-self: start;
 	}
 
-	&:hover {
+	&::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		border-radius: inherit;
 		background-color: lighten(#242526, 10%);
+		z-index: -1;
+		opacity: 0;
+		transition: opacity 100ms;
+	}
+
+	&:hover {
 		color: #ffd7d7;
+
+		&::after {
+			opacity: 1;
+		}
 	}
 }
 </style>

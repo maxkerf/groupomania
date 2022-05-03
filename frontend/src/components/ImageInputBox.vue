@@ -115,7 +115,7 @@ export default {
 		z-index: -1;
 
 		opacity: 0.5;
-		transition: opacity 200ms;
+		transition: opacity 100ms;
 	}
 
 	&:hover::after {
@@ -165,7 +165,7 @@ export default {
 		z-index: -1;
 
 		opacity: 0.5;
-		transition: opacity 200ms;
+		transition: opacity 100ms;
 	}
 
 	&:hover::after {

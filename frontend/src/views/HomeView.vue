@@ -29,7 +29,7 @@
 				v-show="posts.length !== nbPosts"
 				class="show-more-posts-btn"
 			>
-				Show more
+				Show more posts
 			</button>
 		</div>
 		<ModalBox
@@ -240,7 +240,24 @@ export default {
 	}
 }
 
+@mixin reset-btn {
+	border: unset;
+	background-color: unset;
+	font-size: unset;
+	font-family: unset;
+	color: unset;
+	padding: unset;
+}
+
 .show-more-posts-btn {
-	margin-top: 1.5rem;
+	@include reset-btn();
+	cursor: pointer;
+	color: #e4e6eb;
+	font-size: 0.875em;
+
+	&:hover {
+		text-decoration: underline;
+		color: #ffd7d7;
+	}
 }
 </style>

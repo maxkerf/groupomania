@@ -30,7 +30,7 @@
 		z-index: -1;
 
 		opacity: 0;
-		transition: opacity 200ms;
+		transition: opacity 100ms;
 	}
 
 	&:hover {

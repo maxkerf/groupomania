@@ -42,7 +42,7 @@
 		background-color: lighten(#242526, 10%);
 		z-index: -1;
 		opacity: 0;
-		transition: opacity 150ms;
+		transition: opacity 100ms;
 	}
 
 	&:hover {
