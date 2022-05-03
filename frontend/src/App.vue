@@ -94,7 +94,7 @@ nav {
 		border-radius: 2rem;
 		border-bottom-right-radius: 0;
 		opacity: 0;
-		transition: opacity 150ms;
+		transition: opacity 100ms;
 	}
 
 	&:hover {

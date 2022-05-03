@@ -87,7 +87,7 @@
 				v-show="showComments"
 				:comments="comments"
 				:nbComments="nbComments"
-				@get-more-comments="getMoreComments()"
+				@get-more-comments="getMoreComments"
 				@delete-comment="deleteComment"
 				@update-comment="updateComment"
 				ref="commentsBox"
@@ -122,7 +122,6 @@ export default {
 			nbComments: 0,
 			showComments: false,
 			showDropdownMenu: false,
-			whatsUpdated: "",
 		};
 	},
 
@@ -151,15 +150,6 @@ export default {
 		if (this.post.text) this.formatText();
 	},
 
-	updated() {
-		const commentsBox = this.$refs.commentsBox._.subTree.el;
-		commentsBox.scroll({
-			top: this.whatsUpdated === "getMoreComments" ? 0 : 1000,
-		});
-
-		this.whatsUpdated = "";
-	},
-
 	methods: {
 		formatText() {
 			// clear
@@ -176,31 +166,23 @@ export default {
 			if (this.comments.length === 0) this.getPostComments();
 		},
 
-		getMoreComments() {
-			this.whatsUpdated = "getMoreComments";
-			this.getPostComments(this.comments.length);
+		async getMoreComments(cb) {
+			await this.getPostComments(this.comments.length);
+			cb();
 		},
 
 		react(type) {
 			this.$emit("react", this.post.id, type);
 		},
 
-		async addComment(comment) {
+		async getNumberComments() {
 			try {
-				const payload = {
-					postId: this.post.id,
-					comment,
-				};
-
-				const data = await this.$store.dispatch("addComment", payload);
-				console.log(data);
-
-				this.nbComments++;
-				this.showComments = true;
-				await this.$nextTick();
-				this.comments.push(data.commentCreated);
+				this.nbComments = await this.$store.dispatch(
+					"getNumberComments",
+					this.post.id
+				);
 			} catch (err) {
-				handleError(err, this, "add comment");
+				handleError(err, this, "get number comments");
 			}
 		},
 
@@ -218,14 +200,22 @@ export default {
 			}
 		},
 
-		async getNumberComments() {
+		async addComment(comment) {
 			try {
-				this.nbComments = await this.$store.dispatch(
-					"getNumberComments",
-					this.post.id
-				);
+				const payload = {
+					postId: this.post.id,
+					comment,
+				};
+
+				const data = await this.$store.dispatch("addComment", payload);
+				console.log(data);
+
+				this.showComments = true;
+				await this.$nextTick();
+				this.nbComments++;
+				this.comments = [...this.comments, data.commentCreated]; // this way (not push) to trigger the watcher
 			} catch (err) {
-				handleError(err, this, "get number comments");
+				handleError(err, this, "add comment");
 			}
 		},
 

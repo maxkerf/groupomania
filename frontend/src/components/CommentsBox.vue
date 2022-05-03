@@ -1,11 +1,11 @@
 <template>
-	<div class="comments-box">
+	<div class="comments-box" ref="commentsBox">
 		<button
 			class="get-more-comments-btn"
-			v-show="comments.length !== nbComments"
-			@click="$emit('get-more-comments')"
+			v-show="comments.length < nbComments && showGetMoreCommentsBtn"
+			@click="onGetMoreCommentsBtnClick"
 		>
-			Show more comments
+			Show 3 more comments
 		</button>
 		<CommentBox
 			v-for="comment in comments"
@@ -24,11 +24,46 @@
 import CommentBox from "./CommentBox.vue";
 
 export default {
+	data() {
+		return {
+			showGetMoreCommentsBtn: true,
+		};
+	},
+
 	components: {
 		CommentBox,
 	},
 
 	props: ["comments", "nbComments"],
+
+	watch: {
+		async comments(newValue, oldValue) {
+			await this.$nextTick();
+			// scroll top when comments are added to the beginning
+			// in fact, show new comments in the post comments list
+			newValue[newValue.length - 1].id === oldValue[oldValue.length - 1]?.id
+				? this.scrollTop()
+				: this.scrollBottom();
+		},
+	},
+
+	methods: {
+		scrollTop() {
+			this.$refs.commentsBox.scroll({ top: 0 });
+		},
+
+		scrollBottom() {
+			this.$refs.commentsBox.scroll({ top: Math.pow(10, 6) });
+		},
+
+		onGetMoreCommentsBtnClick() {
+			this.showGetMoreCommentsBtn = false;
+			this.$emit(
+				"get-more-comments",
+				() => (this.showGetMoreCommentsBtn = true)
+			);
+		},
+	},
 };
 </script>
 
