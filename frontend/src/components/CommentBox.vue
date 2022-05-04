@@ -1,9 +1,13 @@
 <template>
 	<div :class="`comment-box${updating ? ' updating' : ''}`">
 		<DateBox
+			v-show="!updating"
 			:creationDate="comment.creationDate"
 			:lastUpdate="comment.lastUpdate"
 		/>
+		<span class="update-comment-annotation" v-show="updating">
+			Update your comment
+		</span>
 		<div v-show="!updating">
 			<img
 				class="profile-picture"
@@ -16,7 +20,6 @@
 				>{{ comment.user_username }}</router-link
 			>
 			<DropdownBox
-				class="dropdown-box"
 				v-show="
 					login.user.role === userRoles.admin ||
 					comment.user_id === login.user.id
@@ -39,7 +42,6 @@
 		</div>
 		<UpdateCommentForm
 			v-if="updating"
-			class="update-comment-form"
 			:comment="comment"
 			ref="updateCommentForm"
 			@update-comment="updateComment"
@@ -192,10 +194,12 @@ export default {
 	}
 }
 
-.date-box {
+.update-comment-annotation {
 	font-size: 0.75rem;
-	margin-bottom: 0.25rem;
 	color: #b0b3b8;
+	display: inline-block;
+	margin-bottom: 0.25rem;
+	margin-left: 0.375rem;
 }
 
 .profile-picture {
@@ -225,12 +229,9 @@ export default {
 }
 
 .comment {
+	grid-row-start: 2;
+	grid-column-start: 2;
 	margin: 0;
 	overflow-wrap: anywhere;
-}
-
-.update-comment-form {
-	grid-column-start: 2;
-	grid-row-start: 2;
 }
 </style>

@@ -42,7 +42,7 @@
 		<ModalBox
 			:toggleModal="toggleModal"
 			ref="updatePostModal"
-			title="Update a post"
+			title="Update your post"
 		>
 			<UpdatePostForm :post="postToUpdate" @update-post="updatePost" />
 		</ModalBox>
@@ -184,6 +184,8 @@ export default {
 .home-view {
 	overflow: hidden scroll;
 	position: relative;
+	// useless transform property to be the fixed buttons ancestor (cf. position fixed wiki)
+	/* transform: translate(0); */
 }
 
 .post-cards-box {
@@ -199,6 +201,7 @@ export default {
 	left: 50%;
 	// card/2 + btn + scrollbar/2 + gap
 	transform: translateX(calc((200px + 100% + 10px + 0.5rem) * -1));
+	//transform: translateX(calc((200px + 100% + 0.5rem) * -1));
 	border: unset;
 	padding: unset;
 	cursor: pointer;
@@ -211,6 +214,10 @@ export default {
 	width: 2em;
 	height: 2em;
 	border-radius: 50%;
+
+	/* z-index: 10;
+	background-color: green;
+	border-radius: unset; */
 
 	&:hover {
 		color: #ffd7d7;

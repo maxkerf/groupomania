@@ -58,5 +58,6 @@ export default {
 .date-box {
 	font-size: 0.75rem;
 	color: #b0b3b8;
+	margin-bottom: 0.25rem;
 }
 </style>

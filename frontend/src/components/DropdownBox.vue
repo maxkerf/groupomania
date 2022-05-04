@@ -25,11 +25,13 @@ export default {
 		openDropdownMenu() {
 			this.showDropdownMenu = true;
 			window.addEventListener("click", this.handleWindowClick);
+			window.addEventListener("wheel", this.handleWindowClick);
 		},
 
 		closeDropdownMenu() {
 			this.showDropdownMenu = false;
 			window.removeEventListener("click", this.handleWindowClick);
+			window.removeEventListener("wheel", this.handleWindowClick);
 		},
 
 		toggleDropdownMenu() {
@@ -53,7 +55,7 @@ export default {
 
 <style lang="scss" scoped>
 .dropdown-box {
-	position: relative;
+	/* position: relative; */
 
 	&-post {
 		& .dropdown-btn {
@@ -63,6 +65,10 @@ export default {
 			&:hover::after {
 				opacity: 1;
 			}
+		}
+
+		& .dropdown-menu {
+			transform: translateX(calc(-100% + 32px)); // dp-btn size
 		}
 	}
 
@@ -76,6 +82,10 @@ export default {
 			&:hover::after {
 				opacity: 1;
 			}
+		}
+
+		& .dropdown-menu {
+			transform: translateX(calc(-100% + 24px)); // dp-btn size
 		}
 	}
 }
@@ -112,8 +122,8 @@ export default {
 
 .dropdown-menu {
 	position: absolute;
-	top: 100%;
-	right: 0;
+	/* top: 100%;
+	right: 0; */
 	background-color: #242526;
 	display: flex;
 	flex-direction: column;

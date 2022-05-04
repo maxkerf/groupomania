@@ -12,7 +12,6 @@
 				>{{ post.user_username }}</router-link
 			>
 			<DropdownBox
-				class="dropdown-box"
 				v-if="
 					login.user.role === userRoles.admin || post.user_id === login.user.id
 				"
@@ -83,7 +82,6 @@
 			</div>
 			<div class="linebreak"><hr /></div>
 			<CommentsBox
-				class="comments-box"
 				v-show="showComments"
 				:comments="comments"
 				:nbComments="nbComments"
@@ -268,6 +266,16 @@ export default {
 	color: #e4e6eb;
 	width: 400px;
 	border-radius: 0.75rem;
+
+	/* position: relative; */
+	/* &::after {
+		content: "";
+		background-color: red;
+		top: 0;
+		width: 50%;
+		height: 100%;
+		position: absolute;
+	} */
 }
 
 .post-card-header {
@@ -362,9 +370,5 @@ export default {
 		border-top: 1px solid #515151;
 		margin: 0;
 	}
-}
-
-.comments-box {
-	grid-column: span 2;
 }
 </style>

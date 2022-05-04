@@ -1,5 +1,5 @@
 <template>
-	<div class="comments-box" ref="commentsBox">
+	<div class="comments-box" ref="commentsBox" @scroll="onCommentsBoxScroll">
 		<button
 			class="get-more-comments-btn"
 			v-show="comments.length < nbComments && showGetMoreCommentsBtn"
@@ -48,6 +48,18 @@ export default {
 	},
 
 	methods: {
+		onCommentsBoxScroll(e) {
+			const dropdownMenus =
+				this.$refs.commentsBox.querySelectorAll(".dropdown-menu");
+
+			// dropdown menu is absolute so it follows the scroll
+			// here I replace it depending on the scroll
+			dropdownMenus.forEach(
+				el =>
+					(el.style.marginTop = `calc(${-e.srcElement.scrollTop}px + 0.2em)`)
+			);
+		},
+
 		scrollTop() {
 			this.$refs.commentsBox.scroll({ top: 0 });
 		},

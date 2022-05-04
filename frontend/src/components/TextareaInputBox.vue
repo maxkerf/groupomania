@@ -93,7 +93,7 @@ export default {
 	background-color: unset;
 	outline: unset;
 	overflow: hidden;
-	transform: translateY(1px);
+	margin-top: 1px;
 
 	&::placeholder {
 		color: #b0b3b8;
@@ -102,6 +102,6 @@ export default {
 
 .text-counter {
 	font-size: 0.75em;
-	transform: translateY(calc(5em / 16));
+	margin-top: calc(5em / 16);
 }
 </style>
