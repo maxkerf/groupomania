@@ -1,20 +1,31 @@
 <template>
 	<div class="profile-view">
-		<img
-			:src="`${
-				user.picture ? `${apiRoot}/images/user/${user.picture}` : '/user.svg'
-			}`"
-			alt="profile picture"
-		/>
 		<button
+			class="user-picture-btn"
 			v-if="
 				login.user.role === userRoles.admin ||
 				login.user.id == this.$route.params.id
 			"
 			@click="toggleModal($refs.updatePictureModal)"
 		>
-			Update picture
+			<img
+				class="user-picture"
+				:src="userPictureSource"
+				alt="profile picture"
+			/>
+			<div class="user-picture-btn-overlay">
+				<i class="fa-solid fa-pen"></i>
+			</div>
 		</button>
+		<img
+			v-if="
+				login.user.role !== userRoles.admin &&
+				login.user.id != this.$route.params.id
+			"
+			class="user-picture"
+			:src="userPictureSource"
+			alt="profile picture"
+		/>
 		<ModalBox
 			:toggleModal="toggleModal"
 			ref="updatePictureModal"
@@ -77,14 +88,25 @@ export default {
 			},
 		};
 	},
+
 	components: {
 		UpdateUserPictureForm,
 		UpdateUserInfosForm,
 		ModalBox,
 	},
+
 	computed: {
 		...mapState(["login", "apiRoot", "userRoles"]),
+
+		userPictureSource() {
+			return `${
+				this.user.picture
+					? `${this.apiRoot}/images/user/${this.user.picture}`
+					: "/user.svg"
+			}`;
+		},
 	},
+
 	async created() {
 		if (this.login.user.id === -1) return this.$router.push("/login");
 
@@ -104,6 +126,7 @@ export default {
 			{ immediate: true }
 		);
 	},
+
 	methods: {
 		...mapActions(["toggleModal"]),
 
@@ -175,11 +198,49 @@ export default {
 	padding: 1rem;
 }
 
-img {
-	height: 100px;
+@mixin reset-btn {
+	border: unset;
+	background-color: unset;
+	font-size: unset;
+	font-family: unset;
+	color: unset;
+	padding: unset;
 }
 
-button {
-	margin-top: 0.5rem;
+.user-picture-btn {
+	@include reset-btn;
+	cursor: pointer;
+	position: relative;
+	border-radius: 50%;
+
+	&:hover {
+		.user-picture-btn-overlay {
+			opacity: 1;
+		}
+	}
+}
+
+.user-picture-btn-overlay {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	border-radius: inherit;
+	background-color: rgba(0, 0, 0, 0.25);
+	display: grid;
+	place-items: center;
+	font-size: 2.5em;
+	color: #ffd7d7;
+	opacity: 0;
+	transition: opacity 100ms;
+}
+
+.user-picture {
+	width: 6em;
+	height: 6em;
+	border-radius: 50%;
+	object-fit: cover;
+	vertical-align: bottom;
 }
 </style>
