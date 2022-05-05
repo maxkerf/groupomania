@@ -1,31 +1,49 @@
 <template>
 	<div class="profile-view">
-		<button
-			class="user-picture-btn"
-			v-if="
-				login.user.role === userRoles.admin ||
-				login.user.id == this.$route.params.id
-			"
-			@click="toggleModal($refs.updatePictureModal)"
-		>
+		<div class="profile-card">
+			<button
+				class="user-picture-btn"
+				v-if="isAdmin || isSelf"
+				@click="toggleModal($refs.updatePictureModal)"
+			>
+				<img
+					class="user-picture"
+					:src="userPictureSource"
+					alt="profile picture"
+				/>
+				<div class="user-picture-btn-overlay">
+					<i class="fa-solid fa-pen"></i>
+				</div>
+			</button>
 			<img
+				v-if="!isAdmin && !isSelf"
 				class="user-picture"
 				:src="userPictureSource"
 				alt="profile picture"
 			/>
-			<div class="user-picture-btn-overlay">
-				<i class="fa-solid fa-pen"></i>
+			<span class="username">{{ user.username }}</span>
+			<span class="date">
+				Since {{ new Date(user.creationDate).toLocaleDateString() }}
+			</span>
+			<div class="btn-box" v-if="isAdmin || isSelf">
+				<ProfileCardBtn
+					v-if="isSelf"
+					icon="fa-solid fa-right-from-bracket"
+					title="Logout"
+					@click="logout"
+				/>
+				<ProfileCardBtn
+					icon="fa-solid fa-pen"
+					title="Update profile"
+					@click="toggleModal($refs.updateInfosModal)"
+				/>
+				<ProfileCardBtn
+					icon="fa-solid fa-trash-can"
+					title="Delete account"
+					@click="deleteAccount"
+				/>
 			</div>
-		</button>
-		<img
-			v-if="
-				login.user.role !== userRoles.admin &&
-				login.user.id != this.$route.params.id
-			"
-			class="user-picture"
-			:src="userPictureSource"
-			alt="profile picture"
-		/>
+		</div>
 		<ModalBox
 			:toggleModal="toggleModal"
 			ref="updatePictureModal"
@@ -36,40 +54,13 @@
 				@update-user-picture="updateUserPicture"
 			/>
 		</ModalBox>
-		<hr />
-		<span>Username: {{ user.username }}</span>
-		<span>
-			Creation date: {{ new Date(user.creationDate).toLocaleDateString() }}
-		</span>
-		<button
-			v-if="
-				login.user.role === userRoles.admin ||
-				login.user.id == this.$route.params.id
-			"
-			@click="toggleModal($refs.updateInfosModal)"
-		>
-			Update infos
-		</button>
 		<ModalBox
 			:toggleModal="toggleModal"
 			ref="updateInfosModal"
-			title="Update user infos"
+			title="Update profile"
 		>
 			<UpdateUserInfosForm :user="user" @update-user="updateUser" />
 		</ModalBox>
-		<hr />
-		<button v-if="login.user.id == this.$route.params.id" @click="logout">
-			Logout
-		</button>
-		<button
-			v-if="
-				login.user.role === userRoles.admin ||
-				login.user.id == this.$route.params.id
-			"
-			@click="deleteAccount"
-		>
-			Delete account
-		</button>
 	</div>
 </template>
 
@@ -78,6 +69,7 @@ import { mapActions, mapState } from "vuex";
 import UpdateUserPictureForm from "../components/UpdateUserPictureForm.vue";
 import UpdateUserInfosForm from "../components/UpdateUserInfosForm.vue";
 import ModalBox from "../components/ModalBox.vue";
+import ProfileCardBtn from "../components/ProfileCardBtn.vue";
 import handleError from "../handleError.js";
 
 export default {
@@ -93,6 +85,7 @@ export default {
 		UpdateUserPictureForm,
 		UpdateUserInfosForm,
 		ModalBox,
+		ProfileCardBtn,
 	},
 
 	computed: {
@@ -104,6 +97,14 @@ export default {
 					? `${this.apiRoot}/images/user/${this.user.picture}`
 					: "/user.svg"
 			}`;
+		},
+
+		isAdmin() {
+			return this.login.user.role === this.userRoles.admin;
+		},
+
+		isSelf() {
+			return this.login.user.id == this.$route.params.id;
 		},
 	},
 
@@ -194,8 +195,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.profile-view {
-	padding: 1rem;
+.profile-card {
+	margin: 0 auto;
+	margin-top: 3rem;
+	width: fit-content;
+	display: grid;
+	justify-items: center;
+	gap: 0.5rem;
+	color: #e4e6eb;
+	position: relative;
+	z-index: 0;
+	padding: 0 1rem 1rem 1rem;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 3em;
+		bottom: 0;
+		width: 100%;
+		background-color: #242526; //lighten(#515151, 10%)
+		z-index: -1;
+		border-radius: 1em;
+		border: 1px solid #e4e6eb;
+	}
 }
 
 @mixin reset-btn {
@@ -242,5 +264,20 @@ export default {
 	border-radius: 50%;
 	object-fit: cover;
 	vertical-align: bottom;
+}
+
+.username {
+	font-size: 1.5rem;
+	font-weight: 500;
+}
+
+.date {
+	font-style: italic;
+}
+
+.btn-box {
+	display: flex;
+	gap: 0.75rem;
+	margin-top: 0.5rem;
 }
 </style>
