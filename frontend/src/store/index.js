@@ -31,6 +31,11 @@ export default createStore({
 			localStorage.setItem("login", JSON.stringify(state.login));
 		},
 
+		SET_LOGIN_USER_USERNAME(state, username) {
+			state.login.user.username = username;
+			localStorage.setItem("login", JSON.stringify(state.login));
+		},
+
 		REMOVE_LOGIN(state) {
 			state.login = DEFAULT_LOGIN;
 			localStorage.removeItem("login");
@@ -104,7 +109,7 @@ export default createStore({
 			});
 		},
 
-		async updateUser({ state }, payload) {
+		async updateUser({ state, commit }, payload) {
 			const res = await fetch(`${state.apiRoot}/users/${payload.userId}`, {
 				method: "PUT",
 				headers: {
@@ -116,9 +121,12 @@ export default createStore({
 			const data = await res.json();
 
 			return new Promise((resolve, reject) => {
-				res.ok
-					? resolve(data)
-					: reject(Object.assign({ status: res.status }, data));
+				if (res.ok) {
+					commit("SET_LOGIN_USER_USERNAME", payload.newUser.username);
+					resolve(data);
+				} else {
+					reject(Object.assign({ status: res.status }, data));
+				}
 			});
 		},
 

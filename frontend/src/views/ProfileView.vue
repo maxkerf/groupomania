@@ -59,7 +59,7 @@
 			ref="updateInfosModal"
 			title="Update profile"
 		>
-			<UpdateUserInfosForm :user="user" @update-user="updateUser" />
+			<UpdateUserProfileForm :user="user" @update-user="updateUser" />
 		</ModalBox>
 	</div>
 </template>
@@ -67,7 +67,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import UpdateUserPictureForm from "../components/UpdateUserPictureForm.vue";
-import UpdateUserInfosForm from "../components/UpdateUserInfosForm.vue";
+import UpdateUserProfileForm from "../components/UpdateUserProfileForm.vue";
 import ModalBox from "../components/ModalBox.vue";
 import ProfileCardBtn from "../components/ProfileCardBtn.vue";
 import handleError from "../handleError.js";
@@ -83,7 +83,7 @@ export default {
 
 	components: {
 		UpdateUserPictureForm,
-		UpdateUserInfosForm,
+		UpdateUserProfileForm,
 		ModalBox,
 		ProfileCardBtn,
 	},

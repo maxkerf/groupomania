@@ -4,7 +4,7 @@
 			class="text-input"
 			type="text"
 			name="text"
-			placeholder="Add a comment"
+			:placeholder="placeholder"
 			:maxlength="maxlength"
 			required
 			ref="textInput"
@@ -24,23 +24,32 @@ export default {
 			required: true,
 		},
 		oldText: String,
-	},
-
-	data() {
-		return {
-			maxlength: 255,
-		};
+		focus: {
+			type: Boolean,
+			default: false,
+		},
+		maxlength: {
+			type: Number,
+			default: 255,
+		},
+		placeholder: {
+			type: String,
+			default: "Write something here...",
+		},
 	},
 
 	mounted() {
-		if (this.oldText) {
-			this.emitText(this.oldText);
-		}
+		if (this.oldText) this.emitText(this.oldText);
+		if (this.focus) this.focusTextInput();
 	},
 
 	methods: {
 		emitText(newtext) {
 			this.$emit("update-text", newtext);
+		},
+
+		focusTextInput() {
+			this.$refs.textInput.focus();
 		},
 
 		onTextInput(e) {
