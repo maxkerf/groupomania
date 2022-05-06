@@ -10,7 +10,6 @@
 			ref="textInput"
 			:value="text"
 			@input="onTextInput"
-			@blur="$emit('blur')"
 		/>
 		<span class="text-counter">{{ text.length }}/{{ maxlength }}</span>
 	</div>

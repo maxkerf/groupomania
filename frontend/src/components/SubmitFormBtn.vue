@@ -1,13 +1,14 @@
 <template>
-	<button class="submit-form-btn" type="submit"><slot></slot></button>
+	<button type="submit"><slot></slot></button>
 </template>
 
 <style lang="scss" scoped>
-.submit-form-btn {
+button {
 	border: unset;
 	color: unset;
 	font-size: unset;
 	font-family: unset;
+	outline: unset;
 	background-color: #515151;
 	padding: 0.25rem 0.5rem 0.375rem 0.5rem;
 	border-radius: 0.25rem;
@@ -39,6 +40,10 @@
 		&::after {
 			opacity: 1;
 		}
+	}
+
+	&:focus {
+		outline: 1px solid;
 	}
 }
 </style>

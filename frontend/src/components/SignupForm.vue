@@ -1,28 +1,32 @@
 <template>
-	<form @submit.prevent="signup">
-		<label for="email">Email</label>
-		<input id="email" type="email" v-model="email" required maxlength="50" />
-		<label for="password">Password</label>
-		<input
-			id="password"
+	<form @submit.prevent="onFormSubmit">
+		<BasicInput
+			type="email"
+			placeholder="Email"
+			maxlength="50"
+			:focus="true"
+			v-model="email"
+		/>
+		<BasicInput
 			type="password"
+			placeholder="Password"
+			maxlength="30"
 			v-model="password"
-			required
-			maxlength="30"
 		/>
-		<label for="username">Username</label>
-		<input
-			id="username"
+		<BasicInput
 			type="text"
-			v-model="username"
-			required
+			placeholder="Username"
 			maxlength="30"
+			v-model="username"
 		/>
-		<button type="submit">Signup</button>
+		<SubmitFormBtn>Signup</SubmitFormBtn>
 	</form>
 </template>
 
 <script>
+import BasicInput from "./BasicInput.vue";
+import SubmitFormBtn from "./SubmitFormBtn.vue";
+
 export default {
 	data() {
 		return {
@@ -31,8 +35,14 @@ export default {
 			username: "",
 		};
 	},
+
+	components: {
+		BasicInput,
+		SubmitFormBtn,
+	},
+
 	methods: {
-		signup() {
+		onFormSubmit() {
 			const user = {
 				email: this.email,
 				password: this.password,
@@ -46,11 +56,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-form > * {
-	display: block;
+form {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
 }
 
-button {
-	margin-top: 1rem;
+button[type="submit"] {
+	margin-top: 0.5rem;
 }
 </style>

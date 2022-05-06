@@ -189,7 +189,7 @@ export default {
 		border-radius: 0.5rem;
 		border-top-left-radius: unset;
 		display: grid;
-		grid-template-columns: auto 1fr auto;
+		grid-template-columns: auto 1fr 32px;
 		grid-template-rows: auto 1fr;
 	}
 }

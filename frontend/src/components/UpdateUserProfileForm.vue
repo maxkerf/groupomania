@@ -1,5 +1,5 @@
 <template>
-	<form @submit.prevent="onFormSubmit" ref="form">
+	<form @submit.prevent="onFormSubmit">
 		<TextInputBox
 			:text="username"
 			:oldText="user.username"

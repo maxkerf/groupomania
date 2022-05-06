@@ -1,15 +1,21 @@
 <template>
-	<form @submit.prevent="login">
-		<label for="email">Email</label>
-		<input v-model="email" id="email" type="email" required />
-		<label for="password">Password</label>
-		<input id="password" type="password" v-model="password" required />
-		<p>{{ errorMessage }}</p>
-		<button type="submit">Login</button>
+	<form @submit.prevent="onFormSubmit">
+		<BasicInput
+			type="email"
+			placeholder="Email"
+			:focus="true"
+			v-model="email"
+		/>
+		<BasicInput type="password" placeholder="Password" v-model="password" />
+		<p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+		<SubmitFormBtn>Login</SubmitFormBtn>
 	</form>
 </template>
 
 <script>
+import BasicInput from "./BasicInput.vue";
+import SubmitFormBtn from "./SubmitFormBtn.vue";
+
 export default {
 	data() {
 		return {
@@ -17,9 +23,20 @@ export default {
 			password: "",
 		};
 	},
+
 	props: ["errorMessage"],
+
+	components: {
+		BasicInput,
+		SubmitFormBtn,
+	},
+
 	methods: {
-		login() {
+		updateEmail(newEmail) {
+			this.email = newEmail;
+		},
+
+		onFormSubmit() {
 			const user = {
 				email: this.email,
 				password: this.password,
@@ -32,7 +49,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-form > * {
-	display: block;
+form {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.error-message {
+	margin: 0;
+	text-align: center;
+	color: #ff4444;
+}
+
+button[type="submit"] {
+	margin-top: 0.5rem;
 }
 </style>
