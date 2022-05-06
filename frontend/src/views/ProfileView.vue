@@ -213,10 +213,9 @@ export default {
 		top: 3em;
 		bottom: 0;
 		width: 100%;
-		background-color: #242526; //lighten(#515151, 10%)
+		background-color: #242526;
 		z-index: -1;
-		border-radius: 1em;
-		border: 1px solid #e4e6eb;
+		border-radius: 0.75rem;
 	}
 }
 

@@ -34,6 +34,7 @@ export default {
 	border: calc(3em / 16) solid lighten(#242526, 10%);
 	border-radius: 0.375em;
 	font-size: 1.25rem;
+	background-color: #515151;
 	position: relative;
 	z-index: 0;
 
@@ -41,7 +42,7 @@ export default {
 		color: #ffd7d7;
 
 		&::after {
-			transform: scale(1);
+			opacity: 1;
 		}
 	}
 
@@ -53,8 +54,8 @@ export default {
 		background-color: lighten(#242526, 10%);
 		z-index: -1;
 		border-radius: inherit;
-		transform: scale(0);
-		transition: transform 250ms;
+		opacity: 0;
+		transition: opacity 100ms;
 	}
 }
 </style>

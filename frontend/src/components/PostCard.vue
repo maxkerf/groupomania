@@ -1,16 +1,21 @@
 <template>
 	<article class="post-card" ref="article">
 		<div class="post-card-header">
-			<img
+			<router-link
 				class="user-picture"
-				:src="`${apiRoot}/images/user/${post.user_picture}`"
-				alt="profile picture"
-			/>
+				:to="{ name: 'profile', params: { id: post.user_id } }"
+			>
+				<img
+					:src="`${apiRoot}/images/user/${post.user_picture}`"
+					alt="profile picture"
+				/>
+			</router-link>
 			<router-link
 				class="username"
 				:to="{ name: 'profile', params: { id: post.user_id } }"
-				>{{ post.user_username }}</router-link
 			>
+				{{ post.user_username }}
+			</router-link>
 			<DropdownBox
 				v-if="
 					login.user.role === userRoles.admin || post.user_id === login.user.id
@@ -288,11 +293,20 @@ export default {
 
 .user-picture {
 	grid-row: span 2;
-	height: 3em;
-	width: 3em;
-	border-radius: 50%;
-	object-fit: cover;
 	margin-right: 0.5rem;
+
+	&:hover {
+		img {
+			filter: brightness(1.1);
+		}
+	}
+
+	img {
+		height: 3em;
+		width: 3em;
+		border-radius: 50%;
+		object-fit: cover;
+	}
 }
 
 .username {
