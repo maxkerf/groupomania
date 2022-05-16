@@ -154,7 +154,7 @@ export default {
 		},
 
 		isEventInsideElement(e, el) {
-			return e.path.find(i => i === el) ? true : false;
+			return e.composedPath().find(i => i === el) ? true : false;
 		},
 
 		isEventInsideOneOfElements(e, els) {
