@@ -3,8 +3,21 @@ const jwt = require("jsonwebtoken");
 
 const userManager = require("../managers/user");
 const postManager = require("../managers/post");
+const commentManager = require("../managers/comment");
+const reactionManager = require("../managers/reaction");
 const handleError = require("../globalFunctions/handleError");
 const deleteUserPicture = require("../globalFunctions/deleteUserPicture");
+const deletePostImage = require("../globalFunctions/deletePostImage");
+
+async function deleteUserPosts(userId) {
+	const userPosts = await postManager.getUserPosts(userId);
+	for (const post of userPosts) {
+		await reactionManager.deletePostReactions(post.id);
+		await commentManager.deletePostComments(post.id);
+		if (post.image) await deletePostImage(post.image);
+		await postManager.deletePost(post.id);
+	}
+}
 
 exports.signup = async (req, res) => {
 	try {
@@ -76,7 +89,7 @@ exports.updateUserPicture = async (req, res) => {
 	try {
 		const user = await userManager.getUserById(userId);
 		await userManager.updateUserPicture(userId, newPicture);
-		await deleteUserPicture(user.picture);
+		if (user.picture) await deleteUserPicture(user.picture);
 		res
 			.status(200)
 			.json({ message: "User picture updated", pictureUpdated: newPicture });
@@ -90,8 +103,10 @@ exports.deleteUser = async (req, res) => {
 	const user = res.locals.user;
 
 	try {
-		await deleteUserPicture(user.picture);
-		await postManager.deleteUserPosts(user.id);
+		await deleteUserPosts(user.id);
+		await reactionManager.deleteUserReactions(user.id);
+		await commentManager.deleteUserComments(user.id);
+		if (user.picture) await deleteUserPicture(user.picture);
 		await userManager.deleteUser(user.id);
 		res.status(200).json({ message: "User deleted" });
 	} catch (err) {

@@ -78,6 +78,14 @@ exports.deleteComment = id => {
 	});
 };
 
+exports.deleteUserComments = userId => {
+	const sql = "DELETE FROM comment WHERE user_id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.query(sql, userId, err => (err ? reject(err) : resolve()));
+	});
+};
+
 exports.deletePostComments = postId => {
 	const sql = "DELETE FROM comment WHERE post_id = ?";
 

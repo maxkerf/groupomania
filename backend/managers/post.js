@@ -77,10 +77,10 @@ exports.deletePost = postId => {
 	});
 };
 
-exports.deleteUserPosts = userId => {
-	const sql = "DELETE FROM `post` WHERE `user_id` = ?";
+exports.getUserPosts = userId => {
+	const sql = "SELECT * FROM `post` WHERE `user_id` = ?";
 
 	return new Promise((resolve, reject) => {
-		db.query(sql, userId, err => (err ? reject(err) : resolve()));
+		db.query(sql, userId, (err, data) => (err ? reject(err) : resolve(data)));
 	});
 };
