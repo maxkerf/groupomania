@@ -23,7 +23,9 @@ export default {
 			],
 		};
 	},
+
 	props: ["type", "postReactions", "userId"],
+
 	computed: {
 		hasReacted() {
 			return Boolean(
@@ -90,11 +92,11 @@ export default {
 }
 
 .liked {
-	color: blue;
+	color: #4444ff;
 }
 
 .disliked {
-	color: red;
+	color: #ff4444;
 }
 
 .loved {

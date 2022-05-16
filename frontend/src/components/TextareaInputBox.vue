@@ -3,7 +3,6 @@
 		<textarea
 			class="text-input"
 			name="text"
-			id="text"
 			:maxlength="maxlength"
 			rows="1"
 			:placeholder="placeholder"
@@ -80,6 +79,7 @@ export default {
 	gap: 1rem;
 	min-height: 2em;
 	box-sizing: border-box;
+	width: 350px;
 }
 
 .text-input {

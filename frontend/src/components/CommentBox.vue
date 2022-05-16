@@ -11,7 +11,7 @@
 		<div v-show="!updating">
 			<img
 				class="profile-picture"
-				:src="`${apiRoot}/images/user/${comment.user_picture}`"
+				:src="userPictureSource"
 				alt="user profile picture"
 			/>
 			<router-link
@@ -55,6 +55,7 @@ import UpdateCommentForm from "../components/UpdateCommentForm.vue";
 import DropdownBox from "../components/DropdownBox.vue";
 import DropdownMenuBtn from "../components/DropdownMenuBtn.vue";
 import DateBox from "../components/DateBox.vue";
+import getUserPictureSource from "../getUserPictureSource.js";
 
 export default {
 	data() {
@@ -102,6 +103,10 @@ export default {
 				: "0s";
 
 			return `${result} ago`;
+		},
+
+		userPictureSource() {
+			return getUserPictureSource(this.apiRoot, this.comment.user_picture);
 		},
 	},
 

@@ -9,7 +9,7 @@
 					class="profile-link"
 					:to="{ name: 'profile', params: { id: login.user.id } }"
 				>
-					<img :src="`${apiRoot}/images/user/${login.user.picture}`" alt="" />
+					<img :src="userPictureSource" alt="" />
 					<span>{{ login.user.username }}</span>
 				</router-link>
 			</nav>
@@ -23,16 +23,15 @@
 
 <script>
 import { mapState } from "vuex";
+import getUserPictureSource from "./getUserPictureSource.js";
 
 export default {
-	data() {
-		return {
-			user: {},
-		};
-	},
-
 	computed: {
 		...mapState(["login", "apiRoot"]),
+
+		userPictureSource() {
+			return getUserPictureSource(this.apiRoot, this.login.user.picture);
+		},
 	},
 };
 </script>

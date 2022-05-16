@@ -58,8 +58,10 @@ export default {
 	padding: 1rem;
 	border: 3px solid lighten(#242526, 10%);
 	border-radius: 0.5rem;
-	min-width: 15em;
-	max-width: 20em;
+	min-width: 250px;
+	max-width: 400px;
+	max-height: 90%;
+	overflow: hidden auto;
 	display: grid;
 	gap: 1rem;
 }

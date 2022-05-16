@@ -5,10 +5,7 @@
 				class="user-picture"
 				:to="{ name: 'profile', params: { id: post.user_id } }"
 			>
-				<img
-					:src="`${apiRoot}/images/user/${post.user_picture}`"
-					alt="profile picture"
-				/>
+				<img :src="userPictureSource" alt="profile picture" />
 			</router-link>
 			<router-link
 				class="username"
@@ -109,6 +106,7 @@ import DropdownBox from "./DropdownBox.vue";
 import DropdownMenuBtn from "./DropdownMenuBtn.vue";
 import DateBox from "./DateBox.vue";
 import handleError from "../handleError.js";
+import getUserPictureSource from "../getUserPictureSource.js";
 
 export default {
 	components: {
@@ -135,6 +133,10 @@ export default {
 
 		formatNumberComments() {
 			return `${this.nbComments} comment${this.nbComments === 1 ? "" : "s"}`;
+		},
+
+		userPictureSource() {
+			return getUserPictureSource(this.apiRoot, this.post.user_picture);
 		},
 	},
 
@@ -271,16 +273,6 @@ export default {
 	color: #e4e6eb;
 	width: 400px;
 	border-radius: 0.75rem;
-
-	/* position: relative; */
-	/* &::after {
-		content: "";
-		background-color: red;
-		top: 0;
-		width: 50%;
-		height: 100%;
-		position: absolute;
-	} */
 }
 
 .post-card-header {
@@ -353,6 +345,7 @@ export default {
 		display: flex;
 		justify-content: space-between;
 		padding: 0.5rem 0.75rem;
+		margin-top: 0.25rem;
 	}
 }
 

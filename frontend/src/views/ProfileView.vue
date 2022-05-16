@@ -71,13 +71,12 @@ import UpdateUserProfileForm from "../components/UpdateUserProfileForm.vue";
 import ModalBox from "../components/ModalBox.vue";
 import ProfileCardBtn from "../components/ProfileCardBtn.vue";
 import handleError from "../handleError.js";
+import getUserPictureSource from "../getUserPictureSource.js";
 
 export default {
 	data() {
 		return {
-			user: {
-				picture: "user.svg",
-			},
+			user: {},
 		};
 	},
 
@@ -92,11 +91,7 @@ export default {
 		...mapState(["login", "apiRoot", "userRoles"]),
 
 		userPictureSource() {
-			return `${
-				this.user.picture
-					? `${this.apiRoot}/images/user/${this.user.picture}`
-					: "/user.svg"
-			}`;
+			return getUserPictureSource(this.apiRoot, this.user.picture);
 		},
 
 		isAdmin() {
@@ -231,8 +226,10 @@ export default {
 .user-picture-btn {
 	@include reset-btn;
 	cursor: pointer;
-	position: relative;
+	width: 6em;
+	height: 6em;
 	border-radius: 50%;
+	position: relative;
 
 	&:hover {
 		.user-picture-btn-overlay {
