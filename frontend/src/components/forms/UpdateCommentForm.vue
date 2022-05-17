@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import TextareaInputBox from "./TextareaInputBox.vue";
-import SubmitCommentFormBtn from "./SubmitCommentFormBtn.vue";
+import TextareaInputBox from "../TextareaInputBox.vue";
+import SubmitCommentFormBtn from "../SubmitCommentFormBtn.vue";
 
 export default {
 	props: {

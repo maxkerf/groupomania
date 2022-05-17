@@ -12,7 +12,7 @@
 
 <script>
 import { mapState } from "vuex";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/forms/LoginForm";
 
 export default {
 	data() {
@@ -41,7 +41,7 @@ export default {
 				this.$router.push("/");
 			} catch (err) {
 				console.error(err);
-				this.errorMessage = err.message;
+				this.errorMessage = err.message || err.errors[0].msg;
 			}
 		},
 	},
@@ -58,6 +58,7 @@ export default {
 	left: 50%;
 	transform: translateX(-50%);
 	top: 25%;
+	width: 200px;
 	background-color: #242526;
 	color: #e4e6eb;
 	padding: 1rem 1.5rem;

@@ -51,7 +51,7 @@
 
 <script>
 import { mapState } from "vuex";
-import UpdateCommentForm from "../components/UpdateCommentForm.vue";
+import UpdateCommentForm from "../components/forms/UpdateCommentForm.vue";
 import DropdownBox from "../components/DropdownBox.vue";
 import DropdownMenuBtn from "../components/DropdownMenuBtn.vue";
 import DateBox from "../components/DateBox.vue";

@@ -12,7 +12,7 @@
 
 <script>
 import { mapState } from "vuex";
-import SignupForm from "../components/SignupForm";
+import SignupForm from "../components/forms/SignupForm";
 
 export default {
 	components: {
@@ -50,6 +50,7 @@ export default {
 	left: 50%;
 	transform: translateX(-50%);
 	top: 25%;
+	width: 200px;
 	background-color: #242526;
 	color: #e4e6eb;
 	padding: 1rem 1.5rem;

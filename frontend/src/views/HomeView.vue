@@ -53,8 +53,8 @@
 import { mapActions, mapState } from "vuex";
 import handleError from "../handleError.js";
 import PostCard from "../components/PostCard.vue";
-import AddPostForm from "../components/AddPostForm.vue";
-import UpdatePostForm from "../components/UpdatePostForm.vue";
+import AddPostForm from "../components/forms/AddPostForm.vue";
+import UpdatePostForm from "../components/forms/UpdatePostForm.vue";
 import ModalBox from "../components/ModalBox.vue";
 
 export default {

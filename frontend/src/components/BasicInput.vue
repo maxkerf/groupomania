@@ -4,7 +4,6 @@
 		@input="$emit('update:modelValue', $event.target.value)"
 		ref="input"
 		required
-		autofocus
 	/>
 </template>
 

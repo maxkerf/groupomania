@@ -100,7 +100,7 @@
 <script>
 import { mapState } from "vuex";
 import ReactionBox from "./ReactionBox.vue";
-import AddCommentForm from "./AddCommentForm.vue";
+import AddCommentForm from "./forms/AddCommentForm.vue";
 import CommentsBox from "./CommentsBox.vue";
 import DropdownBox from "./DropdownBox.vue";
 import DropdownMenuBtn from "./DropdownMenuBtn.vue";

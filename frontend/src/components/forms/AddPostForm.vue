@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import TextareaInputBox from "./TextareaInputBox.vue";
-import ImageInputBox from "./ImageInputBox.vue";
-import SubmitFormBtn from "./SubmitFormBtn.vue";
+import TextareaInputBox from "../TextareaInputBox.vue";
+import ImageInputBox from "../ImageInputBox.vue";
+import SubmitFormBtn from "../SubmitFormBtn.vue";
 
 export default {
 	data() {

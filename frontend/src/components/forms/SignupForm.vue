@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import BasicInput from "./BasicInput.vue";
-import SubmitFormBtn from "./SubmitFormBtn.vue";
+import BasicInput from "../BasicInput.vue";
+import SubmitFormBtn from "../SubmitFormBtn.vue";
 
 export default {
 	data() {
