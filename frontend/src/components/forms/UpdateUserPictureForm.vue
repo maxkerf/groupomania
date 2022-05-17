@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import ImageInputBox from "./ImageInputBox.vue";
-import SubmitFormBtn from "./SubmitFormBtn.vue";
+import ImageInputBox from "../ImageInputBox.vue";
+import SubmitFormBtn from "../SubmitFormBtn.vue";
 
 export default {
 	props: ["user"],

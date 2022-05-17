@@ -66,8 +66,8 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import UpdateUserPictureForm from "../components/UpdateUserPictureForm.vue";
-import UpdateUserProfileForm from "../components/UpdateUserProfileForm.vue";
+import UpdateUserPictureForm from "../components/forms/UpdateUserPictureForm.vue";
+import UpdateUserProfileForm from "../components/forms/UpdateUserProfileForm.vue";
 import ModalBox from "../components/ModalBox.vue";
 import ProfileCardBtn from "../components/ProfileCardBtn.vue";
 import handleError from "../handleError.js";

@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import TextInputBox from "./TextInputBox.vue";
-import SubmitFormBtn from "./SubmitFormBtn.vue";
+import TextInputBox from "../TextInputBox.vue";
+import SubmitFormBtn from "../SubmitFormBtn.vue";
 
 export default {
 	props: ["user"],
