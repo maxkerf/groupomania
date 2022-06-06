@@ -1,13 +1,23 @@
 <template>
-	<form @submit.prevent="onFormSubmit">
+	<form novalidate @submit.prevent="onFormSubmit">
 		<BasicInput
 			type="email"
+			name="email"
 			placeholder="Email"
 			:focus="true"
 			v-model="email"
 		/>
-		<BasicInput type="password" placeholder="Password" v-model="password" />
-		<p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+		<p class="error-msg" v-show="errors.email">{{ errors.email }}</p>
+		<BasicInput
+			type="password"
+			name="password"
+			placeholder="Password"
+			v-model="password"
+		/>
+		<p class="error-msg" v-show="errors.password">{{ errors.password }}</p>
+		<p class="error-msg error-msg-global" v-if="errors.global">
+			{{ errors.global }}
+		</p>
 		<SubmitFormBtn>Login</SubmitFormBtn>
 	</form>
 </template>
@@ -15,12 +25,21 @@
 <script>
 import BasicInput from "../BasicInput.vue";
 import SubmitFormBtn from "../SubmitFormBtn.vue";
+import {
+	checkFormInputs,
+	focusFirstInvalidFormInput,
+} from "../../formValidation.js";
 
 export default {
 	data() {
 		return {
 			email: "",
 			password: "",
+			errors: {
+				email: "",
+				password: "",
+				global: "",
+			},
 		};
 	},
 
@@ -36,13 +55,23 @@ export default {
 			this.email = newEmail;
 		},
 
-		onFormSubmit() {
-			const user = {
-				email: this.email,
-				password: this.password,
-			};
+		resetErrors() {
+			for (const key in this.errors) this.errors[key] = "";
+		},
 
-			this.$emit("login", user);
+		onFormSubmit(e) {
+			this.resetErrors();
+			checkFormInputs(this);
+			focusFirstInvalidFormInput(this);
+
+			if (e.target.checkValidity()) {
+				const user = {
+					email: this.email,
+					password: this.password,
+				};
+
+				this.$emit("login", user);
+			}
 		},
 	},
 };
@@ -50,19 +79,23 @@ export default {
 
 <style lang="scss" scoped>
 form {
+	width: 100%;
 	margin-top: 0.5rem;
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
 }
-
-.error-message {
-	margin: 0;
-	text-align: center;
-	color: #ff4444;
-}
-
 button[type="submit"] {
 	margin-top: 0.5rem;
+}
+
+.error-msg {
+	color: #ff4444;
+	margin: -0.25rem 0.5rem 0 0.5rem;
+
+	&-global {
+		margin: 0.25rem 0 0 0;
+		text-align: center;
+	}
 }
 </style>

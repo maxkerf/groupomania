@@ -5,7 +5,11 @@
 			<p class="info">
 				No account yet? <router-link to="/signup">Signup</router-link>
 			</p>
-			<LoginForm @login="loginUser" :errorMessage="errorMessage" />
+			<LoginForm
+				@login="loginUser"
+				:errorMessage="errorMessage"
+				ref="loginForm"
+			/>
 		</div>
 	</div>
 </template>
@@ -13,6 +17,7 @@
 <script>
 import { mapState } from "vuex";
 import LoginForm from "../components/forms/LoginForm";
+import { focusFirstInvalidFormInput } from "../formValidation.js";
 
 export default {
 	data() {
@@ -41,7 +46,15 @@ export default {
 				this.$router.push("/");
 			} catch (err) {
 				console.error(err);
-				this.errorMessage = err.message || err.errors[0].msg;
+				// if there are errors on the inputs
+				if (err.errors) {
+					err.errors?.forEach(e => {
+						this.$refs.loginForm.errors[e.param] = `${e.msg}.`;
+					});
+					focusFirstInvalidFormInput(this.$refs.loginForm);
+				} else {
+					this.$refs.loginForm.errors.global = `${err.message}.`;
+				}
 			}
 		},
 	},
@@ -58,7 +71,7 @@ export default {
 	left: 50%;
 	transform: translateX(-50%);
 	top: 25%;
-	width: 200px;
+	width: 260px;
 	background-color: #242526;
 	color: #e4e6eb;
 	padding: 1rem 1.5rem;

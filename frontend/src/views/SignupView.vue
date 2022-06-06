@@ -5,7 +5,7 @@
 			<p class="info">
 				Already among us? <router-link to="/login">Login</router-link>
 			</p>
-			<SignupForm @signup="signup" />
+			<SignupForm @signup="signup" ref="signupForm" />
 		</div>
 	</div>
 </template>
@@ -13,17 +13,21 @@
 <script>
 import { mapState } from "vuex";
 import SignupForm from "../components/forms/SignupForm";
+import { focusFirstInvalidFormInput } from "../formValidation.js";
 
 export default {
 	components: {
 		SignupForm,
 	},
+
 	computed: {
 		...mapState(["login"]),
 	},
+
 	created() {
 		if (this.login.user.id !== -1) return this.$router.push("/");
 	},
+
 	methods: {
 		async signup(user) {
 			try {
@@ -34,6 +38,10 @@ export default {
 				this.$router.push("/");
 			} catch (err) {
 				console.error(err);
+				err.errors.forEach(e => {
+					this.$refs.signupForm.errors[e.param] = `${e.msg}.`;
+				});
+				focusFirstInvalidFormInput(this.$refs.signupForm);
 			}
 		},
 	},
@@ -50,7 +58,7 @@ export default {
 	left: 50%;
 	transform: translateX(-50%);
 	top: 25%;
-	width: 200px;
+	width: 260px;
 	background-color: #242526;
 	color: #e4e6eb;
 	padding: 1rem 1.5rem;
