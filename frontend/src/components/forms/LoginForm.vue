@@ -43,18 +43,12 @@ export default {
 		};
 	},
 
-	props: ["errorMessage"],
-
 	components: {
 		BasicInput,
 		SubmitFormBtn,
 	},
 
 	methods: {
-		updateEmail(newEmail) {
-			this.email = newEmail;
-		},
-
 		resetErrors() {
 			for (const key in this.errors) this.errors[key] = "";
 		},
@@ -85,6 +79,7 @@ form {
 	flex-direction: column;
 	gap: 0.75rem;
 }
+
 button[type="submit"] {
 	margin-top: 0.5rem;
 }

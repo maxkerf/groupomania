@@ -10,6 +10,7 @@
 				<i class="fa-solid fa-image"></i>
 			</label>
 			<input
+				name="image"
 				class="image-input"
 				type="file"
 				id="image"

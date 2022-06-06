@@ -1,17 +1,22 @@
 <template>
-	<form @submit.prevent="onFormSubmit">
+	<form novalidate @submit.prevent="onFormSubmit">
 		<TextareaInputBox
 			:text="text"
 			:oldText="post.text"
 			:focus="true"
 			@update-text="updateText"
 		/>
+		<p class="error-msg" v-show="errors.text">{{ errors.text }}</p>
 		<ImageInputBox
 			:image="image"
 			:oldImage="post.image"
 			updatedImageGroup="post"
 			@update-image="updateImage"
 		/>
+		<p class="error-msg" v-show="errors.image">{{ errors.image }}</p>
+		<p class="error-msg error-msg-global" v-if="errors.global">
+			{{ errors.global }}
+		</p>
 		<SubmitFormBtn>Save</SubmitFormBtn>
 	</form>
 </template>
@@ -20,6 +25,10 @@
 import TextareaInputBox from "../TextareaInputBox.vue";
 import ImageInputBox from "../ImageInputBox.vue";
 import SubmitFormBtn from "../SubmitFormBtn.vue";
+import {
+	checkFormInputs,
+	focusFirstInvalidFormInput,
+} from "../../formValidation.js";
 
 export default {
 	props: ["post"],
@@ -28,6 +37,11 @@ export default {
 		return {
 			text: "",
 			image: null,
+			errors: {
+				text: "",
+				image: "",
+				global: "",
+			},
 		};
 	},
 
@@ -46,13 +60,23 @@ export default {
 			this.image = newImage;
 		},
 
-		onFormSubmit() {
-			const newPost = {
-				text: this.text,
-				image: this.image,
-			};
+		resetErrors() {
+			for (const key in this.errors) this.errors[key] = "";
+		},
 
-			this.$emit("update-post", this.post.id, newPost);
+		onFormSubmit(e) {
+			this.resetErrors();
+			checkFormInputs(this);
+			focusFirstInvalidFormInput(this);
+
+			if (e.target.checkValidity()) {
+				const newPost = {
+					text: this.text,
+					image: this.image,
+				};
+
+				this.$emit("update-post", this.post.id, newPost);
+			}
 		},
 	},
 };
@@ -64,5 +88,15 @@ form {
 	flex-direction: column;
 	gap: 1rem;
 	align-items: center;
+}
+
+.error-msg {
+	color: #ff4444;
+	margin: -0.25rem 0.5rem 0 0.5rem;
+	text-align: center;
+
+	&-global {
+		margin: 0.25rem 0 0 0;
+	}
 }
 </style>

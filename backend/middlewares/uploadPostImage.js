@@ -25,7 +25,7 @@ const fileFilter = (req, file, cb) => {
 	if (!AUTHORIZED_EXTENSIONS.includes(extension))
 		return cb(
 			Error(
-				`Invalid image (authorized extensions: ${AUTHORIZED_EXTENSIONS.join(
+				`Invalid image extension (authorized extensions: ${AUTHORIZED_EXTENSIONS.join(
 					"/"
 				)})`
 			)
@@ -42,12 +42,21 @@ module.exports = (req, res, next) => {
 	}).single("image");
 
 	upload(req, res, err => {
-		if (err)
-			return res
-				.status(400)
-				.json(
-					err instanceof multer.MulterError ? err : { message: err.message }
-				);
+		if (err) {
+			const response = {
+				errors: [
+					{
+						msg:
+							err instanceof multer.MulterError
+								? "Invalid image size (> 1Mo)"
+								: err.message,
+						param: "image",
+					},
+				],
+			};
+
+			return res.status(400).json(response);
+		}
 
 		next();
 	});

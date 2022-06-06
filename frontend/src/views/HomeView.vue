@@ -37,14 +37,18 @@
 			ref="createPostModal"
 			title="Add a post"
 		>
-			<AddPostForm @add-post="addPost" />
+			<AddPostForm @add-post="addPost" ref="addPostForm" />
 		</ModalBox>
 		<ModalBox
 			:toggleModal="toggleModal"
 			ref="updatePostModal"
 			title="Update your post"
 		>
-			<UpdatePostForm :post="postToUpdate" @update-post="updatePost" />
+			<UpdatePostForm
+				:post="postToUpdate"
+				@update-post="updatePost"
+				ref="updatePostForm"
+			/>
 		</ModalBox>
 	</div>
 </template>
@@ -56,6 +60,7 @@ import PostCard from "../components/PostCard.vue";
 import AddPostForm from "../components/forms/AddPostForm.vue";
 import UpdatePostForm from "../components/forms/UpdatePostForm.vue";
 import ModalBox from "../components/ModalBox.vue";
+import { focusFirstInvalidFormInput } from "../formValidation.js";
 
 export default {
 	data() {
@@ -130,6 +135,15 @@ export default {
 				this.scrollTop();
 			} catch (err) {
 				handleError(err, this, "add post");
+				// if there are errors on the inputs
+				if (err.errors) {
+					err.errors?.forEach(e => {
+						this.$refs.addPostForm.errors[e.param] = `${e.msg}.`;
+					});
+					focusFirstInvalidFormInput(this.$refs.addPostForm);
+				} else {
+					this.$refs.addPostForm.errors.global = `${err.message}.`;
+				}
 			}
 		},
 
@@ -147,6 +161,15 @@ export default {
 				this.toggleModal(this.$refs.updatePostModal);
 			} catch (err) {
 				handleError(err, this, "update post");
+				// if there are errors on the inputs
+				if (err.errors) {
+					err.errors?.forEach(e => {
+						this.$refs.updatePostForm.errors[e.param] = `${e.msg}.`;
+					});
+					focusFirstInvalidFormInput(this.$refs.updatePostForm);
+				} else {
+					this.$refs.updatePostForm.errors.global = `${err.message}.`;
+				}
 			}
 		},
 
