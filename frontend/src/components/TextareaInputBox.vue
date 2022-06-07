@@ -3,26 +3,29 @@
 		<textarea
 			class="text-input"
 			name="text"
+			rows="1"
 			:required="required"
 			:maxlength="maxlength"
-			rows="1"
 			:placeholder="placeholder"
-			ref="textInput"
-			@input="onTextInput"
+			ref="textarea"
+			:value="modelValue"
+			@input="$emit('update:modelValue', $event.target.value)"
 		></textarea>
-		<span class="text-counter">{{ text.length }}/{{ maxlength }}</span>
+		<span class="text-counter">{{ modelValue.length }}/{{ maxlength }}</span>
 	</div>
 </template>
 
 <script>
 export default {
+	name: "TextareaInputBox",
+
 	props: {
-		text: {
+		modelValue: {
 			type: String,
-			required: true,
+			default: "",
 		},
-		oldText: String,
-		focus: {
+
+		required: {
 			type: Boolean,
 			default: false,
 		},
@@ -34,41 +37,30 @@ export default {
 			type: String,
 			default: "Write something here...",
 		},
-		required: {
+
+		focus: {
 			type: Boolean,
 			default: false,
 		},
 	},
 
+	emits: ["update:modelValue"],
+
 	watch: {
-		text(newText) {
-			this.$refs.textInput.value = newText;
-			this.resizeTextInput();
+		modelValue() {
+			this.resizeTextarea();
 		},
 	},
 
 	mounted() {
-		if (this.oldText) this.emitText(this.oldText);
-		if (this.focus) this.focusTextInput();
+		if (this.focus) this.$refs.textarea.focus();
 	},
 
 	methods: {
-		emitText(newtext) {
-			this.$emit("update-text", newtext);
-		},
-
-		resizeTextInput() {
-			const textInput = this.$refs.textInput;
-			textInput.style.height = "auto";
-			textInput.style.height = `${textInput.scrollHeight}px`;
-		},
-
-		focusTextInput() {
-			this.$refs.textInput.focus();
-		},
-
-		onTextInput(e) {
-			this.emitText(e.srcElement.value);
+		resizeTextarea() {
+			const textarea = this.$refs.textarea;
+			textarea.style.height = "auto";
+			textarea.style.height = `${textarea.scrollHeight}px`;
 		},
 	},
 };

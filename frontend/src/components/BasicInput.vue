@@ -1,9 +1,9 @@
 <template>
 	<input
+		required
+		ref="input"
 		:value="modelValue"
 		@input="$emit('update:modelValue', $event.target.value)"
-		ref="input"
-		required
 	/>
 </template>
 
@@ -12,7 +12,9 @@ export default {
 	name: "BasicInput",
 
 	props: {
-		modelValue: String,
+		modelValue: {
+			type: String,
+		},
 		focus: {
 			type: Boolean,
 			default: false,

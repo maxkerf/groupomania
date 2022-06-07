@@ -1,6 +1,6 @@
 <template>
 	<form novalidate @submit.prevent="onFormSubmit" ref="form">
-		<TextareaInputBox :text="text" :focus="true" @update-text="updateText" />
+		<TextareaInputBox v-model="text" :focus="true" />
 		<p class="error-msg" v-show="errors.text">{{ errors.text }}</p>
 		<ImageInputBox :image="image" @update-image="updateImage" />
 		<p class="error-msg" v-show="errors.image">{{ errors.image }}</p>
@@ -40,10 +40,6 @@ export default {
 	},
 
 	methods: {
-		updateText(newText) {
-			this.text = newText;
-		},
-
 		updateImage(newImage) {
 			this.image = newImage;
 		},

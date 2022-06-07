@@ -10,9 +10,9 @@
 				<i class="fa-solid fa-image"></i>
 			</label>
 			<input
-				name="image"
 				class="image-input"
 				type="file"
+				name="image"
 				id="image"
 				accept=".jpg,.jpeg,.png"
 				ref="imageInput"
@@ -52,8 +52,12 @@ export default {
 			type: [File, null],
 			required: true,
 		},
-		oldImage: String,
-		updatedImageGroup: String,
+		oldImage: {
+			type: String,
+		},
+		updatedImageGroup: {
+			type: String,
+		},
 	},
 
 	computed: {
@@ -77,7 +81,7 @@ export default {
 		},
 
 		onImageInputChange(e) {
-			const file = e.srcElement.files[0];
+			const file = e.target.files[0];
 			this.emitImage(file ? file : null);
 		},
 
