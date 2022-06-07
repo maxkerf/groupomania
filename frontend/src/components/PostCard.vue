@@ -259,6 +259,7 @@ export default {
 
 				this.comments.splice(this.comments.indexOf(comment), 1);
 				this.nbComments--;
+				if (!this.nbComments) this.showComments = false;
 			} catch (err) {
 				handleError(err, this, "delete comment");
 			}

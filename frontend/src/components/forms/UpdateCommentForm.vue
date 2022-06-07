@@ -4,6 +4,7 @@
 			:text="text"
 			:oldText="comment.text"
 			:focus="true"
+			:required="true"
 			@update-text="updateText"
 		/>
 		<SubmitCommentFormBtn />

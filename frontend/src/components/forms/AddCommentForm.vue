@@ -2,6 +2,7 @@
 	<form @submit.prevent="onFormSubmit">
 		<TextareaInputBox
 			:text="text"
+			:required="true"
 			@update-text="updateText"
 			placeholder="Add a comment"
 		/>

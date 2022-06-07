@@ -3,6 +3,7 @@
 		<textarea
 			class="text-input"
 			name="text"
+			:required="required"
 			:maxlength="maxlength"
 			rows="1"
 			:placeholder="placeholder"
@@ -32,6 +33,10 @@ export default {
 		placeholder: {
 			type: String,
 			default: "Write something here...",
+		},
+		required: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
