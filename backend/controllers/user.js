@@ -83,18 +83,36 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.updateUserPicture = async (req, res) => {
-	const userId = res.locals.user.id;
-	const newPicture = req.file.filename;
+	const user = res.locals.user;
+	let newPicture = user.picture;
 
 	try {
-		const user = await userManager.getUserById(userId);
-		await userManager.updateUserPicture(userId, newPicture);
-		if (user.picture) await deleteUserPicture(user.picture);
-		res
-			.status(200)
-			.json({ message: "User picture updated", pictureUpdated: newPicture });
+		if (req.file && !user.picture) {
+			newPicture = req.file.filename;
+		} else if (!req.file && user.picture) {
+			await deleteUserPicture(user.picture);
+			newPicture = null;
+		} else if (req.file && user.picture) {
+			if (req.file.originalname === user.picture) {
+				await deleteUserPicture(req.file.filename);
+			} else {
+				await deleteUserPicture(user.picture);
+				newPicture = req.file.filename;
+			}
+		}
+
+		let response = { message: "User picture kept" };
+
+		if (newPicture !== user.picture) {
+			await userManager.updateUserPicture(user.id, newPicture);
+			response = {
+				message: "User picture updated",
+				pictureUpdated: newPicture,
+			};
+		}
+
+		res.status(200).json(response);
 	} catch (err) {
-		await deleteUserPicture(newPicture);
 		handleError(err, res, "update user picture");
 	}
 };

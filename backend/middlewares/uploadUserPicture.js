@@ -1,6 +1,7 @@
 const multer = require("multer");
 
 const AUTHORIZED_EXTENSIONS = ["jpg", "jpeg", "png"];
+const MAX_FILE_SIZE = 1024 * 1024; // 1Mo
 
 function getExtension(file) {
 	return file.mimetype.split("/")[1];
@@ -24,7 +25,7 @@ const fileFilter = (req, file, cb) => {
 	if (!AUTHORIZED_EXTENSIONS.includes(extension))
 		return cb(
 			Error(
-				`Invalid picture (authorized extensions: ${AUTHORIZED_EXTENSIONS.join(
+				`Invalid picture extension (authorized extensions: ${AUTHORIZED_EXTENSIONS.join(
 					"/"
 				)})`
 			)
@@ -34,17 +35,28 @@ const fileFilter = (req, file, cb) => {
 };
 
 module.exports = (req, res, next) => {
-	const upload = multer({ storage, fileFilter }).single("picture");
+	const upload = multer({
+		storage,
+		fileFilter,
+		limits: { fileSize: MAX_FILE_SIZE },
+	}).single("picture");
 
 	upload(req, res, err => {
-		if (err)
-			return res
-				.status(400)
-				.json(
-					err instanceof multer.MulterError ? err : { message: err.message }
-				);
-		else if (!req.file)
-			return res.status(400).json({ message: "Picture required" });
+		if (err) {
+			const response = {
+				errors: [
+					{
+						msg:
+							err instanceof multer.MulterError
+								? "Invalid image size (> 1Mo)"
+								: err.message,
+						param: "image",
+					},
+				],
+			};
+
+			return res.status(400).json(response);
+		}
 
 		next();
 	});

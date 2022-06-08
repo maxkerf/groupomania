@@ -148,7 +148,9 @@ export default createStore({
 
 			return new Promise((resolve, reject) => {
 				if (res.ok) {
-					commit("SET_LOGIN_USER_PICTURE", data.pictureUpdated);
+					// picture value can be string or null
+					if (data.pictureUpdated !== undefined)
+						commit("SET_LOGIN_USER_PICTURE", data.pictureUpdated);
 					resolve(data);
 				} else {
 					reject(Object.assign({ status: res.status }, data));

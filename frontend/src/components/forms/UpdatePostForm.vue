@@ -1,11 +1,6 @@
 <template>
 	<form novalidate @submit.prevent="onFormSubmit">
-		<TextareaInputBox
-			:text="text"
-			:oldText="post.text"
-			:focus="true"
-			@update-text="updateText"
-		/>
+		<TextareaInputBox v-model="text" :focus="true" />
 		<p class="error-msg" v-show="errors.text">{{ errors.text }}</p>
 		<ImageInputBox
 			:image="image"
@@ -31,11 +26,13 @@ import {
 } from "../../formValidation.js";
 
 export default {
+	name: "UpdatePostForm",
+
 	props: ["post"],
 
 	data() {
 		return {
-			text: "",
+			text: this.post.text,
 			image: null,
 			errors: {
 				text: "",
@@ -52,10 +49,6 @@ export default {
 	},
 
 	methods: {
-		updateText(newText) {
-			this.text = newText;
-		},
-
 		updateImage(newImage) {
 			this.image = newImage;
 		},

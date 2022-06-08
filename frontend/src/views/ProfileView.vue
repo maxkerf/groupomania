@@ -52,6 +52,7 @@
 			<UpdateUserPictureForm
 				:user="user"
 				@update-user-picture="updateUserPicture"
+				ref="updateUserPictureForm"
 			/>
 		</ModalBox>
 		<ModalBox
@@ -126,6 +127,11 @@ export default {
 	methods: {
 		...mapActions(["toggleModal"]),
 
+		logout() {
+			this.$store.dispatch("logout");
+			this.$router.push("/login");
+		},
+
 		async getOneUser() {
 			try {
 				this.user = await this.$store.dispatch(
@@ -135,11 +141,6 @@ export default {
 			} catch (err) {
 				handleError(err, this, "get one user");
 			}
-		},
-
-		logout() {
-			this.$store.dispatch("logout");
-			this.$router.push("/login");
 		},
 
 		async updateUser(newUser) {
@@ -162,13 +163,18 @@ export default {
 				userId: this.user.id,
 				newPicture,
 			};
+
 			try {
 				const data = await this.$store.dispatch("updateUserPicture", payload);
 				console.log(data);
-				this.user.picture = data.pictureUpdated;
 				this.toggleModal(this.$refs.updatePictureModal);
 			} catch (err) {
-				console.error(err);
+				handleError(err, this, "update user picture");
+				// if there are errors on the inputs
+				if (err.errors) {
+					const e = err.errors[0];
+					this.$refs.updateUserPictureForm.errors[e.param] = `${e.msg}.`;
+				}
 			}
 		},
 

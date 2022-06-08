@@ -21,6 +21,8 @@ import {
 } from "../../formValidation.js";
 
 export default {
+	name: "AddPostForm",
+
 	data() {
 		return {
 			text: "",

@@ -3,6 +3,7 @@
 		<button
 			@click="$emit('react', type)"
 			:class="`reaction-btn ${hasReacted ? hasReactedClasses[type] : ''}`"
+			:title="titles[type]"
 		>
 			<i :class="icons[type]"></i>
 		</button>
@@ -21,6 +22,7 @@ export default {
 				"fa-solid fa-heart",
 				"fa-solid fa-face-laugh-beam",
 			],
+			titles: ["Dislike", "Like", "Love", "Laugh"],
 		};
 	},
 
