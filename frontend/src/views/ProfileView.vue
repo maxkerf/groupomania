@@ -3,6 +3,7 @@
 		<div class="profile-card">
 			<button
 				class="user-picture-btn"
+				title="Update picture"
 				v-if="isAdmin || isSelf"
 				@click="toggleModal($refs.updatePictureModal)"
 			>
@@ -60,21 +61,30 @@
 			ref="updateInfosModal"
 			title="Update profile"
 		>
-			<UpdateUserProfileForm :user="user" @update-user="updateUser" />
+			<UpdateUserProfileForm
+				:user="user"
+				@update-user="updateUser"
+				ref="updateUserProfileForm"
+			/>
 		</ModalBox>
 	</div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
+
 import UpdateUserPictureForm from "../components/forms/UpdateUserPictureForm.vue";
 import UpdateUserProfileForm from "../components/forms/UpdateUserProfileForm.vue";
 import ModalBox from "../components/ModalBox.vue";
 import ProfileCardBtn from "../components/ProfileCardBtn.vue";
+
 import handleError from "../handleError.js";
 import getUserPictureSource from "../getUserPictureSource.js";
+import { focusFirstInvalidFormInput } from "../formValidation.js";
 
 export default {
+	name: "ProfileView",
+
 	data() {
 		return {
 			user: {},
@@ -154,7 +164,11 @@ export default {
 				this.user.username = newUser.username;
 				this.toggleModal(this.$refs.updateInfosModal);
 			} catch (err) {
-				console.error(err);
+				handleError(err, this, "update user profile");
+				err.errors.forEach(e => {
+					this.$refs.updateUserProfileForm.errors[e.param] = `${e.msg}.`;
+				});
+				focusFirstInvalidFormInput(this.$refs.updateUserProfileForm);
 			}
 		},
 
