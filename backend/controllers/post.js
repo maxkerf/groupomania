@@ -2,7 +2,7 @@ const postManager = require("../managers/post");
 const commentManager = require("../managers/comment");
 const reactionManager = require("../managers/reaction");
 const handleError = require("../globalFunctions/handleError");
-const deletePostImage = require("../globalFunctions/deletePostImage");
+const { deletePostImage } = require("../globalFunctions/handleFile");
 
 Object.prototype.isEmpty = function () {
 	return Object.keys(this).length ? false : true;

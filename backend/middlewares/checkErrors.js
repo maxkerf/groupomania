@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 
-const deletePostImage = require("../globalFunctions/deletePostImage");
+const handleError = require("../globalFunctions/handleError");
+const { deletePostImage } = require("../globalFunctions/handleFile.js");
 
 function isCreatingOrUpdatingPost(req) {
 	return (
@@ -15,8 +16,13 @@ module.exports = checkErrors = async (req, res, next) => {
 	if (!errors.isEmpty()) {
 		const errorsArray = errors.array();
 
-		if (isCreatingOrUpdatingPost(req) && req.file)
-			await deletePostImage(req.file.filename);
+		try {
+			if (isCreatingOrUpdatingPost(req) && req.file)
+				await deletePostImage(req.file.filename);
+		} catch (err) {
+			handleError(err, res, "check request errors");
+			return;
+		}
 
 		errorsArray.find(error => error.msg.status === 500)
 			? res.status(500).json({ message: "Internal Server Error" })

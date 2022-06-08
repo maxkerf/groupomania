@@ -6,8 +6,10 @@ const postManager = require("../managers/post");
 const commentManager = require("../managers/comment");
 const reactionManager = require("../managers/reaction");
 const handleError = require("../globalFunctions/handleError");
-const deleteUserPicture = require("../globalFunctions/deleteUserPicture");
-const deletePostImage = require("../globalFunctions/deletePostImage");
+const {
+	deleteUserPicture,
+	deletePostImage,
+} = require("../globalFunctions/handleFile");
 
 async function deleteUserPosts(userId) {
 	const userPosts = await postManager.getUserPosts(userId);
