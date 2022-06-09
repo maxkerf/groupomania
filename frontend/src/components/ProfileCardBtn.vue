@@ -14,15 +14,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@mixin reset-btn {
-	border: unset;
-	background-color: unset;
-	font-size: unset;
-	font-family: unset;
-	color: unset;
-	padding: unset;
-}
-
 .profile-card-btn {
 	@include reset-btn();
 	cursor: pointer;

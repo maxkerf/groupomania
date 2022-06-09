@@ -245,6 +245,10 @@ export default {
 	&:hover {
 		color: $contrast-color;
 	}
+
+	&:focus {
+		outline: 2px solid;
+	}
 }
 
 .scroll-top-btn {
@@ -268,15 +272,6 @@ export default {
 	&:hover {
 		color: $contrast-color;
 	}
-}
-
-@mixin reset-btn {
-	border: unset;
-	background-color: unset;
-	font-size: unset;
-	font-family: unset;
-	color: unset;
-	padding: unset;
 }
 
 .show-more-posts-btn {

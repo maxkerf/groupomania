@@ -30,16 +30,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@mixin reset-input {
-	border: unset;
-	background-color: unset;
-	padding: unset;
-	font-size: unset;
-	color: unset;
-	font-family: unset;
-	outline: unset;
-}
-
 input {
 	@include reset-input();
 	background-color: $bg-color-2;

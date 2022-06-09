@@ -1,14 +1,6 @@
 <template>
 	<div>
 		<div class="image-input-box">
-			<label
-				class="image-label"
-				for="image"
-				title="Add an image"
-				v-show="!image"
-			>
-				<i class="fa-solid fa-image"></i>
-			</label>
 			<input
 				class="image-input"
 				type="file"
@@ -18,6 +10,14 @@
 				ref="imageInput"
 				@change="onImageInputChange"
 			/>
+			<label
+				class="image-label"
+				for="image"
+				title="Add an image"
+				v-show="!image"
+			>
+				<i class="fa-solid fa-image"></i>
+			</label>
 		</div>
 		<div class="image-preview-box" v-show="image">
 			<img :src="imagePreviewSource" alt="Image preview" />
@@ -133,6 +133,10 @@ export default {
 	top: 0;
 	z-index: -1;
 	opacity: 0;
+
+	&:focus + .image-label {
+		outline: 2px solid;
+	}
 }
 
 .image-preview-box {

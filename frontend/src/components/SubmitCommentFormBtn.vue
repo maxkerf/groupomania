@@ -5,15 +5,6 @@
 </template>
 
 <style lang="scss">
-@mixin reset-btn {
-	border: unset;
-	background-color: unset;
-	font-size: unset;
-	font-family: unset;
-	color: unset;
-	padding: unset;
-}
-
 .submit-btn {
 	@include reset-btn;
 	align-self: flex-start;
@@ -29,6 +20,10 @@
 
 	& i {
 		transform: translateX(-1px);
+	}
+
+	&:focus {
+		outline: 2px solid;
 	}
 
 	&::after {

@@ -234,15 +234,6 @@ export default {
 	}
 }
 
-@mixin reset-btn {
-	border: unset;
-	background-color: unset;
-	font-size: unset;
-	font-family: unset;
-	color: unset;
-	padding: unset;
-}
-
 .user-picture-btn {
 	@include reset-btn;
 	cursor: pointer;
