@@ -80,7 +80,7 @@ export default {
 <style lang="scss" scoped>
 .date-box {
 	font-size: 0.75rem;
-	color: #b0b3b8;
+	color: $txt-color-2;
 	margin-bottom: 0.25rem;
 }
 </style>

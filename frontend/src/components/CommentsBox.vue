@@ -100,11 +100,11 @@ export default {
 	font-family: unset;
 	font-size: 0.875rem;
 	cursor: pointer;
-	color: #b0b3b8;
+	color: $txt-color-2;
 
 	&:hover {
 		text-decoration: underline;
-		color: #ffd7d7;
+		color: $contrast-color;
 	}
 }
 </style>

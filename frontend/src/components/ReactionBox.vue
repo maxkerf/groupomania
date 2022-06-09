@@ -62,7 +62,7 @@ export default {
 	background-color: unset;
 	padding: unset;
 	cursor: pointer;
-	color: #e4e6eb;
+	color: $txt-color-1;
 	font-size: 1.25rem;
 
 	display: grid;
@@ -82,7 +82,7 @@ export default {
 		right: 0;
 		left: 0;
 		border-radius: inherit;
-		background-color: #515151;
+		background-color: $bg-color-2;
 		z-index: -1;
 		opacity: 0;
 		transition: opacity 100ms;
@@ -94,18 +94,18 @@ export default {
 }
 
 .liked {
-	color: #4444ff;
+	color: $liked-color;
 }
 
 .disliked {
-	color: #ff4444;
+	color: $disliked-color;
 }
 
 .loved {
-	color: deeppink;
+	color: $loved-color;
 }
 
 .laughed {
-	color: goldenrod;
+	color: $laughed-color;
 }
 </style>

@@ -95,7 +95,7 @@ button[type="submit"] {
 
 .error-msg {
 	margin: unset;
-	color: #ff4444;
+	color: $txt-color-error;
 	margin: -0.25rem 0.5rem 0 0.5rem;
 }
 </style>

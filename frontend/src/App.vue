@@ -46,13 +46,13 @@ body {
 	height: 100vh;
 	display: grid;
 	grid-template-rows: auto 1fr auto;
-	background-color: #515151;
+	background-color: $bg-color-2;
 }
 
 header {
 	padding: 1rem 1.5rem;
-	color: #e4e6eb;
-	background-color: #242526;
+	color: $txt-color-1;
+	background-color: $bg-color-1;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 	z-index: 1;
 	display: flex;
@@ -70,7 +70,7 @@ nav {
 
 	a {
 		text-decoration: unset;
-		color: #e4e6eb;
+		color: $txt-color-1;
 	}
 }
 
@@ -89,7 +89,7 @@ nav {
 		bottom: 0;
 		right: 0;
 		z-index: -1;
-		background-color: lighten(#242526, 10%);
+		background-color: lighten($bg-color-1, 10%);
 		border-radius: 2rem;
 		border-bottom-right-radius: 0;
 		opacity: 0;
@@ -97,7 +97,7 @@ nav {
 	}
 
 	&:hover {
-		color: #ffd7d7;
+		color: $contrast-color;
 
 		&::after {
 			opacity: 1;
@@ -115,8 +115,8 @@ nav {
 footer {
 	text-align: center;
 	padding: 1rem;
-	color: #b0b3b8;
-	background-color: #242526;
+	color: $txt-color-2;
+	background-color: $bg-color-1;
 	box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.1);
 	z-index: 0;
 	font-size: 0.875rem;

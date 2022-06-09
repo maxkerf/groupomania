@@ -72,8 +72,8 @@ export default {
 	transform: translateX(-50%);
 	top: 25%;
 	width: 260px;
-	background-color: #242526;
-	color: #e4e6eb;
+	background-color: $bg-color-1;
+	color: $txt-color-1;
 	padding: 1rem 1.5rem;
 	border-radius: 0.75rem;
 	display: flex;
@@ -95,7 +95,7 @@ export default {
 
 		&:hover {
 			text-decoration: underline;
-			color: #ffd7d7;
+			color: $contrast-color;
 		}
 	}
 }

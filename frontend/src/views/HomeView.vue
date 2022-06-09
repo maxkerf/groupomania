@@ -232,8 +232,8 @@ export default {
 	margin-top: 1rem;
 	display: grid;
 	place-items: center;
-	background-color: #242526;
-	color: #e4e6eb;
+	background-color: $bg-color-1;
+	color: $txt-color-1;
 	width: 2em;
 	height: 2em;
 	border-radius: 50%;
@@ -243,7 +243,7 @@ export default {
 	border-radius: unset; */
 
 	&:hover {
-		color: #ffd7d7;
+		color: $contrast-color;
 	}
 }
 
@@ -259,14 +259,14 @@ export default {
 	margin-top: 1rem;
 	display: grid;
 	place-items: center;
-	background-color: #242526;
-	color: #e4e6eb;
+	background-color: $bg-color-1;
+	color: $txt-color-1;
 	width: 2em;
 	height: 2em;
 	border-radius: 50%;
 
 	&:hover {
-		color: #ffd7d7;
+		color: $contrast-color;
 	}
 }
 
@@ -282,12 +282,12 @@ export default {
 .show-more-posts-btn {
 	@include reset-btn();
 	cursor: pointer;
-	color: #e4e6eb;
+	color: $txt-color-1;
 	font-size: 0.875em;
 
 	&:hover {
 		text-decoration: underline;
-		color: #ffd7d7;
+		color: $contrast-color;
 	}
 }
 </style>

@@ -1,12 +1,6 @@
 <template>
 	<form @submit.prevent="onFormSubmit" ref="form">
-		<TextareaInputBox
-			:text="text"
-			:oldText="comment.text"
-			:focus="true"
-			:required="true"
-			@update-text="updateText"
-		/>
+		<TextareaInputBox v-model="text" :focus="true" :required="true" />
 		<SubmitCommentFormBtn />
 	</form>
 </template>
@@ -25,7 +19,7 @@ export default {
 
 	data() {
 		return {
-			text: "",
+			text: this.comment.text,
 		};
 	},
 
@@ -35,10 +29,6 @@ export default {
 	},
 
 	methods: {
-		updateText(newText) {
-			this.text = newText;
-		},
-
 		onFormSubmit() {
 			const newComment = {
 				text: this.text,

@@ -270,8 +270,8 @@ export default {
 
 <style lang="scss" scoped>
 .post-card {
-	background-color: #242526;
-	color: #e4e6eb;
+	background-color: $bg-color-1;
+	color: $txt-color-1;
 	width: 400px;
 	border-radius: 0.75rem;
 }
@@ -306,7 +306,7 @@ export default {
 	justify-self: start;
 	align-self: flex-end;
 	text-decoration: none;
-	color: #e4e6eb;
+	color: $txt-color-1;
 	font-weight: 500;
 
 	&:hover {
@@ -362,11 +362,11 @@ export default {
 	font-family: unset;
 	font-size: 0.875rem;
 	cursor: pointer;
-	color: #b0b3b8;
+	color: $txt-color-2;
 
 	&:hover {
 		text-decoration: underline;
-		color: #ffd7d7;
+		color: $contrast-color;
 	}
 }
 
@@ -375,7 +375,7 @@ export default {
 
 	& > hr {
 		border: 0;
-		border-top: 1px solid #515151;
+		border-top: 1px solid $bg-color-2;
 		margin: 0;
 	}
 }

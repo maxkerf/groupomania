@@ -9,7 +9,7 @@ button {
 	font-size: unset;
 	font-family: unset;
 	outline: unset;
-	background-color: #515151;
+	background-color: $bg-color-2;
 	padding: 0.25rem 0.5rem 0.375rem 0.5rem;
 	border-radius: 0.25rem;
 	cursor: pointer;
@@ -27,7 +27,7 @@ button {
 		bottom: 0;
 		right: 0;
 		border-radius: inherit;
-		background-color: lighten(#242526, 10%);
+		background-color: lighten($bg-color-1, 10%);
 		z-index: -1;
 
 		opacity: 0;
@@ -35,7 +35,7 @@ button {
 	}
 
 	&:hover {
-		color: #ffd7d7;
+		color: $contrast-color;
 
 		&::after {
 			opacity: 1;
@@ -43,7 +43,7 @@ button {
 	}
 
 	&:focus {
-		outline: 1px solid;
+		outline: 2px solid;
 	}
 }
 </style>

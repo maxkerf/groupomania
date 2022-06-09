@@ -68,7 +68,7 @@ export default {
 
 <style lang="scss" scoped>
 .textarea-input-box {
-	background-color: #515151;
+	background-color: $bg-color-2;
 	padding: 0.25rem 0.5rem;
 	border-radius: 0.5rem;
 	display: flex;
@@ -93,7 +93,7 @@ export default {
 	margin-top: 1px;
 
 	&::placeholder {
-		color: #b0b3b8;
+		color: $txt-color-2;
 	}
 }
 

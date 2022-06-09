@@ -189,7 +189,7 @@ export default {
 	}
 
 	& > div:nth-of-type(2) {
-		background-color: #515151;
+		background-color: $bg-color-2;
 		padding: 0.25rem;
 		border-radius: 0.5rem;
 		border-top-left-radius: unset;
@@ -201,7 +201,7 @@ export default {
 
 .update-comment-annotation {
 	font-size: 0.75rem;
-	color: #b0b3b8;
+	color: $txt-color-2;
 	display: inline-block;
 	margin-bottom: 0.25rem;
 	margin-left: 0.375rem;
@@ -218,7 +218,7 @@ export default {
 
 .username {
 	text-decoration: none;
-	color: #e4e6eb;
+	color: $txt-color-1;
 	font-weight: 500;
 	justify-self: start;
 

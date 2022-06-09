@@ -84,7 +84,7 @@ form {
 }
 
 .error-msg {
-	color: #ff4444;
+	color: $txt-color-error;
 	margin: -0.25rem 0.5rem 0 0.5rem;
 	text-align: center;
 

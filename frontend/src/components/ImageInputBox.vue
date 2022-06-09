@@ -116,7 +116,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		border-radius: 50%;
-		background-color: lighten(#242526, 10%);
+		background-color: lighten($bg-color-1, 10%);
 		z-index: -1;
 
 		opacity: 0.5;
@@ -166,7 +166,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		border-radius: 50%;
-		background-color: #bbb;
+		background-color: $txt-color-1;
 		z-index: -1;
 
 		opacity: 0.5;

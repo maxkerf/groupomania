@@ -42,16 +42,16 @@ export default {
 
 input {
 	@include reset-input();
-	background-color: #515151;
+	background-color: $bg-color-2;
 	border-radius: 0.5rem;
 	padding: 0.25rem 0.5rem;
 
 	&::placeholder {
-		color: #b0b3b8;
+		color: $txt-color-2;
 	}
 
 	&:focus {
-		outline: 2px solid #e4e6eb;
+		outline: 2px solid $txt-color-1;
 	}
 }
 </style>

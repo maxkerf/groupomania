@@ -217,7 +217,7 @@ export default {
 	display: grid;
 	justify-items: center;
 	gap: 0.5rem;
-	color: #e4e6eb;
+	color: $txt-color-1;
 	position: relative;
 	z-index: 0;
 	padding: 0 1rem 1rem 1rem;
@@ -228,7 +228,7 @@ export default {
 		top: 3em;
 		bottom: 0;
 		width: 100%;
-		background-color: #242526;
+		background-color: $bg-color-1;
 		z-index: -1;
 		border-radius: 0.75rem;
 	}
@@ -265,11 +265,11 @@ export default {
 	right: 0;
 	left: 0;
 	border-radius: inherit;
-	background-color: rgba(0, 0, 0, 0.25);
+	background-color: $overlay-color-light;
 	display: grid;
 	place-items: center;
 	font-size: 2.5em;
-	color: #ffd7d7;
+	color: $contrast-color;
 	opacity: 0;
 	transition: opacity 100ms;
 }

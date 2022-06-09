@@ -26,20 +26,20 @@ export default {
 .profile-card-btn {
 	@include reset-btn();
 	cursor: pointer;
-	background-color: #242526;
+	background-color: $bg-color-1;
 	width: 2em;
 	height: 2em;
 	display: grid;
 	place-items: center;
-	border: calc(3em / 16) solid lighten(#242526, 10%);
+	border: calc(3em / 16) solid lighten($bg-color-1, 10%);
 	border-radius: 0.375em;
 	font-size: 1.25rem;
-	background-color: #515151;
+	background-color: $bg-color-2;
 	position: relative;
 	z-index: 0;
 
 	&:hover {
-		color: #ffd7d7;
+		color: $contrast-color;
 
 		&::after {
 			opacity: 1;
@@ -51,7 +51,7 @@ export default {
 		position: absolute;
 		width: 115%;
 		height: 115%;
-		background-color: lighten(#242526, 10%);
+		background-color: lighten($bg-color-1, 10%);
 		z-index: -1;
 		border-radius: inherit;
 		opacity: 0;

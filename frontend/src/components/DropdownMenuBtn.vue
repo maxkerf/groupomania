@@ -21,7 +21,7 @@ export default {
 	background-color: unset;
 	padding: 0.25em 1em 0.25em 0.5em;
 	cursor: pointer;
-	color: #e4e6eb;
+	color: $txt-color-1;
 	border-radius: 0.1em;
 	display: grid;
 	grid-template-columns: 1em 1fr;
@@ -41,14 +41,14 @@ export default {
 		right: 0;
 		left: 0;
 		border-radius: inherit;
-		background-color: lighten(#242526, 10%);
+		background-color: lighten($bg-color-1, 10%);
 		z-index: -1;
 		opacity: 0;
 		transition: opacity 100ms;
 	}
 
 	&:hover {
-		color: #ffd7d7;
+		color: $contrast-color;
 
 		&::after {
 			opacity: 1;

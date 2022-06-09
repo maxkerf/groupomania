@@ -60,7 +60,7 @@ export default {
 	&-post {
 		& .dropdown-btn {
 			&::after {
-				background-color: lighten(#242526, 10%);
+				background-color: lighten($bg-color-1, 10%);
 			}
 			&:hover::after {
 				opacity: 1;
@@ -77,7 +77,7 @@ export default {
 			font-size: 0.75rem;
 
 			&::after {
-				background-color: lighten(#515151, 10%);
+				background-color: lighten($bg-color-2, 10%);
 			}
 			&:hover::after {
 				opacity: 1;
@@ -94,7 +94,7 @@ export default {
 	border: unset;
 	background-color: unset;
 	padding: unset;
-	color: #e4e6eb;
+	color: $txt-color-1;
 	cursor: pointer;
 	font-size: unset;
 	width: 2em;
@@ -113,7 +113,7 @@ export default {
 		right: 0;
 		left: 0;
 		border-radius: inherit;
-		background-color: lighten(#242526, 10%);
+		background-color: lighten($bg-color-1, 10%);
 		z-index: -1;
 		opacity: 0;
 		transition: opacity 100ms;
@@ -124,12 +124,12 @@ export default {
 	position: absolute;
 	/* top: 100%;
 	right: 0; */
-	background-color: #242526;
+	background-color: $bg-color-1;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
 	padding: 2px;
-	border: 0.0625em solid #515151;
+	border: 0.0625em solid $bg-color-2;
 	border-radius: 0.2em;
 	margin-top: 0.2em;
 	box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);

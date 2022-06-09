@@ -46,17 +46,17 @@ export default {
 }
 
 .modal-overlay {
-	background-color: rgba(0, 0, 0, 0.75);
+	background-color: $overlay-color-dark;
 	width: 100%;
 	height: 100%;
 }
 
 .modal {
-	background-color: #242526;
-	color: #e4e6eb;
+	background-color: $bg-color-1;
+	color: $txt-color-1;
 	position: absolute;
 	padding: 1rem;
-	border: 3px solid lighten(#242526, 10%);
+	border: 3px solid lighten($bg-color-1, 10%);
 	border-radius: 0.5rem;
 	min-width: 250px;
 	max-width: 400px;
@@ -93,7 +93,7 @@ export default {
 	&::after {
 		content: "";
 		position: absolute;
-		background-color: lighten(#242526, 10%);
+		background-color: lighten($bg-color-1, 10%);
 		width: 100%;
 		height: 100%;
 		border-radius: 50%;
