@@ -7,14 +7,16 @@
 		>
 			<i class="fa-solid fa-pen"></i>
 		</button>
-		<button
-			v-show="showScrollTopBtn"
-			class="scroll-top-btn"
-			@click="scrollTop"
-			title="Scroll to top"
-		>
-			<i class="fa-solid fa-angle-up"></i>
-		</button>
+		<Transition name="scroll-top-btn">
+			<button
+				v-show="showScrollTopBtn"
+				class="scroll-top-btn"
+				@click="scrollTop"
+				title="Scroll to top"
+			>
+				<i class="fa-solid fa-angle-up"></i>
+			</button>
+		</Transition>
 		<div class="post-cards-box" ref="postCardsBox">
 			<PostCard
 				v-for="post in posts"
@@ -207,12 +209,10 @@ export default {
 .home-view {
 	overflow: hidden scroll;
 	position: relative;
-	// useless transform property to be the fixed buttons ancestor (cf. position fixed wiki)
-	/* transform: translate(0); */
 }
 
 .post-cards-box {
-	padding: 1rem;
+	padding: 1rem 0.75rem;
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
@@ -222,9 +222,9 @@ export default {
 .add-post-btn {
 	position: fixed;
 	left: 50%;
-	// card/2 + btn + scrollbar/2 + gap
-	transform: translateX(calc((200px + 100% + 10px + 0.5rem) * -1));
-	//transform: translateX(calc((200px + 100% + 0.5rem) * -1));
+	transform: translateX(
+		calc((200px + 100% + 10px + 0.5rem) * -1)
+	); // card/2 + btn + scrollbar/2 + gap
 	border: unset;
 	padding: unset;
 	cursor: pointer;
@@ -238,29 +238,37 @@ export default {
 	height: 2em;
 	border-radius: 50%;
 
-	/* z-index: 10;
-	background-color: green;
-	border-radius: unset; */
-
-	&:hover {
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			color: $contrast-color;
+		}
 	}
 
-	&:focus {
+	&:focus-visible {
 		outline: 2px solid;
+	}
+
+	@media screen and (max-width: 550px) {
+		margin-top: unset;
+		transform: unset;
+		left: unset;
+		bottom: calc(70px + 1rem - 3px); // footer height + padding-bottom in fact
+		right: calc(0.75rem - 3px); // padding-right in fact
+		z-index: 1;
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+		background-color: lighten($bg-color-1, 10%);
 	}
 }
 
 .scroll-top-btn {
 	position: fixed;
-	bottom: 86px;
+	bottom: calc(70px + 1rem); // footer height + padding-bottom in fact
 	left: 50%;
-	transform: translateX(200px); // card/2
+	margin-left: 200px;
 	border: unset;
 	padding: unset;
 	cursor: pointer;
 	font-size: 1.25rem;
-	margin-top: 1rem;
 	display: grid;
 	place-items: center;
 	background-color: $bg-color-1;
@@ -269,8 +277,32 @@ export default {
 	height: 2em;
 	border-radius: 50%;
 
-	&:hover {
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			color: $contrast-color;
+		}
+	}
+
+	&-enter-active,
+	&-leave-active {
+		transition: transform 0.3s;
+	}
+
+	&-enter-from,
+	&-leave-to {
+		transform: scale(0);
+	}
+
+	@media screen and (max-width: 550px) {
+		margin-left: unset;
+		left: unset;
+		bottom: calc(
+			70px + 1rem - 3px + 2em + 0.25rem
+		); // footer height + padding-bottom + add post btn height
+		right: calc(0.75rem - 3px); // padding-right in fact
+		z-index: 1;
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+		background-color: lighten($bg-color-1, 10%);
 	}
 }
 

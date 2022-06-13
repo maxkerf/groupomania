@@ -44,13 +44,14 @@ body {
 .app-container {
 	font-family: system-ui, sans-serif;
 	height: 100vh;
+	overflow: hidden;
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 	background-color: $bg-color-2;
 }
 
 header {
-	padding: 1rem 1.5rem;
+	padding: 0.625rem 0.75rem;
 	color: $txt-color-1;
 	background-color: $bg-color-1;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -58,10 +59,13 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 0.75rem;
 }
 
 .logo {
-	height: 35px;
+	width: 100%;
+	max-width: 220px;
+	vertical-align: middle;
 }
 
 nav {
@@ -74,11 +78,13 @@ nav {
 	}
 }
 
+$profile-link-img-size: 40px;
+
 .profile-link {
 	display: flex;
 	align-items: center;
 	gap: 0.375rem;
-	padding: 0.25rem 0.375rem 0.25rem 0.25rem;
+	padding: 0.25rem;
 	position: relative;
 
 	&::after {
@@ -91,24 +97,39 @@ nav {
 		z-index: -1;
 		background-color: lighten($bg-color-1, 10%);
 		border-radius: 2rem;
-		border-bottom-right-radius: 0;
-		opacity: 0;
+		opacity: 0.5;
 		transition: opacity 100ms;
+
+		@media screen and (max-width: 400px) {
+			opacity: 0;
+		}
 	}
 
-	&:hover {
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			color: $contrast-color;
 
-		&::after {
-			opacity: 1;
+			&::after {
+				opacity: 1;
+			}
 		}
 	}
 
 	img {
-		width: 2em;
-		height: 2em;
+		width: $profile-link-img-size;
+		height: $profile-link-img-size;
 		object-fit: cover;
 		border-radius: 50%;
+	}
+
+	span {
+		margin-right: 0.375rem;
+		font-weight: 500;
+		margin-top: -2px;
+
+		@media screen and (max-width: 400px) {
+			display: none;
+		}
 	}
 }
 

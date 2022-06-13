@@ -210,26 +210,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile-view {
+	padding: 0 0.75rem;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+}
+
 .profile-card {
-	margin: 0 auto;
+	max-width: 176px;
+	box-sizing: border-box;
 	margin-top: 3rem;
-	width: fit-content;
-	display: grid;
-	justify-items: center;
-	gap: 0.5rem;
+	padding: 0 1rem 1rem 1rem;
 	color: $txt-color-1;
 	position: relative;
 	z-index: 0;
-	padding: 0 1rem 1rem 1rem;
+	display: grid;
+	justify-items: center;
+	gap: 0.5rem;
 
 	&::before {
 		content: "";
 		position: absolute;
 		top: 3em;
 		bottom: 0;
-		width: 100%;
-		background-color: $bg-color-1;
+		left: 0;
+		right: 0;
 		z-index: -1;
+		background-color: $bg-color-1;
 		border-radius: 0.75rem;
 	}
 }
@@ -276,6 +284,8 @@ export default {
 .username {
 	font-size: 1.5rem;
 	font-weight: 500;
+	line-break: anywhere;
+	text-align: center;
 }
 
 .date {

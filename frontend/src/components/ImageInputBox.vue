@@ -123,8 +123,10 @@ export default {
 		transition: opacity 100ms;
 	}
 
-	&:hover::after {
-		opacity: 1;
+	@media (any-hover: hover) {
+		&:hover::after {
+			opacity: 1;
+		}
 	}
 }
 
@@ -134,13 +136,14 @@ export default {
 	z-index: -1;
 	opacity: 0;
 
-	&:focus + .image-label {
+	&:focus-visible + .image-label {
 		outline: 2px solid;
 	}
 }
 
 .image-preview-box {
 	position: relative;
+	max-width: 350px;
 
 	& img {
 		max-width: 100%;
@@ -177,8 +180,10 @@ export default {
 		transition: opacity 100ms;
 	}
 
-	&:hover::after {
-		opacity: 1;
+	@media (any-hover: hover) {
+		&:hover::after {
+			opacity: 1;
+		}
 	}
 }
 </style>

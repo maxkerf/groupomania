@@ -88,24 +88,66 @@ export default {
 		transition: opacity 100ms;
 	}
 
-	&:hover::after {
-		opacity: 1;
+	@media (any-hover: hover) {
+		&:hover::after {
+			opacity: 1;
+		}
+	}
+}
+
+@keyframes liked {
+	to {
+		transform: rotate(-10deg) translateY(-1px) scale(1.1);
 	}
 }
 
 .liked {
 	color: $liked-color;
+	animation: liked 0.3s;
+}
+
+@keyframes disliked {
+	to {
+		transform: rotate(10deg) translateY(1px) scale(1.1);
+	}
 }
 
 .disliked {
 	color: $disliked-color;
+	animation: disliked 0.3s;
+}
+
+@keyframes loved {
+	25% {
+		transform: scale(1.1);
+	}
+	50% {
+		transform: scale(1);
+	}
+	75% {
+		transform: scale(1.1);
+	}
 }
 
 .loved {
 	color: $loved-color;
+	animation: loved 0.3s;
+}
+
+@keyframes laughed {
+	25% {
+		transform: rotate(-10deg);
+	}
+	50% {
+		transform: rotate(0);
+	}
+	75% {
+		transform: rotate(10deg);
+	}
 }
 
 .laughed {
 	color: $laughed-color;
+	animation: laughed 0.3s;
 }
 </style>

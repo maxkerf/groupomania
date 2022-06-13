@@ -22,7 +22,7 @@
 		transform: translateX(-1px);
 	}
 
-	&:focus {
+	&:focus-visible {
 		outline: 2px solid;
 	}
 
@@ -40,11 +40,13 @@
 		transition: opacity 100ms;
 	}
 
-	&:hover {
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			color: $contrast-color;
 
-		&::after {
-			opacity: 1;
+			&::after {
+				opacity: 1;
+			}
 		}
 	}
 }

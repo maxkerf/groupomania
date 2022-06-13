@@ -4,7 +4,7 @@
 			type="text"
 			name="username"
 			placeholder="Username"
-			maxlength="30"
+			maxlength="15"
 			:focus="true"
 			v-model="username"
 		/>
@@ -71,6 +71,7 @@ form {
 .error-msg {
 	margin: unset;
 	color: $txt-color-error;
-	margin: -0.25rem 0.5rem 0 0.5rem;
+	margin-top: -0.25rem;
+	text-align: center;
 }
 </style>

@@ -1,18 +1,20 @@
 <template>
-	<div v-if="showModal" class="modal-box">
-		<div @click="toggleModal(this)" class="modal-overlay"></div>
-		<div class="modal">
-			<span class="modal-title">{{ title }}</span>
-			<button
-				@click="toggleModal(this)"
-				class="close-modal-btn"
-				title="Close modal"
-			>
-				<i class="fa-solid fa-xmark"></i>
-			</button>
-			<slot></slot>
+	<Transition name="modal-box">
+		<div v-if="showModal" class="modal-box">
+			<div @click="toggleModal(this)" class="modal-overlay"></div>
+			<div class="modal" ref="modal">
+				<span class="modal-title">{{ title }}</span>
+				<button
+					@click="toggleModal(this)"
+					class="close-modal-btn"
+					title="Close modal"
+				>
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+				<slot></slot>
+			</div>
 		</div>
-	</div>
+	</Transition>
 </template>
 
 <script>
@@ -22,6 +24,7 @@ export default {
 			showModal: false,
 		};
 	},
+
 	props: {
 		title: {
 			type: String,
@@ -29,6 +32,14 @@ export default {
 			default: "Title",
 		},
 		toggleModal: Function,
+	},
+
+	watch: {
+		showModal() {
+			if (this.showModal === false) {
+				this.$refs.modal.classList.add("hide");
+			}
+		},
 	},
 };
 </script>
@@ -43,12 +54,39 @@ export default {
 	display: grid;
 	place-items: center;
 	z-index: 10;
+
+	&-enter-active {
+		transition: opacity 0.4s;
+	}
+
+	&-leave-active {
+		transition: opacity 0.3s 0.1s;
+	}
+
+	&-enter-from,
+	&-leave-to {
+		opacity: 0;
+	}
 }
 
 .modal-overlay {
 	background-color: $overlay-color-dark;
 	width: 100%;
 	height: 100%;
+}
+
+/* Modal */
+
+@keyframes show-modal {
+	from {
+		transform: translateY(-10%);
+	}
+}
+
+@keyframes hide-modal {
+	to {
+		transform: translateY(10%);
+	}
 }
 
 .modal {
@@ -58,20 +96,23 @@ export default {
 	padding: 1rem;
 	border: 3px solid lighten($bg-color-1, 10%);
 	border-radius: 0.5rem;
-	min-width: 250px;
-	max-width: 400px;
+	box-sizing: border-box;
+	max-width: 90%;
 	max-height: 90%;
 	overflow: hidden auto;
 	display: grid;
 	gap: 1rem;
+	animation: 0.3s 0.1s show-modal ease-out backwards;
+
+	&.hide {
+		animation: 0.3s hide-modal ease-in forwards;
+	}
 }
 
 .modal-title {
 	font-weight: 500;
-	display: block;
 	text-align: center;
-	justify-self: center;
-	width: calc(100% - 4em);
+	padding: 0 2em;
 }
 
 .close-modal-btn {
@@ -102,9 +143,10 @@ export default {
 		transition: opacity 100ms;
 	}
 
-	&:hover::after {
-		opacity: 1;
+	@media (any-hover: hover) {
+		&:hover::after {
+			opacity: 1;
+		}
 	}
 }
 </style>
-3

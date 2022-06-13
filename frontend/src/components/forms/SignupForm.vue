@@ -21,7 +21,7 @@
 			type="text"
 			name="username"
 			placeholder="Username"
-			maxlength="30"
+			maxlength="15"
 			v-model="username"
 		/>
 		<p class="error-msg" v-show="errors.username">{{ errors.username }}</p>
@@ -82,7 +82,6 @@ export default {
 
 <style lang="scss" scoped>
 form {
-	width: 100%;
 	margin-top: 0.5rem;
 	display: flex;
 	flex-direction: column;
@@ -96,6 +95,7 @@ button[type="submit"] {
 .error-msg {
 	margin: unset;
 	color: $txt-color-error;
-	margin: -0.25rem 0.5rem 0 0.5rem;
+	margin-top: -0.25rem;
+	text-align: center;
 }
 </style>

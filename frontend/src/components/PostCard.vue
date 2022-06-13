@@ -273,6 +273,7 @@ export default {
 	background-color: $bg-color-1;
 	color: $txt-color-1;
 	width: 400px;
+	max-width: 100%;
 	border-radius: 0.75rem;
 }
 
@@ -336,8 +337,8 @@ export default {
 
 	img {
 		display: block;
-		width: 100%;
-		margin-top: 0.75rem;
+		max-width: 100%;
+		margin: 0.75rem auto 0;
 	}
 }
 
@@ -345,6 +346,8 @@ export default {
 	& > div:nth-child(1) {
 		display: flex;
 		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 0.5rem 0.75rem;
 		padding: 0.5rem 0.75rem;
 		margin-top: 0.25rem;
 	}
@@ -364,9 +367,11 @@ export default {
 	cursor: pointer;
 	color: $txt-color-2;
 
-	&:hover {
-		text-decoration: underline;
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			text-decoration: underline;
+			color: $contrast-color;
+		}
 	}
 }
 

@@ -29,11 +29,13 @@ export default {
 	position: relative;
 	z-index: 0;
 
-	&:hover {
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			color: $contrast-color;
 
-		&::after {
-			opacity: 1;
+			&::after {
+				opacity: 1;
+			}
 		}
 	}
 

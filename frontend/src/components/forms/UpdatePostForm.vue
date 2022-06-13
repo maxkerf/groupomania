@@ -32,7 +32,7 @@ export default {
 
 	data() {
 		return {
-			text: this.post.text,
+			text: "",
 			image: null,
 			errors: {
 				text: "",
@@ -46,6 +46,10 @@ export default {
 		TextareaInputBox,
 		ImageInputBox,
 		SubmitFormBtn,
+	},
+
+	created() {
+		if (this.post.text) this.text = this.post.text;
 	},
 
 	methods: {

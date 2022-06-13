@@ -64,38 +64,43 @@ export default {
 <style lang="scss" scoped>
 .login-view {
 	height: 100vh;
+	display: grid;
+	place-items: center;
+	padding: 0.75rem;
+	box-sizing: border-box;
 }
 
 .login-box {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	top: 25%;
-	width: 260px;
+	width: 100%;
+	max-width: 310px;
+	box-sizing: border-box;
 	background-color: $bg-color-1;
 	color: $txt-color-1;
 	padding: 1rem 1.5rem;
 	border-radius: 0.75rem;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	gap: 0.75rem;
 }
 
 .title {
 	margin: 0;
+	text-align: center;
 }
 
 .info {
 	margin: 0;
+	text-align: center;
 
 	a {
 		text-decoration: unset;
 		color: unset;
 
-		&:hover {
-			text-decoration: underline;
-			color: $contrast-color;
+		@media (any-hover: hover) {
+			&:hover {
+				text-decoration: underline;
+				color: $contrast-color;
+			}
 		}
 	}
 }

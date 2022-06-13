@@ -35,12 +35,14 @@ input {
 	background-color: $bg-color-2;
 	border-radius: 0.5rem;
 	padding: 0.25rem 0.5rem;
+	box-sizing: border-box;
+	width: 100%;
 
 	&::placeholder {
 		color: $txt-color-2;
 	}
 
-	&:focus {
+	&:focus-visible {
 		outline: 2px solid $txt-color-1;
 	}
 }

@@ -4,6 +4,7 @@
 			class="text-input"
 			name="text"
 			rows="1"
+			cols="50"
 			:required="required"
 			:maxlength="maxlength"
 			:placeholder="placeholder"
@@ -22,7 +23,6 @@ export default {
 	props: {
 		modelValue: {
 			type: String,
-			default: "",
 		},
 
 		required: {
@@ -35,7 +35,7 @@ export default {
 		},
 		placeholder: {
 			type: String,
-			default: "Write something here...",
+			default: "Text",
 		},
 
 		focus: {
@@ -54,10 +54,12 @@ export default {
 
 	mounted() {
 		if (this.focus) this.$refs.textarea.focus();
+		this.resizeTextarea();
 	},
 
 	methods: {
-		resizeTextarea() {
+		async resizeTextarea() {
+			await this.$nextTick(); // when the value is reset by the parent, wait to have the new one (not the old)
 			const textarea = this.$refs.textarea;
 			textarea.style.height = "auto";
 			textarea.style.height = `${textarea.scrollHeight}px`;
@@ -71,12 +73,12 @@ export default {
 	background-color: $bg-color-2;
 	padding: 0.25rem 0.5rem;
 	border-radius: 0.5rem;
+	box-sizing: border-box;
+	min-height: 2em;
+	max-width: 350px; // stop the width expansion defined with cols attribute
 	display: flex;
 	justify-content: space-between;
 	gap: 1rem;
-	min-height: 2em;
-	box-sizing: border-box;
-	width: 350px;
 }
 
 .text-input {
@@ -91,6 +93,7 @@ export default {
 	outline: unset;
 	overflow: hidden;
 	margin-top: 1px;
+	width: 100%;
 
 	&::placeholder {
 		color: $txt-color-2;

@@ -102,9 +102,11 @@ export default {
 	cursor: pointer;
 	color: $txt-color-2;
 
-	&:hover {
-		text-decoration: underline;
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			text-decoration: underline;
+			color: $contrast-color;
+		}
 	}
 }
 </style>

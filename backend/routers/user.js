@@ -9,6 +9,10 @@ const checkErrors = require("../middlewares/checkErrors");
 const uploadUserPicture = require("../middlewares/uploadUserPicture");
 const handleError = require("../globalFunctions/handleError");
 
+const MAX_LENGTH_EMAIL = 50;
+const MAX_LENGTH_PASSWORD = 30;
+const MAX_LENGTH_USERNAME = 15;
+
 async function isEmailUnique(email) {
 	let user;
 
@@ -62,8 +66,8 @@ router.post(
 		.withMessage("Email required")
 		.isString()
 		.withMessage("Email must be a string")
-		.isLength({ max: 50 })
-		.withMessage("Email must be at most 50 characters")
+		.isLength({ max: MAX_LENGTH_EMAIL })
+		.withMessage(`Email must be at most ${MAX_LENGTH_EMAIL} characters long`)
 		.isEmail()
 		.withMessage("Email must respect a good email form")
 		.custom(isEmailUnique),
@@ -73,8 +77,10 @@ router.post(
 		.withMessage("Password required")
 		.isString()
 		.withMessage("Password must be a string")
-		.isLength({ max: 30 })
-		.withMessage("Password must be at most 30 characters"),
+		.isLength({ max: MAX_LENGTH_PASSWORD })
+		.withMessage(
+			`Password must be at most ${MAX_LENGTH_PASSWORD} characters long`
+		),
 
 	body("username")
 		.trim()
@@ -82,8 +88,10 @@ router.post(
 		.withMessage("Username required")
 		.isString()
 		.withMessage("Username must be a string")
-		.isLength({ max: 30 })
-		.withMessage("Username must be at most 30 characters")
+		.isLength({ max: MAX_LENGTH_USERNAME })
+		.withMessage(
+			`Username must be at most ${MAX_LENGTH_USERNAME} characters long`
+		)
 		.custom(isUsernameUnique),
 
 	checkErrors,
@@ -129,8 +137,10 @@ router.put(
 		.withMessage("Username required")
 		.isString()
 		.withMessage("Username must be a string")
-		.isLength({ max: 30 })
-		.withMessage("Username must be at most 30 characters")
+		.isLength({ max: MAX_LENGTH_USERNAME })
+		.withMessage(
+			`Username must be at most ${MAX_LENGTH_USERNAME} characters long`
+		)
 		.custom(isUsernameUnique),
 
 	checkErrors,

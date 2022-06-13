@@ -7,9 +7,11 @@
 		<button @click="toggleDropdownMenu" class="dropdown-btn" ref="dropdownBtn">
 			<i class="fa-solid fa-ellipsis"></i>
 		</button>
-		<div v-show="showDropdownMenu" class="dropdown-menu">
-			<slot></slot>
-		</div>
+		<Transition name="dropdown-menu">
+			<div v-show="showDropdownMenu" class="dropdown-menu">
+				<slot></slot>
+			</div>
+		</Transition>
 	</div>
 </template>
 
@@ -55,15 +57,10 @@ export default {
 
 <style lang="scss" scoped>
 .dropdown-box {
-	/* position: relative; */
-
 	&-post {
 		& .dropdown-btn {
 			&::after {
 				background-color: lighten($bg-color-1, 10%);
-			}
-			&:hover::after {
-				opacity: 1;
 			}
 		}
 
@@ -74,14 +71,11 @@ export default {
 
 	&-comment {
 		& .dropdown-btn {
-			font-size: 0.75rem;
-
 			&::after {
 				background-color: lighten($bg-color-2, 10%);
 			}
-			&:hover::after {
-				opacity: 1;
-			}
+
+			font-size: 0.75rem;
 		}
 
 		& .dropdown-menu {
@@ -118,12 +112,16 @@ export default {
 		opacity: 0;
 		transition: opacity 100ms;
 	}
+
+	@media (any-hover: hover) {
+		&:hover::after {
+			opacity: 1;
+		}
+	}
 }
 
 .dropdown-menu {
 	position: absolute;
-	/* top: 100%;
-	right: 0; */
 	background-color: $bg-color-1;
 	display: flex;
 	flex-direction: column;
@@ -134,5 +132,15 @@ export default {
 	margin-top: 0.2em;
 	box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
 	z-index: 1;
+
+	&-enter-active,
+	&-leave-active {
+		transition: opacity 0.2s;
+	}
+
+	&-enter-from,
+	&-leave-to {
+		opacity: 0;
+	}
 }
 </style>

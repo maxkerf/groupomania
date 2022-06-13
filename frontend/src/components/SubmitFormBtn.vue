@@ -8,12 +8,10 @@ button {
 	color: unset;
 	font-size: unset;
 	font-family: unset;
-	outline: unset;
 	background-color: $bg-color-2;
 	padding: 0.25rem 0.5rem 0.375rem 0.5rem;
 	border-radius: 0.25rem;
 	cursor: pointer;
-	display: block;
 	margin: 0 auto;
 	font-weight: 500;
 	position: relative;
@@ -34,16 +32,14 @@ button {
 		transition: opacity 100ms;
 	}
 
-	&:hover {
-		color: $contrast-color;
+	@media (any-hover: hover) {
+		&:hover {
+			color: $contrast-color;
 
-		&::after {
-			opacity: 1;
+			&::after {
+				opacity: 1;
+			}
 		}
-	}
-
-	&:focus {
-		outline: 2px solid;
 	}
 }
 </style>
