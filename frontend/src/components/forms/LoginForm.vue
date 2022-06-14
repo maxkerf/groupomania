@@ -7,17 +7,15 @@
 			:focus="true"
 			v-model="email"
 		/>
-		<p class="error-msg" v-show="errors.email">{{ errors.email }}</p>
+		<FormErrorMessageContainer :errorMessage="errors.email" />
 		<BasicInput
 			type="password"
 			name="password"
 			placeholder="Password"
 			v-model="password"
 		/>
-		<p class="error-msg" v-show="errors.password">{{ errors.password }}</p>
-		<p class="error-msg error-msg-global" v-if="errors.global">
-			{{ errors.global }}
-		</p>
+		<FormErrorMessageContainer :errorMessage="errors.password" />
+		<FormErrorMessageContainer :errorMessage="errors.global" :isGlobal="true" />
 		<SubmitFormBtn>Login</SubmitFormBtn>
 	</form>
 </template>
@@ -25,6 +23,7 @@
 <script>
 import BasicInput from "../BasicInput.vue";
 import SubmitFormBtn from "../SubmitFormBtn.vue";
+import FormErrorMessageContainer from "../FormErrorMessageContainer.vue";
 import {
 	checkFormInputs,
 	focusFirstInvalidFormInput,
@@ -46,6 +45,7 @@ export default {
 	components: {
 		BasicInput,
 		SubmitFormBtn,
+		FormErrorMessageContainer,
 	},
 
 	methods: {
@@ -81,16 +81,5 @@ form {
 
 button[type="submit"] {
 	margin-top: 0.5rem;
-}
-
-.error-msg {
-	margin: unset;
-	color: $txt-color-error;
-	margin-top: -0.25rem;
-	text-align: center;
-
-	&-global {
-		margin-top: 0.25rem;
-	}
 }
 </style>

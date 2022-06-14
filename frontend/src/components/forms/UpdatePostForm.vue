@@ -1,17 +1,15 @@
 <template>
 	<form novalidate @submit.prevent="onFormSubmit">
 		<TextareaInputBox v-model="text" :focus="true" />
-		<p class="error-msg" v-show="errors.text">{{ errors.text }}</p>
+		<FormErrorMessageContainer :errorMessage="errors.text" />
 		<ImageInputBox
 			:image="image"
 			:oldImage="post.image"
 			updatedImageGroup="post"
 			@update-image="updateImage"
 		/>
-		<p class="error-msg" v-show="errors.image">{{ errors.image }}</p>
-		<p class="error-msg error-msg-global" v-if="errors.global">
-			{{ errors.global }}
-		</p>
+		<FormErrorMessageContainer :errorMessage="errors.image" />
+		<FormErrorMessageContainer :errorMessage="errors.global" :isGlobal="true" />
 		<SubmitFormBtn>Save</SubmitFormBtn>
 	</form>
 </template>
@@ -20,6 +18,7 @@
 import TextareaInputBox from "../TextareaInputBox.vue";
 import ImageInputBox from "../ImageInputBox.vue";
 import SubmitFormBtn from "../SubmitFormBtn.vue";
+import FormErrorMessageContainer from "../FormErrorMessageContainer.vue";
 import {
 	checkFormInputs,
 	focusFirstInvalidFormInput,
@@ -46,6 +45,7 @@ export default {
 		TextareaInputBox,
 		ImageInputBox,
 		SubmitFormBtn,
+		FormErrorMessageContainer,
 	},
 
 	created() {
@@ -85,15 +85,6 @@ form {
 	flex-direction: column;
 	gap: 1rem;
 	align-items: center;
-}
-
-.error-msg {
-	color: $txt-color-error;
-	margin: -0.25rem 0.5rem 0 0.5rem;
-	text-align: center;
-
-	&-global {
-		margin: 0.25rem 0 0 0;
-	}
+	max-width: 350px;
 }
 </style>

@@ -8,7 +8,7 @@
 			:focus="true"
 			v-model="username"
 		/>
-		<p class="error-msg" v-show="errors.username">{{ errors.username }}</p>
+		<FormErrorMessageContainer :errorMessage="errors.username" />
 		<SubmitFormBtn>Save</SubmitFormBtn>
 	</form>
 </template>
@@ -16,6 +16,7 @@
 <script>
 import BasicInput from "../BasicInput.vue";
 import SubmitFormBtn from "../SubmitFormBtn.vue";
+import FormErrorMessageContainer from "../FormErrorMessageContainer.vue";
 import {
 	checkFormInputs,
 	focusFirstInvalidFormInput,
@@ -40,6 +41,7 @@ export default {
 	components: {
 		BasicInput,
 		SubmitFormBtn,
+		FormErrorMessageContainer,
 	},
 
 	methods: {
@@ -66,12 +68,6 @@ form {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-}
-
-.error-msg {
-	margin: unset;
-	color: $txt-color-error;
-	margin-top: -0.25rem;
-	text-align: center;
+	max-width: 350px;
 }
 </style>

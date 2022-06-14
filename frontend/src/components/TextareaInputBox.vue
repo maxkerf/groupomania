@@ -75,7 +75,6 @@ export default {
 	border-radius: 0.5rem;
 	box-sizing: border-box;
 	min-height: 2em;
-	max-width: 350px; // stop the width expansion defined with cols attribute
 	display: flex;
 	justify-content: space-between;
 	gap: 1rem;

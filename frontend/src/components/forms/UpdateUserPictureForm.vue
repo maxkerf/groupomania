@@ -6,7 +6,7 @@
 			updatedImageGroup="user"
 			@update-image="updateImage"
 		/>
-		<p class="error-msg" v-show="errors.image">{{ errors.image }}</p>
+		<FormErrorMessageContainer :errorMessage="errors.image" />
 		<SubmitFormBtn>Save</SubmitFormBtn>
 	</form>
 </template>
@@ -14,6 +14,7 @@
 <script>
 import ImageInputBox from "../ImageInputBox.vue";
 import SubmitFormBtn from "../SubmitFormBtn.vue";
+import FormErrorMessageContainer from "../FormErrorMessageContainer.vue";
 
 export default {
 	name: "UpdateUserPictureForm",
@@ -32,6 +33,7 @@ export default {
 	components: {
 		ImageInputBox,
 		SubmitFormBtn,
+		FormErrorMessageContainer,
 	},
 
 	methods: {
@@ -51,11 +53,6 @@ form {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-}
-
-.error-msg {
-	color: $txt-color-error;
-	margin: -0.25rem 0.5rem 0 0.5rem;
-	text-align: center;
+	max-width: 350px;
 }
 </style>

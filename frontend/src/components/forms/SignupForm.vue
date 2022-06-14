@@ -8,7 +8,7 @@
 			:focus="true"
 			v-model="email"
 		/>
-		<p class="error-msg" v-show="errors.email">{{ errors.email }}</p>
+		<FormErrorMessageContainer :errorMessage="errors.email" />
 		<BasicInput
 			type="password"
 			name="password"
@@ -16,7 +16,7 @@
 			maxlength="30"
 			v-model="password"
 		/>
-		<p class="error-msg" v-show="errors.password">{{ errors.password }}</p>
+		<FormErrorMessageContainer :errorMessage="errors.password" />
 		<BasicInput
 			type="text"
 			name="username"
@@ -24,7 +24,7 @@
 			maxlength="15"
 			v-model="username"
 		/>
-		<p class="error-msg" v-show="errors.username">{{ errors.username }}</p>
+		<FormErrorMessageContainer :errorMessage="errors.username" />
 		<SubmitFormBtn>Signup</SubmitFormBtn>
 	</form>
 </template>
@@ -32,6 +32,7 @@
 <script>
 import BasicInput from "../BasicInput.vue";
 import SubmitFormBtn from "../SubmitFormBtn.vue";
+import FormErrorMessageContainer from "../FormErrorMessageContainer.vue";
 import {
 	checkFormInputs,
 	focusFirstInvalidFormInput,
@@ -54,6 +55,7 @@ export default {
 	components: {
 		BasicInput,
 		SubmitFormBtn,
+		FormErrorMessageContainer,
 	},
 
 	methods: {
@@ -90,12 +92,5 @@ form {
 
 button[type="submit"] {
 	margin-top: 0.5rem;
-}
-
-.error-msg {
-	margin: unset;
-	color: $txt-color-error;
-	margin-top: -0.25rem;
-	text-align: center;
 }
 </style>

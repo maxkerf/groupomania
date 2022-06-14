@@ -143,7 +143,6 @@ export default {
 
 .image-preview-box {
 	position: relative;
-	max-width: 350px;
 
 	& img {
 		max-width: 100%;
