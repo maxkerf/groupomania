@@ -1,0 +1,34 @@
+CREATE TABLE user (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  email VARCHAR(255) UNIQUE,
+  password VARCHAR(255),
+  username VARCHAR(255) UNIQUE,
+  creationDate DATETIME,
+  picture VARCHAR(255),
+  role INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE post (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  creationDate DATETIME,
+  text VARCHAR(255),
+  image VARCHAR(255),
+  lastUpdate DATETIME
+);
+
+CREATE TABLE reaction (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  post_id INT NOT NULL,
+  type INT
+);
+
+CREATE TABLE comment (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  post_id INT NOT NULL,
+  creationDate DATETIME,
+  text VARCHAR(255),
+  lastUpdate DATETIME
+);
