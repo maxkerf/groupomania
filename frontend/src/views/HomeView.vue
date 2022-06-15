@@ -1,5 +1,5 @@
 <template>
-	<div class="home-view" ref="homeView" @scroll="handleScroll">
+	<main class="home-view" ref="homeView" @scroll="handleScroll">
 		<button
 			class="add-post-btn"
 			@click="toggleModal($refs.createPostModal)"
@@ -52,7 +52,7 @@
 				ref="updatePostForm"
 			/>
 		</ModalBox>
-	</div>
+	</main>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
 	<form novalidate @submit.prevent="onFormSubmit" ref="form">
-		<TextareaInputBox v-model="text" :focus="true" />
+		<TextareaInputBox v-model="text" title="post text" :focus="true" />
 		<FormErrorMessageContainer :errorMessage="errors.text" />
 		<ImageInputBox :image="image" @update-image="updateImage" />
 		<FormErrorMessageContainer :errorMessage="errors.image" />

@@ -3,6 +3,7 @@
 		<TextareaInputBox
 			v-model="text"
 			:required="true"
+			title="Add comment"
 			placeholder="Add a comment"
 		/>
 		<SubmitCommentFormBtn />

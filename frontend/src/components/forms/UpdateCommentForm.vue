@@ -1,6 +1,11 @@
 <template>
 	<form @submit.prevent="onFormSubmit" ref="form">
-		<TextareaInputBox v-model="text" :focus="true" :required="true" />
+		<TextareaInputBox
+			v-model="text"
+			title="Update comment"
+			:focus="true"
+			:required="true"
+		/>
 		<SubmitCommentFormBtn />
 	</form>
 </template>

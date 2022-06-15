@@ -1,5 +1,5 @@
 <template>
-	<div class="login-view">
+	<main class="login-view">
 		<div class="login-box">
 			<h1 class="title">Login</h1>
 			<p class="info">
@@ -11,7 +11,7 @@
 				ref="loginForm"
 			/>
 		</div>
-	</div>
+	</main>
 </template>
 
 <script>

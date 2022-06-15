@@ -3,6 +3,7 @@
 		<BasicInput
 			type="text"
 			name="username"
+			title="username"
 			placeholder="Username"
 			maxlength="15"
 			:focus="true"

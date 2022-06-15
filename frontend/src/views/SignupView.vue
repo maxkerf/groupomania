@@ -1,5 +1,5 @@
 <template>
-	<div class="signup-view">
+	<main class="signup-view">
 		<div class="signup-box">
 			<h1 class="title">Signup</h1>
 			<p class="info">
@@ -7,7 +7,7 @@
 			</p>
 			<SignupForm @signup="signup" ref="signupForm" />
 		</div>
-	</div>
+	</main>
 </template>
 
 <script>

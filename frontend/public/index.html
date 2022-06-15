@@ -6,13 +6,28 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		<link rel="icon" href="<%= BASE_URL %>favicon.ico" />
 		<title><%= htmlWebpackPlugin.options.title %></title>
+		<meta
+			name="description"
+			content="Groupomania is a social media built for the entreprises. The goal is to boost the intern communication between the employees. Knowing each other in a more infomal way will enhance the group and improve their work."
+		/>
 		<link
-			rel="stylesheet"
+			rel="preload"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+			as="style"
+			onload="this.onload=null;this.rel='stylesheet'"
 			integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
 			crossorigin="anonymous"
 			referrerpolicy="no-referrer"
 		/>
+		<noscript>
+			<link
+				rel="stylesheet"
+				href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+				integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw=="
+				crossorigin="anonymous"
+				referrerpolicy="no-referrer"
+			/>
+		</noscript>
 	</head>
 	<body>
 		<noscript>

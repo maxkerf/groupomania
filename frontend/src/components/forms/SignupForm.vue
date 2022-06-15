@@ -3,6 +3,7 @@
 		<BasicInput
 			type="email"
 			name="email"
+			title="email"
 			placeholder="Email"
 			maxlength="50"
 			:focus="true"
@@ -12,6 +13,7 @@
 		<BasicInput
 			type="password"
 			name="password"
+			title="password"
 			placeholder="Password"
 			maxlength="30"
 			v-model="password"
@@ -20,6 +22,7 @@
 		<BasicInput
 			type="text"
 			name="username"
+			title="username"
 			placeholder="Username"
 			maxlength="15"
 			v-model="username"

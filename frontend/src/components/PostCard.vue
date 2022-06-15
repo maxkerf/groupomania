@@ -42,7 +42,7 @@
 				class="post-image"
 				v-if="post.image"
 				:src="`${apiRoot}/images/post/${post.image}`"
-				alt="image"
+				alt="post image"
 			/>
 		</div>
 		<div class="community-feedbacks">
@@ -338,6 +338,7 @@ export default {
 	img {
 		display: block;
 		width: 100%;
+		height: 100%;
 		margin-top: 0.75rem;
 	}
 }

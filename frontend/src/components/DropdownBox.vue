@@ -4,7 +4,12 @@
 			attachedElement ? ` dropdown-box-${attachedElement}` : ''
 		}`"
 	>
-		<button @click="toggleDropdownMenu" class="dropdown-btn" ref="dropdownBtn">
+		<button
+			@click="toggleDropdownMenu"
+			class="dropdown-btn"
+			ref="dropdownBtn"
+			aria-label="Dropdown Menu"
+		>
 			<i class="fa-solid fa-ellipsis"></i>
 		</button>
 		<Transition name="dropdown-menu">

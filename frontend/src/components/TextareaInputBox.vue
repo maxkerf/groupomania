@@ -7,6 +7,7 @@
 			cols="50"
 			:required="required"
 			:maxlength="maxlength"
+			:title="title"
 			:placeholder="placeholder"
 			ref="textarea"
 			:value="modelValue"
@@ -32,6 +33,9 @@ export default {
 		maxlength: {
 			type: Number,
 			default: 255,
+		},
+		title: {
+			type: String,
 		},
 		placeholder: {
 			type: String,

@@ -1,5 +1,5 @@
 <template>
-	<div class="profile-view">
+	<main class="profile-view">
 		<div class="profile-card">
 			<button
 				class="user-picture-btn"
@@ -67,7 +67,7 @@
 				ref="updateUserProfileForm"
 			/>
 		</ModalBox>
-	</div>
+	</main>
 </template>
 
 <script>
