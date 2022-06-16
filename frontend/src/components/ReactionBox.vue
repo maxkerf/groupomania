@@ -82,7 +82,7 @@ export default {
 		right: 0;
 		left: 0;
 		border-radius: inherit;
-		background-color: $bg-color-2;
+		background-color: lighten($bg-color-1, 10%);
 		z-index: -1;
 		opacity: 0;
 		transition: opacity 100ms;
