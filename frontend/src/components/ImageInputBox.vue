@@ -5,7 +5,7 @@
 				class="image-input"
 				type="file"
 				name="image"
-				title="image"
+				title="Image"
 				id="image"
 				accept=".jpg,.jpeg,.png"
 				ref="imageInput"

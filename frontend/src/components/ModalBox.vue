@@ -1,14 +1,10 @@
 <template>
 	<Transition name="modal-box">
-		<div v-if="showModal" class="modal-box">
-			<div @click="toggleModal(this)" class="modal-overlay"></div>
+		<div v-if="isShown" class="modal-box">
+			<div @click="toggle" class="modal-overlay"></div>
 			<div class="modal" ref="modal">
 				<span class="modal-title">{{ title }}</span>
-				<button
-					@click="toggleModal(this)"
-					class="close-modal-btn"
-					title="Close modal"
-				>
+				<button @click="toggle" class="close-modal-btn" title="Close modal">
 					<i class="fa-solid fa-xmark"></i>
 				</button>
 				<slot></slot>
@@ -21,24 +17,26 @@
 export default {
 	data() {
 		return {
-			showModal: false,
+			isShown: false,
 		};
 	},
 
 	props: {
 		title: {
 			type: String,
-			required: true,
 			default: "Title",
 		},
-		toggleModal: Function,
 	},
 
 	watch: {
-		showModal() {
-			if (this.showModal === false) {
-				this.$refs.modal.classList.add("hide");
-			}
+		isShown() {
+			if (this.isShown === false) this.$refs.modal.classList.add("hide");
+		},
+	},
+
+	methods: {
+		toggle() {
+			this.isShown = !this.isShown;
 		},
 	},
 };

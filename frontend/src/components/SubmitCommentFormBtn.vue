@@ -1,5 +1,5 @@
 <template>
-	<button class="submit-btn" type="submit" title="Send comment">
+	<button class="submit-btn" type="submit" title="Send a comment">
 		<i class="fa-solid fa-paper-plane"></i>
 	</button>
 </template>

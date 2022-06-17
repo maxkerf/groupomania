@@ -39,6 +39,7 @@ export default {
 <style lang="scss">
 body {
 	margin: 0;
+	overflow: hidden;
 }
 
 .app-container {

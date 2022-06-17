@@ -5,7 +5,7 @@
 				class="user-picture-btn"
 				title="Update picture"
 				v-if="isAdmin || isSelf"
-				@click="toggleModal($refs.updatePictureModal)"
+				@click="$refs.updatePictureModal.toggle"
 			>
 				<img
 					class="user-picture"
@@ -36,7 +36,7 @@
 				<ProfileCardBtn
 					icon="fa-solid fa-pen"
 					title="Update profile"
-					@click="toggleModal($refs.updateInfosModal)"
+					@click="handleUpdateProfileBtnClick"
 				/>
 				<ProfileCardBtn
 					icon="fa-solid fa-trash-can"
@@ -45,22 +45,14 @@
 				/>
 			</div>
 		</div>
-		<ModalBox
-			:toggleModal="toggleModal"
-			ref="updatePictureModal"
-			title="Update profile picture"
-		>
+		<ModalBox ref="updatePictureModal" title="Update profile picture">
 			<UpdateUserPictureForm
 				:user="user"
 				@update-user-picture="updateUserPicture"
 				ref="updateUserPictureForm"
 			/>
 		</ModalBox>
-		<ModalBox
-			:toggleModal="toggleModal"
-			ref="updateInfosModal"
-			title="Update profile"
-		>
+		<ModalBox ref="updateInfosModal" title="Update profile">
 			<UpdateUserProfileForm
 				:user="user"
 				@update-user="updateUser"
@@ -71,7 +63,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 
 import UpdateUserPictureForm from "../components/forms/UpdateUserPictureForm.vue";
 import UpdateUserProfileForm from "../components/forms/UpdateUserProfileForm.vue";
@@ -135,7 +127,9 @@ export default {
 	},
 
 	methods: {
-		...mapActions(["toggleModal"]),
+		handleUpdateProfileBtnClick() {
+			this.$refs.updateInfosModal.toggle(); // cannot call it directly on profile card btn component ($refs are certainly not yet defined)
+		},
 
 		logout() {
 			this.$store.dispatch("logout");
@@ -162,7 +156,7 @@ export default {
 				const data = await this.$store.dispatch("updateUser", payload);
 				console.log(data);
 				this.user.username = newUser.username;
-				this.toggleModal(this.$refs.updateInfosModal);
+				this.$refs.updateInfosModal.toggle();
 			} catch (err) {
 				handleError(err, this, "update user profile");
 				err.errors.forEach(e => {
@@ -181,7 +175,7 @@ export default {
 			try {
 				const data = await this.$store.dispatch("updateUserPicture", payload);
 				console.log(data);
-				this.toggleModal(this.$refs.updatePictureModal);
+				this.$refs.updatePictureModal.toggle();
 			} catch (err) {
 				handleError(err, this, "update user picture");
 				// if there are errors on the inputs

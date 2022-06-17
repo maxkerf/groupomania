@@ -42,12 +42,6 @@ export default createStore({
 		},
 	},
 	actions: {
-		/* OTHER */
-
-		toggleModal(context, component) {
-			component.showModal = !component.showModal;
-		},
-
 		/* USER */
 
 		async signup({ state }, user) {

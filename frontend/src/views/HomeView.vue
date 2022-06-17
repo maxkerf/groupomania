@@ -2,7 +2,7 @@
 	<main class="home-view" ref="homeView" @scroll="handleScroll">
 		<button
 			class="add-post-btn"
-			@click="toggleModal($refs.createPostModal)"
+			@click="$refs.createPostModal.toggle"
 			title="Add a post"
 		>
 			<i class="fa-solid fa-pen"></i>
@@ -34,18 +34,10 @@
 				Show more posts
 			</button>
 		</div>
-		<ModalBox
-			:toggleModal="toggleModal"
-			ref="createPostModal"
-			title="Add a post"
-		>
+		<ModalBox ref="createPostModal" title="Add a post">
 			<AddPostForm @add-post="addPost" ref="addPostForm" />
 		</ModalBox>
-		<ModalBox
-			:toggleModal="toggleModal"
-			ref="updatePostModal"
-			title="Update your post"
-		>
+		<ModalBox ref="updatePostModal" title="Update your post">
 			<UpdatePostForm
 				:post="postToUpdate"
 				@update-post="updatePost"
@@ -56,7 +48,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 import handleError from "../handleError.js";
 import PostCard from "../components/PostCard.vue";
 import AddPostForm from "../components/forms/AddPostForm.vue";
@@ -93,11 +85,9 @@ export default {
 	},
 
 	methods: {
-		...mapActions(["toggleModal"]),
-
 		launchPostUpdate(postToUpdate) {
 			this.postToUpdate = postToUpdate;
-			this.toggleModal(this.$refs.updatePostModal);
+			this.$refs.updatePostModal.toggle();
 		},
 
 		scrollTop() {
@@ -132,8 +122,7 @@ export default {
 				const data = await this.$store.dispatch("addPost", post);
 				console.log(data);
 				this.posts = [data.postCreated, ...this.posts];
-				this.nbPosts++;
-				this.toggleModal(this.$refs.createPostModal);
+				this.$refs.createPostModal.toggle();
 				this.scrollTop();
 			} catch (err) {
 				handleError(err, this, "add post");
@@ -160,7 +149,7 @@ export default {
 				console.log(data);
 				const postToUpdate = this.posts.find(post => post.id === postId);
 				if (postToUpdate) Object.assign(postToUpdate, data.postUpdated);
-				this.toggleModal(this.$refs.updatePostModal);
+				this.$refs.updatePostModal.toggle();
 			} catch (err) {
 				handleError(err, this, "update post");
 				// if there are errors on the inputs

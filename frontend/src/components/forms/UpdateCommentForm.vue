@@ -2,7 +2,7 @@
 	<form @submit.prevent="onFormSubmit" ref="form">
 		<TextareaInputBox
 			v-model="text"
-			title="Update comment"
+			title="Comment"
 			:focus="true"
 			:required="true"
 		/>

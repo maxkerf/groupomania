@@ -3,7 +3,7 @@
 		<BasicInput
 			type="text"
 			name="username"
-			title="username"
+			title="Username"
 			placeholder="Username"
 			maxlength="15"
 			:focus="true"

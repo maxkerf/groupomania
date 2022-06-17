@@ -3,7 +3,7 @@
 		<BasicInput
 			type="email"
 			name="email"
-			title="email"
+			title="Email"
 			placeholder="Email"
 			:focus="true"
 			v-model="email"
@@ -12,7 +12,7 @@
 		<BasicInput
 			type="password"
 			name="password"
-			title="password"
+			title="Password"
 			placeholder="Password"
 			v-model="password"
 		/>
