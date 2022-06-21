@@ -18,6 +18,9 @@
 			</button>
 		</Transition>
 		<div class="post-cards-box" ref="postCardsBox">
+			<p class="no-post-message" v-show="!posts.length">
+				No post. Be the first to post!
+			</p>
 			<PostCard
 				v-for="post in posts"
 				:key="post.id"
@@ -28,7 +31,7 @@
 			/>
 			<button
 				@click="getPosts"
-				v-show="posts.length !== nbPosts"
+				v-show="posts.length < nbPosts"
 				class="show-more-posts-btn"
 			>
 				Show more posts
@@ -122,6 +125,7 @@ export default {
 				const data = await this.$store.dispatch("addPost", post);
 				console.log(data);
 				this.posts = [data.postCreated, ...this.posts];
+				this.nbPosts++;
 				this.$refs.createPostModal.toggle();
 				this.scrollTop();
 			} catch (err) {
@@ -206,6 +210,18 @@ export default {
 	flex-direction: column;
 	gap: 1rem;
 	align-items: center;
+}
+
+.no-post-message {
+	margin: unset;
+	background-color: $bg-color-1;
+	color: $txt-color-1;
+	width: 400px;
+	box-sizing: border-box;
+	max-width: 100%;
+	border-radius: 0.75rem;
+	padding: 0.75rem;
+	text-align: center;
 }
 
 .add-post-btn {

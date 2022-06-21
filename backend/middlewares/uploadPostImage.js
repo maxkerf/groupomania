@@ -1,6 +1,6 @@
 const multer = require("multer");
 
-const AUTHORIZED_EXTENSIONS = ["jpg", "jpeg", "png", "gif"];
+const AUTHORIZED_TYPES = ["jpg", "jpeg", "png", "gif"];
 const MAX_FILE_SIZE = 1024 * 1024; // 1Mo
 
 function getExtension(file) {
@@ -22,10 +22,10 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
 	const extension = getExtension(file);
 
-	if (!AUTHORIZED_EXTENSIONS.includes(extension))
+	if (!AUTHORIZED_TYPES.includes(extension))
 		return cb(
 			Error(
-				`Invalid image extension (authorized extensions: ${AUTHORIZED_EXTENSIONS.join(
+				`Invalid file type (authorized extensions: ${AUTHORIZED_TYPES.join(
 					"/"
 				)})`
 			)
@@ -48,7 +48,7 @@ module.exports = (req, res, next) => {
 					{
 						msg:
 							err instanceof multer.MulterError
-								? "Invalid image size (> 1Mo)"
+								? "Invalid file size (> 1Mo)"
 								: err.message,
 						param: "image",
 					},
