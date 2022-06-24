@@ -38,10 +38,15 @@ export default {
 				this.$router.push("/");
 			} catch (err) {
 				console.error(err);
-				err.errors.forEach(e => {
-					this.$refs.signupForm.errors[e.param] = `${e.msg}.`;
-				});
-				focusFirstInvalidFormInput(this.$refs.signupForm);
+				// if there are errors on the inputs
+				if (err.errors) {
+					err.errors.forEach(e => {
+						this.$refs.signupForm.errors[e.param] = `${e.msg}.`;
+					});
+					focusFirstInvalidFormInput(this.$refs.signupForm);
+				} else {
+					this.$refs.signupForm.errors.global = `${err.message}.`;
+				}
 			}
 		},
 	},

@@ -28,6 +28,7 @@
 			v-model="username"
 		/>
 		<FormErrorMessageContainer :errorMessage="errors.username" />
+		<FormErrorMessageContainer :errorMessage="errors.global" :isGlobal="true" />
 		<SubmitFormBtn>Signup</SubmitFormBtn>
 	</form>
 </template>
@@ -51,6 +52,7 @@ export default {
 				email: "",
 				password: "",
 				username: "",
+				global: "",
 			},
 		};
 	},
