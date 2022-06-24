@@ -23,7 +23,7 @@ This application uses a MySQL database.
 It could be local or on the cloud, make sure to create all the tables needed (cf. `database-config.sql`).  
 Don't forget to write your [connection key](https://dev.mysql.com/doc/refman/8.0/en/connecting-using-uri-or-key-value-pairs.html) in the `.env` file.  
 Template: mysql://_user_:_password_@_host_/_schema_.  
-Example: mysql://user:password@localhost/Groupomania.
+Example: mysql://user:password@localhost/groupomania.
 
 ### Server
 
